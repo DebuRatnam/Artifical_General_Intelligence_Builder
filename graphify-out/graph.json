@@ -1,0 +1,729 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "dsp_filter.h",
+      "file_type": "code",
+      "source_file": "dsp_filter.h",
+      "source_location": "L1",
+      "id": "dsp_filter_h",
+      "community": 1,
+      "norm_label": "dsp_filter.h"
+    },
+    {
+      "label": "agent_simulator.py",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L1",
+      "id": "agent_simulator_py",
+      "community": 0,
+      "norm_label": "agent_simulator.py"
+    },
+    {
+      "label": "Policy",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L18",
+      "id": "files_agent_simulator_policy",
+      "community": 0,
+      "norm_label": "policy"
+    },
+    {
+      "label": "classify()",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L57",
+      "id": "files_agent_simulator_classify",
+      "community": 0,
+      "norm_label": "classify()"
+    },
+    {
+      "label": "emit_directive()",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L79",
+      "id": "files_agent_simulator_emit_directive",
+      "community": 0,
+      "norm_label": "emit_directive()"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L100",
+      "id": "files_agent_simulator_run",
+      "community": 0,
+      "norm_label": "run()"
+    },
+    {
+      "label": "start()",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L130",
+      "id": "files_agent_simulator_start",
+      "community": 0,
+      "norm_label": "start()"
+    },
+    {
+      "label": "agent_simulator.py Heuristic physical agent: Perceive \u2192 Reason \u2192 Act. Classifies",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L1",
+      "id": "files_agent_simulator_rationale_1",
+      "community": 0,
+      "norm_label": "agent_simulator.py heuristic physical agent: perceive \u2192 reason \u2192 act. classifies"
+    },
+    {
+      "label": "Map sensor signatures to material state.      Signatures (from CLAUDE.md):",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L58",
+      "id": "files_agent_simulator_rationale_58",
+      "community": 0,
+      "norm_label": "map sensor signatures to material state.      signatures (from claude.md):"
+    },
+    {
+      "label": "Pull tokens from token_queue and update shared agent state.     Call this in a d",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L101",
+      "id": "files_agent_simulator_rationale_101",
+      "community": 0,
+      "norm_label": "pull tokens from token_queue and update shared agent state.     call this in a d"
+    },
+    {
+      "label": "Start agent loop as daemon thread. Returns thread.",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L131",
+      "id": "files_agent_simulator_rationale_131",
+      "community": 0,
+      "norm_label": "start agent loop as daemon thread. returns thread."
+    },
+    {
+      "label": "main.c",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L1",
+      "id": "main_c",
+      "community": 1,
+      "norm_label": "main.c"
+    },
+    {
+      "label": "qmi8658_read_az()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L23",
+      "id": "files_main_qmi8658_read_az",
+      "community": 1,
+      "norm_label": "qmi8658_read_az()"
+    },
+    {
+      "label": "read_audio_sample()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L35",
+      "id": "files_main_read_audio_sample",
+      "community": 1,
+      "norm_label": "read_audio_sample()"
+    },
+    {
+      "label": "setup()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L39",
+      "id": "files_main_setup",
+      "community": 1,
+      "norm_label": "setup()"
+    },
+    {
+      "label": "loop()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L46",
+      "id": "files_main_loop",
+      "community": 1,
+      "norm_label": "loop()"
+    },
+    {
+      "label": "compute_hann_window()",
+      "file_type": "code",
+      "source_file": "dsp_filter.c",
+      "source_location": "L20",
+      "id": "files_dsp_filter_compute_hann_window",
+      "community": 1,
+      "norm_label": "compute_hann_window()"
+    },
+    {
+      "label": "dsp_filter_init()",
+      "file_type": "code",
+      "source_file": "dsp_filter.c",
+      "source_location": "L27",
+      "id": "files_dsp_filter_dsp_filter_init",
+      "community": 1,
+      "norm_label": "dsp_filter_init()"
+    },
+    {
+      "label": "dsp_get_peak_hz()",
+      "file_type": "code",
+      "source_file": "dsp_filter.c",
+      "source_location": "L34",
+      "id": "files_dsp_filter_dsp_get_peak_hz",
+      "community": 1,
+      "norm_label": "dsp_get_peak_hz()"
+    },
+    {
+      "label": "main_gui.py",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "L1",
+      "id": "main_gui_py",
+      "community": 4,
+      "norm_label": "main_gui.py"
+    },
+    {
+      "label": "main_gui.py Streamlit dashboard: egocentric camera feed, live tactile line chart",
+      "file_type": "rationale",
+      "source_file": "main_gui.py",
+      "source_location": "L1",
+      "id": "files_main_gui_rationale_1",
+      "community": 4,
+      "norm_label": "main_gui.py streamlit dashboard: egocentric camera feed, live tactile line chart"
+    },
+    {
+      "label": "data_harvester.py",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L1",
+      "id": "data_harvester_py",
+      "community": 2,
+      "norm_label": "data_harvester.py"
+    },
+    {
+      "label": "_parse_line()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L25",
+      "id": "files_data_harvester_parse_line",
+      "community": 2,
+      "norm_label": "_parse_line()"
+    },
+    {
+      "label": "_push()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L36",
+      "id": "files_data_harvester_push",
+      "community": 2,
+      "norm_label": "_push()"
+    },
+    {
+      "label": "_reader_loop()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L45",
+      "id": "files_data_harvester_reader_loop",
+      "community": 2,
+      "norm_label": "_reader_loop()"
+    },
+    {
+      "label": "start()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L61",
+      "id": "files_data_harvester_start",
+      "community": 3,
+      "norm_label": "start()"
+    },
+    {
+      "label": "start_mock()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L75",
+      "id": "files_data_harvester_start_mock",
+      "community": 3,
+      "norm_label": "start_mock()"
+    },
+    {
+      "label": "data_harvester.py Non-blocking serial reader. Runs in a daemon thread and pushes",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L1",
+      "id": "files_data_harvester_rationale_1",
+      "community": 2,
+      "norm_label": "data_harvester.py non-blocking serial reader. runs in a daemon thread and pushes"
+    },
+    {
+      "label": "Parse a CSV serial line into a token. Returns None on bad packet.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L26",
+      "id": "files_data_harvester_rationale_26",
+      "community": 2,
+      "norm_label": "parse a csv serial line into a token. returns none on bad packet."
+    },
+    {
+      "label": "Push token to queue; drop oldest if full.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L37",
+      "id": "files_data_harvester_rationale_37",
+      "community": 2,
+      "norm_label": "push token to queue; drop oldest if full."
+    },
+    {
+      "label": "Background thread: read serial, parse, push to queue.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L46",
+      "id": "files_data_harvester_rationale_46",
+      "community": 2,
+      "norm_label": "background thread: read serial, parse, push to queue."
+    },
+    {
+      "label": "Start the serial reader as a daemon thread. Returns the thread.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L62",
+      "id": "files_data_harvester_rationale_62",
+      "community": 3,
+      "norm_label": "start the serial reader as a daemon thread. returns the thread."
+    },
+    {
+      "label": "Inject synthetic tokens at a fixed rate for testing without hardware.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L76",
+      "id": "files_data_harvester_rationale_76",
+      "community": 3,
+      "norm_label": "inject synthetic tokens at a fixed rate for testing without hardware."
+    }
+  ],
+  "links": [
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "main_c",
+      "target": "dsp_filter_h",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dsp_filter.c",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "dsp_filter_h",
+      "target": "files_dsp_filter_compute_hann_window",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dsp_filter.c",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "dsp_filter_h",
+      "target": "files_dsp_filter_dsp_filter_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dsp_filter.c",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "dsp_filter_h",
+      "target": "files_dsp_filter_dsp_get_peak_hz",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "files_agent_simulator_policy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "files_agent_simulator_classify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "files_agent_simulator_emit_directive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "files_agent_simulator_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "files_agent_simulator_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "files_agent_simulator_rationale_1",
+      "target": "agent_simulator_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "files_agent_simulator_run",
+      "target": "files_agent_simulator_classify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "files_agent_simulator_rationale_58",
+      "target": "files_agent_simulator_classify",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "files_agent_simulator_run",
+      "target": "files_agent_simulator_emit_directive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "files_agent_simulator_rationale_101",
+      "target": "files_agent_simulator_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "files_agent_simulator_rationale_131",
+      "target": "files_agent_simulator_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "main_c",
+      "target": "files_main_qmi8658_read_az",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "main_c",
+      "target": "files_main_read_audio_sample",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "main_c",
+      "target": "files_main_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "main_c",
+      "target": "files_main_loop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "files_main_loop",
+      "target": "files_main_qmi8658_read_az",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "main.c",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "files_main_loop",
+      "target": "files_main_read_audio_sample",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "main.c",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "files_main_setup",
+      "target": "files_dsp_filter_dsp_filter_init"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "main.c",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "files_main_loop",
+      "target": "files_dsp_filter_dsp_get_peak_hz"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "dsp_filter.c",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "files_dsp_filter_dsp_filter_init",
+      "target": "files_dsp_filter_compute_hann_window",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "main_gui.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "files_main_gui_rationale_1",
+      "target": "main_gui_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "data_harvester_py",
+      "target": "files_data_harvester_parse_line",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "data_harvester_py",
+      "target": "files_data_harvester_push",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "data_harvester_py",
+      "target": "files_data_harvester_reader_loop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "data_harvester_py",
+      "target": "files_data_harvester_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "data_harvester_py",
+      "target": "files_data_harvester_start_mock",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "files_data_harvester_rationale_1",
+      "target": "data_harvester_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "files_data_harvester_reader_loop",
+      "target": "files_data_harvester_parse_line",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "files_data_harvester_rationale_26",
+      "target": "files_data_harvester_parse_line",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "files_data_harvester_reader_loop",
+      "target": "files_data_harvester_push",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "files_data_harvester_rationale_37",
+      "target": "files_data_harvester_push",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "files_data_harvester_rationale_46",
+      "target": "files_data_harvester_reader_loop",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "files_data_harvester_start_mock",
+      "target": "files_data_harvester_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "files_data_harvester_rationale_62",
+      "target": "files_data_harvester_start",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "data_harvester.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "files_data_harvester_rationale_76",
+      "target": "files_data_harvester_start_mock",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "data_harvester_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "main_gui.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "main_gui_py",
+      "target": "data_harvester_py",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "978242a3dd842e6d0a00dca78460202f49373992"
+}
