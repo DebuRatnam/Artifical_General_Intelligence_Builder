@@ -23,32 +23,26 @@ class Policy:
     dwell_ms: int = 0      # extra dwell time at contact point
 
 
+# This is where we will add items for our demo.
 POLICIES: dict[str, Policy] = {
-    "Smooth Plastic": Policy(
-        state="Smooth Plastic",
-        velocity_pct=0.0,
-        pitch_deg=0.0,
-        torque_scale=1.0,
+    "Dry Leaves": Policy(
+        state="Dry Leaves",
+        velocity_pct=-10.0,  # Slow down slightly to handle brittle material
+        pitch_deg=1.0,
+        torque_scale=0.5,   # Low torque required for delicate surfaces
     ),
-    "Rough Sandpaper": Policy(
-        state="Rough Sandpaper",
-        velocity_pct=-10.0,
-        pitch_deg=2.0,
-        torque_scale=0.85,
-    ),
-    "Stuck Sticker": Policy(
-        state="Stuck Sticker",
-        velocity_pct=-40.0,
-        pitch_deg=5.0,
-        torque_scale=2.5,
-        dwell_ms=200,
+    "Dense Sticks": Policy(
+        state="Dense Sticks",
+        velocity_pct=-30.0,  # Slow down heavily for solid obstacles
+        pitch_deg=4.0,       # Increase tool pitch clearance
+        torque_scale=2.2,    # High torque scaling to move against resistance
     ),
     "Unknown": Policy(
         state="Unknown",
         velocity_pct=0.0,
         pitch_deg=0.0,
         torque_scale=1.0,
-    ),
+    )
 }
 
 
@@ -56,22 +50,18 @@ POLICIES: dict[str, Policy] = {
 
 def classify(accel_g: float, fft_peak_hz: int) -> str:
     """
-    Map sensor signatures to material state.
-
-    Signatures (from CLAUDE.md):
-      Smooth Plastic  : low vibration + high frequency
-      Rough Sandpaper : mid vibration + low frequency (white noise)
-      Stuck Sticker   : large force spike + low-frequency thud
-      Unknown         : anything else → hold last state
+    Classifies organic materials based on vibrational friction (g-force)
+    and acoustic resonance peaks (Hz).
     """
-    if accel_g < 0.3 and fft_peak_hz > 2000:
-        return "Smooth Plastic"
-    elif 0.3 <= accel_g <= 1.0 and fft_peak_hz < 800:
-        return "Rough Sandpaper"
-    elif accel_g > 1.5 and fft_peak_hz < 300:
-        return "Stuck Sticker"
-    else:
-        return "Unknown"
+    # Dry leaves generate high-frequency cracking noises but minimal heavy vibration
+    if accel_g < 0.5 and fft_peak_hz > 1200:
+        return "Dry Leaves"
+        
+    # Dense sticks generate low-frequency heavy impacts/thuds when scraped
+    elif accel_g >= 1.0 and fft_peak_hz < 600:
+        return "Dense Sticks"
+        
+    return "Unknown"
 
 
 # ── Reason + Act: map state to directive string ────────────────────────────────

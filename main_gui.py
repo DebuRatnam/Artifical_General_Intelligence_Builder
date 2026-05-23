@@ -18,6 +18,7 @@ from collections import deque
 import cv2
 import numpy as np
 import streamlit as st
+from multimodal_agent import UnifiedEmbodiedAgent
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -39,11 +40,15 @@ if 'started' not in st.session_state:
     from data_harvester import token_queue, start, start_mock
     import agent_simulator as agent
 
+    # Initialize your new multimodal VLM brain
+    st.session_state.vlm_agent = UnifiedEmbodiedAgent(model_name="moondream")
+    st.session_state.agent_thought = "Awaiting sensory vector alignment trigger..."
+    
     if use_mock:
-        start_mock(hz=100)
+        start_mock(hz=10)
     else:
         start(port=serial_port, baud=baud_rate)
-
+    
     agent.start(token_queue)
     st.session_state.started = True
 
@@ -101,6 +106,7 @@ with col_cam:
         ret, frame = cap.read()
         cap.release()
         if ret:
+            st.session_state.latest_raw_frame = frame.copy() 
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             cam_placeholder.image(frame_rgb, use_column_width=True)
         else:
@@ -131,6 +137,48 @@ m1, m2, m3 = st.columns(3)
 m1.metric("Last Accel",    f"{accel_buf[-1]:.3f} g"  if accel_buf else "—")
 m2.metric("Last FFT Peak", f"{fft_buf[-1]} Hz"       if fft_buf   else "—")
 m3.metric("Tokens received", len(ts_buf))
+
+# ── Auto-refresh every 100 ms ─────────────────────────────────────────────────
+time.sleep(0.1)
+st.rerun()
+
+# ── 🧠 Yann LeCun-inspired Multimodal World Model (INSERTED HERE) ─────────────
+st.markdown("---")
+st.header("🧠 Grounded Perceptual Agent Brain")
+
+col_action, col_thought = st.columns([1, 2])
+
+with col_action:
+    st.write(
+        "Clicking below freezes the current visual matrix and hardware "
+        "telemetry vectors, passing them into the unified VLM agent loop."
+    )
+    
+    # Grab the current transient scalar frames from your streaming deques
+    current_accel = accel_buf[-1] if accel_buf else 0.0
+    current_fft = fft_buf[-1] if fft_buf else 0
+    
+    # 'agent' module handles the current string classification token
+    from agent_simulator import current_state 
+    
+    if st.button("⚡ Trigger Sensory Alignment", type="primary"):
+        with st.spinner("Fusing edge-tokens with VLM visual fields..."):
+            if 'latest_raw_frame' in st.session_state:
+                # Dispatches localized image token + DSP metrics directly to Ollama
+                summary = st.session_state.vlm_agent.generate_grounded_summary(
+                    frame=st.session_state.latest_raw_frame,
+                    accel_g=current_accel,
+                    fft_hz=current_fft,
+                    heuristic_state=current_state
+                )
+                st.session_state.agent_thought = summary
+            else:
+                st.session_state.agent_thought = "Error: Vision matrix buffer empty."
+
+with col_thought:
+    st.subheader("Agent's Perceptual Interpretation")
+    st.info(st.session_state.agent_thought)
+
 
 # ── Auto-refresh every 100 ms ─────────────────────────────────────────────────
 time.sleep(0.1)
