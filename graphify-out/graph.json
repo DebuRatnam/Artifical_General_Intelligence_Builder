@@ -1,41 +1,410 @@
 {
   "directed": false,
   "multigraph": false,
-  "graph": {},
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "multimodal_sensor_fusion_loop",
+        "label": "Multi-Modal Sensor Fusion Pipeline",
+        "nodes": [
+          "main_gui_trigger_sensory_alignment",
+          "multimodal_agent_generate_grounded_summary",
+          "agent_simulator_classify"
+        ],
+        "relation": "implement",
+        "confidence": "EXTRACTED",
+        "confidence_score": 0.95,
+        "source_file": "main_gui.py"
+      },
+      {
+        "id": "thread_safe_producer_consumer",
+        "label": "Thread-Safe Producer-Consumer Pattern",
+        "nodes": [
+          "claude_md_token_queue",
+          "agent_simulator_run",
+          "main_gui_token_queue_consumer"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 0.95,
+        "source_file": "CLAUDE.md"
+      },
+      {
+        "id": "perceive_reason_act_arch",
+        "label": "Perceive-Reason-Act Architecture",
+        "nodes": [
+          "agent_simulator_classify",
+          "agent_simulator_emit_directive",
+          "agent_simulator_run"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "agent_simulator.py"
+      }
+    ]
+  },
   "nodes": [
     {
       "label": "dsp_filter.h",
       "file_type": "code",
       "source_file": "dsp_filter.h",
       "source_location": "L1",
-      "id": "dsp_filter_h",
-      "community": 1,
-      "norm_label": "dsp_filter.h"
+      "community": 4,
+      "norm_label": "dsp_filter.h",
+      "id": "dsp_filter_h"
     },
     {
       "label": "agent_simulator.py",
       "file_type": "code",
       "source_file": "agent_simulator.py",
       "source_location": "L1",
-      "id": "agent_simulator_py",
       "community": 0,
-      "norm_label": "agent_simulator.py"
+      "norm_label": "agent_simulator.py",
+      "id": "agent_simulator_py"
     },
     {
       "label": "Policy",
       "file_type": "code",
       "source_file": "agent_simulator.py",
       "source_location": "L18",
-      "id": "files_agent_simulator_policy",
       "community": 0,
-      "norm_label": "policy"
+      "norm_label": "policy",
+      "id": "files_agent_simulator_policy"
+    },
+    {
+      "label": "agent_simulator.py Heuristic physical agent: Perceive \u2192 Reason \u2192 Act. Classifies",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L1",
+      "community": 0,
+      "norm_label": "agent_simulator.py heuristic physical agent: perceive \u2192 reason \u2192 act. classifies",
+      "id": "files_agent_simulator_rationale_1"
+    },
+    {
+      "label": "Map sensor signatures to material state.      Signatures (from CLAUDE.md):",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L58",
+      "community": 0,
+      "norm_label": "map sensor signatures to material state.      signatures (from claude.md):",
+      "id": "files_agent_simulator_rationale_58"
+    },
+    {
+      "label": "Start agent loop as daemon thread. Returns thread.",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L131",
+      "community": 0,
+      "norm_label": "start agent loop as daemon thread. returns thread.",
+      "id": "files_agent_simulator_rationale_131"
+    },
+    {
+      "label": "main.c",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L1",
+      "community": 4,
+      "norm_label": "main.c",
+      "id": "main_c"
+    },
+    {
+      "label": "qmi8658_read_az()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L23",
+      "community": 4,
+      "norm_label": "qmi8658_read_az()",
+      "id": "files_main_qmi8658_read_az"
+    },
+    {
+      "label": "read_audio_sample()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L35",
+      "community": 4,
+      "norm_label": "read_audio_sample()",
+      "id": "files_main_read_audio_sample"
+    },
+    {
+      "label": "setup()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L39",
+      "community": 4,
+      "norm_label": "setup()",
+      "id": "files_main_setup"
+    },
+    {
+      "label": "loop()",
+      "file_type": "code",
+      "source_file": "main.c",
+      "source_location": "L46",
+      "community": 4,
+      "norm_label": "loop()",
+      "id": "files_main_loop"
+    },
+    {
+      "label": "compute_hann_window()",
+      "file_type": "code",
+      "source_file": "dsp_filter.c",
+      "source_location": "L20",
+      "community": 4,
+      "norm_label": "compute_hann_window()",
+      "id": "files_dsp_filter_compute_hann_window"
+    },
+    {
+      "label": "dsp_filter_init()",
+      "file_type": "code",
+      "source_file": "dsp_filter.c",
+      "source_location": "L27",
+      "community": 4,
+      "norm_label": "dsp_filter_init()",
+      "id": "files_dsp_filter_dsp_filter_init"
+    },
+    {
+      "label": "dsp_get_peak_hz()",
+      "file_type": "code",
+      "source_file": "dsp_filter.c",
+      "source_location": "L34",
+      "community": 4,
+      "norm_label": "dsp_get_peak_hz()",
+      "id": "files_dsp_filter_dsp_get_peak_hz"
+    },
+    {
+      "label": "main_gui.py",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "main_gui.py",
+      "id": "main_gui_py"
+    },
+    {
+      "label": "main_gui.py Streamlit dashboard: egocentric camera feed, live tactile line chart",
+      "file_type": "rationale",
+      "source_file": "main_gui.py",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "main_gui.py streamlit dashboard: egocentric camera feed, live tactile line chart",
+      "id": "files_main_gui_rationale_1"
+    },
+    {
+      "label": "data_harvester.py",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "data_harvester.py",
+      "id": "data_harvester_py"
+    },
+    {
+      "label": "_parse_line()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L25",
+      "community": 1,
+      "norm_label": "_parse_line()",
+      "id": "files_data_harvester_parse_line"
+    },
+    {
+      "label": "_push()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L36",
+      "community": 1,
+      "norm_label": "_push()",
+      "id": "files_data_harvester_push"
+    },
+    {
+      "label": "_reader_loop()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L45",
+      "community": 1,
+      "norm_label": "_reader_loop()",
+      "id": "files_data_harvester_reader_loop"
+    },
+    {
+      "label": "start()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L61",
+      "community": 1,
+      "norm_label": "start()",
+      "id": "files_data_harvester_start"
+    },
+    {
+      "label": "start_mock()",
+      "file_type": "code",
+      "source_file": "data_harvester.py",
+      "source_location": "L75",
+      "community": 1,
+      "norm_label": "start_mock()",
+      "id": "files_data_harvester_start_mock"
+    },
+    {
+      "label": "data_harvester.py Non-blocking serial reader. Runs in a daemon thread and pushes",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L1",
+      "community": 1,
+      "norm_label": "data_harvester.py non-blocking serial reader. runs in a daemon thread and pushes",
+      "id": "files_data_harvester_rationale_1"
+    },
+    {
+      "label": "Parse a CSV serial line into a token. Returns None on bad packet.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L26",
+      "community": 1,
+      "norm_label": "parse a csv serial line into a token. returns none on bad packet.",
+      "id": "files_data_harvester_rationale_26"
+    },
+    {
+      "label": "Push token to queue; drop oldest if full.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L37",
+      "community": 1,
+      "norm_label": "push token to queue; drop oldest if full.",
+      "id": "files_data_harvester_rationale_37"
+    },
+    {
+      "label": "Background thread: read serial, parse, push to queue.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L46",
+      "community": 1,
+      "norm_label": "background thread: read serial, parse, push to queue.",
+      "id": "files_data_harvester_rationale_46"
+    },
+    {
+      "label": "Start the serial reader as a daemon thread. Returns the thread.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L62",
+      "community": 1,
+      "norm_label": "start the serial reader as a daemon thread. returns the thread.",
+      "id": "files_data_harvester_rationale_62"
+    },
+    {
+      "label": "Inject synthetic tokens at a fixed rate for testing without hardware.",
+      "file_type": "rationale",
+      "source_file": "data_harvester.py",
+      "source_location": "L76",
+      "community": 1,
+      "norm_label": "inject synthetic tokens at a fixed rate for testing without hardware.",
+      "id": "files_data_harvester_rationale_76"
+    },
+    {
+      "label": "Classifies organic materials based on vibrational friction (g-force)     and aco",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L52",
+      "id": "files_agent_simulator_rationale_52",
+      "community": 0,
+      "norm_label": "classifies organic materials based on vibrational friction (g-force)     and aco"
+    },
+    {
+      "label": "Pull tokens from token_queue and update shared agent state.     Call this in a d",
+      "file_type": "rationale",
+      "source_file": "agent_simulator.py",
+      "source_location": "L91",
+      "id": "files_agent_simulator_rationale_91",
+      "community": 0,
+      "norm_label": "pull tokens from token_queue and update shared agent state.     call this in a d"
+    },
+    {
+      "label": "multimodal_agent.py",
+      "file_type": "code",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L1",
+      "id": "multimodal_agent_py",
+      "community": 2,
+      "norm_label": "multimodal_agent.py"
+    },
+    {
+      "label": "UnifiedEmbodiedAgent",
+      "file_type": "code",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L11",
+      "id": "files_multimodal_agent_unifiedembodiedagent",
+      "community": 2,
+      "norm_label": "unifiedembodiedagent"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L12",
+      "id": "files_multimodal_agent_unifiedembodiedagent_init",
+      "community": 2,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "host_app/multimodal_agent.py Unified Perceptual Agent: Integrates CV matrices an",
+      "file_type": "rationale",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L1",
+      "id": "files_multimodal_agent_rationale_1",
+      "community": 2,
+      "norm_label": "host_app/multimodal_agent.py unified perceptual agent: integrates cv matrices an"
+    },
+    {
+      "label": "Checks if ollama is running and has the model pulled.",
+      "file_type": "rationale",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L17",
+      "id": "files_multimodal_agent_rationale_17",
+      "community": 2,
+      "norm_label": "checks if ollama is running and has the model pulled."
+    },
+    {
+      "label": "Ingests vision frame, audio bins, and tactile forces simultaneously          to",
+      "file_type": "rationale",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L25",
+      "id": "files_multimodal_agent_rationale_25",
+      "community": 2,
+      "norm_label": "ingests vision frame, audio bins, and tactile forces simultaneously          to"
+    },
+    {
+      "label": "Policy Dataclass",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 18",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_policy",
+      "community": 0,
+      "norm_label": "policy dataclass"
+    },
+    {
+      "label": "POLICIES Dict",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 27",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_policies",
+      "community": 5,
+      "norm_label": "policies dict"
     },
     {
       "label": "classify()",
       "file_type": "code",
       "source_file": "agent_simulator.py",
-      "source_location": "L57",
-      "id": "files_agent_simulator_classify",
+      "source_location": "line 51",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_classify",
       "community": 0,
       "norm_label": "classify()"
     },
@@ -43,8 +412,12 @@
       "label": "emit_directive()",
       "file_type": "code",
       "source_file": "agent_simulator.py",
-      "source_location": "L79",
-      "id": "files_agent_simulator_emit_directive",
+      "source_location": "line 69",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_emit_directive",
       "community": 0,
       "norm_label": "emit_directive()"
     },
@@ -52,8 +425,12 @@
       "label": "run()",
       "file_type": "code",
       "source_file": "agent_simulator.py",
-      "source_location": "L100",
-      "id": "files_agent_simulator_run",
+      "source_location": "line 90",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_run",
       "community": 0,
       "norm_label": "run()"
     },
@@ -61,244 +438,326 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "agent_simulator.py",
-      "source_location": "L130",
-      "id": "files_agent_simulator_start",
+      "source_location": "line 120",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_start",
       "community": 0,
       "norm_label": "start()"
     },
     {
-      "label": "agent_simulator.py Heuristic physical agent: Perceive \u2192 Reason \u2192 Act. Classifies",
+      "label": "current_state (shared global)",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 85",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_current_state",
+      "community": 3,
+      "norm_label": "current_state (shared global)"
+    },
+    {
+      "label": "current_directive (shared global)",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 86",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_current_directive",
+      "community": 3,
+      "norm_label": "current_directive (shared global)"
+    },
+    {
+      "label": "last_policy (shared global)",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 87",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_last_policy",
+      "community": 0,
+      "norm_label": "last_policy (shared global)"
+    },
+    {
+      "label": "Perceive-Reason-Act Loop Pattern",
       "file_type": "rationale",
       "source_file": "agent_simulator.py",
-      "source_location": "L1",
-      "id": "files_agent_simulator_rationale_1",
+      "source_location": "line 3",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_perceive_reason_act",
       "community": 0,
-      "norm_label": "agent_simulator.py heuristic physical agent: perceive \u2192 reason \u2192 act. classifies"
+      "norm_label": "perceive-reason-act loop pattern"
     },
     {
-      "label": "Map sensor signatures to material state.      Signatures (from CLAUDE.md):",
-      "file_type": "rationale",
+      "label": "Dry Leaves Policy",
+      "file_type": "concept",
       "source_file": "agent_simulator.py",
-      "source_location": "L58",
-      "id": "files_agent_simulator_rationale_58",
-      "community": 0,
-      "norm_label": "map sensor signatures to material state.      signatures (from claude.md):"
+      "source_location": "line 29",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_dry_leaves_policy",
+      "community": 5,
+      "norm_label": "dry leaves policy"
     },
     {
-      "label": "Pull tokens from token_queue and update shared agent state.     Call this in a d",
-      "file_type": "rationale",
+      "label": "Dense Sticks Policy",
+      "file_type": "concept",
       "source_file": "agent_simulator.py",
-      "source_location": "L101",
-      "id": "files_agent_simulator_rationale_101",
-      "community": 0,
-      "norm_label": "pull tokens from token_queue and update shared agent state.     call this in a d"
+      "source_location": "line 35",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "agent_simulator_dense_sticks_policy",
+      "community": 5,
+      "norm_label": "dense sticks policy"
     },
     {
-      "label": "Start agent loop as daemon thread. Returns thread.",
+      "label": "UnifiedEmbodiedAgent Class",
+      "file_type": "code",
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 11",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "multimodal_agent_unifiedembodiedagent",
+      "community": 2,
+      "norm_label": "unifiedembodiedagent class"
+    },
+    {
+      "label": "_warmup()",
+      "file_type": "code",
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 16",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "multimodal_agent_warmup",
+      "community": 2,
+      "norm_label": "_warmup()"
+    },
+    {
+      "label": "generate_grounded_summary()",
+      "file_type": "code",
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 24",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "multimodal_agent_generate_grounded_summary",
+      "community": 2,
+      "norm_label": "generate_grounded_summary()"
+    },
+    {
+      "label": "Late-Fusion Multi-Modal Context Pattern",
       "file_type": "rationale",
-      "source_file": "agent_simulator.py",
-      "source_location": "L131",
-      "id": "files_agent_simulator_rationale_131",
-      "community": 0,
-      "norm_label": "start agent loop as daemon thread. returns thread."
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 36",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "multimodal_agent_late_fusion",
+      "community": 2,
+      "norm_label": "late-fusion multi-modal context pattern"
     },
     {
-      "label": "main.c",
-      "file_type": "code",
-      "source_file": "main.c",
-      "source_location": "L1",
-      "id": "main_c",
-      "community": 1,
-      "norm_label": "main.c"
+      "label": "Moondream VLM (Ollama)",
+      "file_type": "concept",
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 12",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "multimodal_agent_moondream",
+      "community": 2,
+      "norm_label": "moondream vlm (ollama)"
     },
     {
-      "label": "qmi8658_read_az()",
-      "file_type": "code",
-      "source_file": "main.c",
-      "source_location": "L23",
-      "id": "files_main_qmi8658_read_az",
-      "community": 1,
-      "norm_label": "qmi8658_read_az()"
-    },
-    {
-      "label": "read_audio_sample()",
-      "file_type": "code",
-      "source_file": "main.c",
-      "source_location": "L35",
-      "id": "files_main_read_audio_sample",
-      "community": 1,
-      "norm_label": "read_audio_sample()"
-    },
-    {
-      "label": "setup()",
-      "file_type": "code",
-      "source_file": "main.c",
-      "source_location": "L39",
-      "id": "files_main_setup",
-      "community": 1,
-      "norm_label": "setup()"
-    },
-    {
-      "label": "loop()",
-      "file_type": "code",
-      "source_file": "main.c",
-      "source_location": "L46",
-      "id": "files_main_loop",
-      "community": 1,
-      "norm_label": "loop()"
-    },
-    {
-      "label": "compute_hann_window()",
-      "file_type": "code",
-      "source_file": "dsp_filter.c",
-      "source_location": "L20",
-      "id": "files_dsp_filter_compute_hann_window",
-      "community": 1,
-      "norm_label": "compute_hann_window()"
-    },
-    {
-      "label": "dsp_filter_init()",
-      "file_type": "code",
-      "source_file": "dsp_filter.c",
-      "source_location": "L27",
-      "id": "files_dsp_filter_dsp_filter_init",
-      "community": 1,
-      "norm_label": "dsp_filter_init()"
-    },
-    {
-      "label": "dsp_get_peak_hz()",
-      "file_type": "code",
-      "source_file": "dsp_filter.c",
-      "source_location": "L34",
-      "id": "files_dsp_filter_dsp_get_peak_hz",
-      "community": 1,
-      "norm_label": "dsp_get_peak_hz()"
-    },
-    {
-      "label": "main_gui.py",
+      "label": "Streamlit Dashboard (main_gui.py)",
       "file_type": "code",
       "source_file": "main_gui.py",
-      "source_location": "L1",
-      "id": "main_gui_py",
-      "community": 4,
-      "norm_label": "main_gui.py"
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_streamlit_dashboard",
+      "community": 3,
+      "norm_label": "streamlit dashboard (main_gui.py)"
     },
     {
-      "label": "main_gui.py Streamlit dashboard: egocentric camera feed, live tactile line chart",
-      "file_type": "rationale",
+      "label": "Token Queue Consumer (drain loop)",
+      "file_type": "code",
       "source_file": "main_gui.py",
-      "source_location": "L1",
-      "id": "files_main_gui_rationale_1",
-      "community": 4,
-      "norm_label": "main_gui.py streamlit dashboard: egocentric camera feed, live tactile line chart"
-    },
-    {
-      "label": "data_harvester.py",
-      "file_type": "code",
-      "source_file": "data_harvester.py",
-      "source_location": "L1",
-      "id": "data_harvester_py",
-      "community": 2,
-      "norm_label": "data_harvester.py"
-    },
-    {
-      "label": "_parse_line()",
-      "file_type": "code",
-      "source_file": "data_harvester.py",
-      "source_location": "L25",
-      "id": "files_data_harvester_parse_line",
-      "community": 2,
-      "norm_label": "_parse_line()"
-    },
-    {
-      "label": "_push()",
-      "file_type": "code",
-      "source_file": "data_harvester.py",
-      "source_location": "L36",
-      "id": "files_data_harvester_push",
-      "community": 2,
-      "norm_label": "_push()"
-    },
-    {
-      "label": "_reader_loop()",
-      "file_type": "code",
-      "source_file": "data_harvester.py",
-      "source_location": "L45",
-      "id": "files_data_harvester_reader_loop",
-      "community": 2,
-      "norm_label": "_reader_loop()"
-    },
-    {
-      "label": "start()",
-      "file_type": "code",
-      "source_file": "data_harvester.py",
-      "source_location": "L61",
-      "id": "files_data_harvester_start",
+      "source_location": "line 71",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_token_queue_consumer",
       "community": 3,
-      "norm_label": "start()"
+      "norm_label": "token queue consumer (drain loop)"
     },
     {
-      "label": "start_mock()",
+      "label": "STATE_COLORS Map",
       "file_type": "code",
-      "source_file": "data_harvester.py",
-      "source_location": "L75",
-      "id": "files_data_harvester_start_mock",
+      "source_file": "main_gui.py",
+      "source_location": "line 79",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_state_colors",
       "community": 3,
-      "norm_label": "start_mock()"
+      "norm_label": "state_colors map"
     },
     {
-      "label": "data_harvester.py Non-blocking serial reader. Runs in a daemon thread and pushes",
-      "file_type": "rationale",
-      "source_file": "data_harvester.py",
-      "source_location": "L1",
-      "id": "files_data_harvester_rationale_1",
-      "community": 2,
-      "norm_label": "data_harvester.py non-blocking serial reader. runs in a daemon thread and pushes"
-    },
-    {
-      "label": "Parse a CSV serial line into a token. Returns None on bad packet.",
-      "file_type": "rationale",
-      "source_file": "data_harvester.py",
-      "source_location": "L26",
-      "id": "files_data_harvester_rationale_26",
-      "community": 2,
-      "norm_label": "parse a csv serial line into a token. returns none on bad packet."
-    },
-    {
-      "label": "Push token to queue; drop oldest if full.",
-      "file_type": "rationale",
-      "source_file": "data_harvester.py",
-      "source_location": "L37",
-      "id": "files_data_harvester_rationale_37",
-      "community": 2,
-      "norm_label": "push token to queue; drop oldest if full."
-    },
-    {
-      "label": "Background thread: read serial, parse, push to queue.",
-      "file_type": "rationale",
-      "source_file": "data_harvester.py",
-      "source_location": "L46",
-      "id": "files_data_harvester_rationale_46",
-      "community": 2,
-      "norm_label": "background thread: read serial, parse, push to queue."
-    },
-    {
-      "label": "Start the serial reader as a daemon thread. Returns the thread.",
-      "file_type": "rationale",
-      "source_file": "data_harvester.py",
-      "source_location": "L62",
-      "id": "files_data_harvester_rationale_62",
+      "label": "Camera Feed (OpenCV capture)",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "line 104",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_camera_feed",
       "community": 3,
-      "norm_label": "start the serial reader as a daemon thread. returns the thread."
+      "norm_label": "camera feed (opencv capture)"
     },
     {
-      "label": "Inject synthetic tokens at a fixed rate for testing without hardware.",
-      "file_type": "rationale",
-      "source_file": "data_harvester.py",
-      "source_location": "L76",
-      "id": "files_data_harvester_rationale_76",
+      "label": "Trigger Sensory Alignment Button",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "line 164",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_trigger_sensory_alignment",
       "community": 3,
-      "norm_label": "inject synthetic tokens at a fixed rate for testing without hardware."
+      "norm_label": "trigger sensory alignment button"
+    },
+    {
+      "label": "vlm_agent Session State",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "line 45",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_vlm_agent_session",
+      "community": 2,
+      "norm_label": "vlm_agent session state"
+    },
+    {
+      "label": "Rolling Deque Buffers (accel/fft/ts)",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "line 61",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "main_gui_rolling_buffers",
+      "community": 3,
+      "norm_label": "rolling deque buffers (accel/fft/ts)"
+    },
+    {
+      "label": "Embodi-Align Project (CLAUDE.md)",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 1",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_embodi_align",
+      "community": 6,
+      "norm_label": "embodi-align project (claude.md)"
+    },
+    {
+      "label": "Serial Protocol (CSV format)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 110",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_serial_protocol",
+      "community": 0,
+      "norm_label": "serial protocol (csv format)"
+    },
+    {
+      "label": "Thread Safety Pattern (daemon threads + Queue)",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 147",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_thread_safety",
+      "community": 3,
+      "norm_label": "thread safety pattern (daemon threads + queue)"
+    },
+    {
+      "label": "Arduino TuyaOpen vs TuyaOS SDK Rationale",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 33",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_arduino_tuya_rationale",
+      "community": 6,
+      "norm_label": "arduino tuyaopen vs tuyaos sdk rationale"
+    },
+    {
+      "label": "FFT Buffer = 512 Constraint",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 131",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_fft_512_constraint",
+      "community": 6,
+      "norm_label": "fft buffer = 512 constraint"
+    },
+    {
+      "label": "token_queue (thread-safe Queue)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 150",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_token_queue",
+      "community": 3,
+      "norm_label": "token_queue (thread-safe queue)"
     }
   ],
   "links": [
@@ -309,9 +768,9 @@
       "source_file": "main.c",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_c",
-      "target": "dsp_filter_h",
-      "confidence_score": 1.0
+      "target": "dsp_filter_h"
     },
     {
       "relation": "contains",
@@ -319,9 +778,9 @@
       "source_file": "dsp_filter.c",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dsp_filter_h",
-      "target": "files_dsp_filter_compute_hann_window",
-      "confidence_score": 1.0
+      "target": "files_dsp_filter_compute_hann_window"
     },
     {
       "relation": "contains",
@@ -329,9 +788,9 @@
       "source_file": "dsp_filter.c",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dsp_filter_h",
-      "target": "files_dsp_filter_dsp_filter_init",
-      "confidence_score": 1.0
+      "target": "files_dsp_filter_dsp_filter_init"
     },
     {
       "relation": "contains",
@@ -339,9 +798,9 @@
       "source_file": "dsp_filter.c",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "dsp_filter_h",
-      "target": "files_dsp_filter_dsp_get_peak_hz",
-      "confidence_score": 1.0
+      "target": "files_dsp_filter_dsp_get_peak_hz"
     },
     {
       "relation": "contains",
@@ -349,49 +808,49 @@
       "source_file": "agent_simulator.py",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agent_simulator_py",
-      "target": "files_agent_simulator_policy",
-      "confidence_score": 1.0
+      "target": "files_agent_simulator_policy"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L57",
+      "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agent_simulator_py",
-      "target": "files_agent_simulator_classify",
-      "confidence_score": 1.0
+      "target": "agent_simulator_classify"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L79",
+      "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agent_simulator_py",
-      "target": "files_agent_simulator_emit_directive",
-      "confidence_score": 1.0
+      "target": "agent_simulator_emit_directive"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L100",
+      "source_location": "L90",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agent_simulator_py",
-      "target": "files_agent_simulator_run",
-      "confidence_score": 1.0
+      "target": "agent_simulator_run"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L130",
+      "source_location": "L120",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "agent_simulator_py",
-      "target": "files_agent_simulator_start",
-      "confidence_score": 1.0
+      "target": "agent_simulator_start"
     },
     {
       "relation": "rationale_for",
@@ -399,20 +858,19 @@
       "source_file": "agent_simulator.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_agent_simulator_rationale_1",
-      "target": "agent_simulator_py",
-      "confidence_score": 1.0
+      "target": "agent_simulator_py"
     },
     {
-      "relation": "calls",
-      "context": "call",
+      "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L112",
+      "source_location": "L47",
       "weight": 1.0,
-      "source": "files_agent_simulator_run",
-      "target": "files_agent_simulator_classify",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "agent_simulator_py",
+      "target": "data_harvester_py"
     },
     {
       "relation": "rationale_for",
@@ -420,40 +878,19 @@
       "source_file": "agent_simulator.py",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_agent_simulator_rationale_58",
-      "target": "files_agent_simulator_classify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "agent_simulator.py",
-      "source_location": "L119",
-      "weight": 1.0,
-      "source": "files_agent_simulator_run",
-      "target": "files_agent_simulator_emit_directive",
-      "confidence_score": 1.0
+      "target": "agent_simulator_classify"
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L101",
+      "source_location": "L121",
       "weight": 1.0,
-      "source": "files_agent_simulator_rationale_101",
-      "target": "files_agent_simulator_run",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "agent_simulator.py",
-      "source_location": "L131",
-      "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_agent_simulator_rationale_131",
-      "target": "files_agent_simulator_start",
-      "confidence_score": 1.0
+      "target": "agent_simulator_start"
     },
     {
       "relation": "contains",
@@ -461,9 +898,9 @@
       "source_file": "main.c",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_c",
-      "target": "files_main_qmi8658_read_az",
-      "confidence_score": 1.0
+      "target": "files_main_qmi8658_read_az"
     },
     {
       "relation": "contains",
@@ -471,9 +908,9 @@
       "source_file": "main.c",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_c",
-      "target": "files_main_read_audio_sample",
-      "confidence_score": 1.0
+      "target": "files_main_read_audio_sample"
     },
     {
       "relation": "contains",
@@ -481,9 +918,9 @@
       "source_file": "main.c",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_c",
-      "target": "files_main_setup",
-      "confidence_score": 1.0
+      "target": "files_main_setup"
     },
     {
       "relation": "contains",
@@ -491,9 +928,9 @@
       "source_file": "main.c",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "main_c",
-      "target": "files_main_loop",
-      "confidence_score": 1.0
+      "target": "files_main_loop"
     },
     {
       "relation": "calls",
@@ -502,9 +939,9 @@
       "source_file": "main.c",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_main_loop",
-      "target": "files_main_qmi8658_read_az",
-      "confidence_score": 1.0
+      "target": "files_main_qmi8658_read_az"
     },
     {
       "relation": "calls",
@@ -513,9 +950,9 @@
       "source_file": "main.c",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_main_loop",
-      "target": "files_main_read_audio_sample",
-      "confidence_score": 1.0
+      "target": "files_main_read_audio_sample"
     },
     {
       "relation": "calls",
@@ -546,9 +983,9 @@
       "source_file": "dsp_filter.c",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_dsp_filter_dsp_filter_init",
-      "target": "files_dsp_filter_compute_hann_window",
-      "confidence_score": 1.0
+      "target": "files_dsp_filter_compute_hann_window"
     },
     {
       "relation": "rationale_for",
@@ -556,9 +993,19 @@
       "source_file": "main_gui.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_main_gui_rationale_1",
-      "target": "main_gui_py",
-      "confidence_score": 1.0
+      "target": "main_gui_py"
+    },
+    {
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "source_file": "main_gui.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "main_gui_py",
+      "target": "data_harvester_py"
     },
     {
       "relation": "contains",
@@ -566,9 +1013,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_harvester_py",
-      "target": "files_data_harvester_parse_line",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_parse_line"
     },
     {
       "relation": "contains",
@@ -576,9 +1023,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_harvester_py",
-      "target": "files_data_harvester_push",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_push"
     },
     {
       "relation": "contains",
@@ -586,9 +1033,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_harvester_py",
-      "target": "files_data_harvester_reader_loop",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_reader_loop"
     },
     {
       "relation": "contains",
@@ -596,9 +1043,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_harvester_py",
-      "target": "files_data_harvester_start",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_start"
     },
     {
       "relation": "contains",
@@ -606,9 +1053,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "data_harvester_py",
-      "target": "files_data_harvester_start_mock",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_start_mock"
     },
     {
       "relation": "rationale_for",
@@ -616,9 +1063,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_1",
-      "target": "data_harvester_py",
-      "confidence_score": 1.0
+      "target": "data_harvester_py"
     },
     {
       "relation": "calls",
@@ -627,9 +1074,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_reader_loop",
-      "target": "files_data_harvester_parse_line",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_parse_line"
     },
     {
       "relation": "rationale_for",
@@ -637,9 +1084,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_26",
-      "target": "files_data_harvester_parse_line",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_parse_line"
     },
     {
       "relation": "calls",
@@ -648,9 +1095,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_reader_loop",
-      "target": "files_data_harvester_push",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_push"
     },
     {
       "relation": "rationale_for",
@@ -658,9 +1105,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_37",
-      "target": "files_data_harvester_push",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_push"
     },
     {
       "relation": "rationale_for",
@@ -668,9 +1115,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_46",
-      "target": "files_data_harvester_reader_loop",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_reader_loop"
     },
     {
       "relation": "calls",
@@ -679,9 +1126,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L90",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_start_mock",
-      "target": "files_data_harvester_start",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_start"
     },
     {
       "relation": "rationale_for",
@@ -689,9 +1136,9 @@
       "source_file": "data_harvester.py",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_62",
-      "target": "files_data_harvester_start",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_start"
     },
     {
       "relation": "rationale_for",
@@ -699,31 +1146,504 @@
       "source_file": "data_harvester.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_76",
-      "target": "files_data_harvester_start_mock",
-      "confidence_score": 1.0
+      "target": "files_data_harvester_start_mock"
     },
     {
-      "relation": "imports",
+      "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L47",
+      "source_location": "L52",
       "weight": 1.0,
-      "source": "agent_simulator_py",
-      "target": "data_harvester_py",
+      "source": "files_agent_simulator_rationale_52",
+      "target": "agent_simulator_classify",
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
+      "relation": "rationale_for",
       "confidence": "EXTRACTED",
-      "source_file": "main_gui.py",
-      "source_location": "L13",
+      "source_file": "agent_simulator.py",
+      "source_location": "L91",
       "weight": 1.0,
-      "source": "main_gui_py",
-      "target": "data_harvester_py",
+      "confidence_score": 1.0,
+      "source": "files_agent_simulator_rationale_91",
+      "target": "agent_simulator_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "multimodal_agent_py",
+      "target": "files_multimodal_agent_unifiedembodiedagent",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_rationale_1",
+      "target": "multimodal_agent_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_unifiedembodiedagent",
+      "target": "files_multimodal_agent_unifiedembodiedagent_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_unifiedembodiedagent",
+      "target": "multimodal_agent_warmup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_unifiedembodiedagent",
+      "target": "multimodal_agent_generate_grounded_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_unifiedembodiedagent_init",
+      "target": "multimodal_agent_warmup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_rationale_17",
+      "target": "multimodal_agent_warmup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "multimodal_agent.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "files_multimodal_agent_rationale_25",
+      "target": "multimodal_agent_generate_grounded_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 69",
+      "weight": 1.0,
+      "source": "agent_simulator_emit_directive",
+      "target": "agent_simulator_policy"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 108",
+      "weight": 1.0,
+      "source": "agent_simulator_classify",
+      "target": "agent_simulator_policies"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 29",
+      "weight": 1.0,
+      "source": "agent_simulator_dry_leaves_policy",
+      "target": "agent_simulator_policies"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 35",
+      "weight": 1.0,
+      "source": "agent_simulator_dense_sticks_policy",
+      "target": "agent_simulator_policies"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "agent_simulator_run",
+      "target": "agent_simulator_classify"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "agent_simulator_perceive_reason_act",
+      "target": "agent_simulator_classify"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 110",
+      "weight": 0.85,
+      "source": "claude_md_serial_protocol",
+      "target": "agent_simulator_classify"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 0.75,
+      "source": "agent_simulator_classify",
+      "target": "multimodal_agent_generate_grounded_summary"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "line 109",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "agent_simulator_run",
+      "target": "agent_simulator_emit_directive"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "agent_simulator_perceive_reason_act",
+      "target": "agent_simulator_emit_directive"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 112",
+      "weight": 1.0,
+      "source": "agent_simulator_run",
+      "target": "agent_simulator_current_state"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 113",
+      "weight": 1.0,
+      "source": "agent_simulator_run",
+      "target": "agent_simulator_current_directive"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 114",
+      "weight": 1.0,
+      "source": "agent_simulator_run",
+      "target": "agent_simulator_last_policy"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 123",
+      "weight": 1.0,
+      "source": "agent_simulator_start",
+      "target": "agent_simulator_run"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "agent_simulator.py",
+      "source_location": "line 90",
+      "weight": 0.85,
+      "source": "agent_simulator_run",
+      "target": "claude_md_thread_safety"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 53",
+      "weight": 1.0,
+      "source": "main_gui_streamlit_dashboard",
+      "target": "agent_simulator_start"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 84",
+      "weight": 1.0,
+      "source": "main_gui_streamlit_dashboard",
+      "target": "agent_simulator_current_state"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 162",
+      "weight": 1.0,
+      "source": "main_gui_trigger_sensory_alignment",
+      "target": "agent_simulator_current_state"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 84",
+      "weight": 1.0,
+      "source": "main_gui_state_colors",
+      "target": "agent_simulator_current_state"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 85",
+      "weight": 1.0,
+      "source": "main_gui_streamlit_dashboard",
+      "target": "agent_simulator_current_directive"
+    },
+    {
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 0.85,
+      "source": "agent_simulator_perceive_reason_act",
+      "target": "multimodal_agent_generate_grounded_summary"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 14",
+      "weight": 1.0,
+      "source": "multimodal_agent_unifiedembodiedagent",
+      "target": "multimodal_agent_warmup"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 45",
+      "weight": 1.0,
+      "source": "main_gui_vlm_agent_session",
+      "target": "multimodal_agent_unifiedembodiedagent"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 20",
+      "weight": 1.0,
+      "source": "multimodal_agent_warmup",
+      "target": "multimodal_agent_moondream"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 52",
+      "weight": 1.0,
+      "source": "multimodal_agent_generate_grounded_summary",
+      "target": "multimodal_agent_moondream"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "multimodal_agent.py",
+      "source_location": "line 36",
+      "weight": 1.0,
+      "source": "multimodal_agent_late_fusion",
+      "target": "multimodal_agent_generate_grounded_summary"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 168",
+      "weight": 1.0,
+      "source": "main_gui_trigger_sensory_alignment",
+      "target": "multimodal_agent_generate_grounded_summary"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "main_gui.py",
+      "source_location": "line 109",
+      "weight": 0.95,
+      "source": "main_gui_camera_feed",
+      "target": "multimodal_agent_generate_grounded_summary"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 71",
+      "weight": 1.0,
+      "source": "main_gui_streamlit_dashboard",
+      "target": "main_gui_token_queue_consumer"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 61",
+      "weight": 1.0,
+      "source": "main_gui_streamlit_dashboard",
+      "target": "main_gui_rolling_buffers"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 104",
+      "weight": 1.0,
+      "source": "main_gui_streamlit_dashboard",
+      "target": "main_gui_camera_feed"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": "line 71",
+      "weight": 1.0,
+      "source": "main_gui_token_queue_consumer",
+      "target": "claude_md_token_queue"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 131",
+      "weight": 1.0,
+      "source": "claude_md_fft_512_constraint",
+      "target": "claude_md_embodi_align"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 33",
+      "weight": 1.0,
+      "source": "claude_md_arduino_tuya_rationale",
+      "target": "claude_md_embodi_align"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 147",
+      "weight": 1.0,
+      "source": "claude_md_thread_safety",
+      "target": "claude_md_token_queue"
     }
   ],
-  "hyperedges": [],
-  "built_at_commit": "978242a3dd842e6d0a00dca78460202f49373992"
+  "hyperedges": [
+    {
+      "id": "multimodal_sensor_fusion_loop",
+      "label": "Multi-Modal Sensor Fusion Pipeline",
+      "nodes": [
+        "main_gui_trigger_sensory_alignment",
+        "multimodal_agent_generate_grounded_summary",
+        "agent_simulator_classify"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "main_gui.py"
+    },
+    {
+      "id": "thread_safe_producer_consumer",
+      "label": "Thread-Safe Producer-Consumer Pattern",
+      "nodes": [
+        "claude_md_token_queue",
+        "agent_simulator_run",
+        "main_gui_token_queue_consumer"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md"
+    },
+    {
+      "id": "perceive_reason_act_arch",
+      "label": "Perceive-Reason-Act Architecture",
+      "nodes": [
+        "agent_simulator_classify",
+        "agent_simulator_emit_directive",
+        "agent_simulator_run"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py"
+    }
+  ],
+  "built_at_commit": "13058b1c1be25e1fa0aba5feeba69de8f17f3ec7"
 }

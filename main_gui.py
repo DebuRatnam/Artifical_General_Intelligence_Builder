@@ -39,16 +39,17 @@ window_size = st.sidebar.slider("Plot window (samples)", 50, 500, 200)
 if 'started' not in st.session_state:
     from data_harvester import token_queue, start, start_mock
     import agent_simulator as agent
+    from multimodal_agent import UnifiedEmbodiedAgent
 
-    # Initialize your new multimodal VLM brain
+    # Initialize your new multimodal VLM brain & default state
     st.session_state.vlm_agent = UnifiedEmbodiedAgent(model_name="moondream")
     st.session_state.agent_thought = "Awaiting sensory vector alignment trigger..."
-    
+
     if use_mock:
-        start_mock(hz=10)
+        start_mock(hz=100)
     else:
         start(port=serial_port, baud=baud_rate)
-    
+        
     agent.start(token_queue)
     st.session_state.started = True
 
@@ -76,10 +77,9 @@ while not token_queue.empty() and drained < 50:
 
 # ── State colour map ──────────────────────────────────────────────────────────
 STATE_COLORS = {
-    "Smooth Plastic":  "#2ecc71",   # green
-    "Rough Sandpaper": "#f39c12",   # amber
-    "Stuck Sticker":   "#e74c3c",   # red
-    "Unknown":         "#95a5a6",   # grey
+    "Dry Leaves":   "#2ecc71",   # Green (safe/brittle material)
+    "Dense Sticks":  "#e74c3c",   # Red (high-torque obstacle hazard)
+    "Unknown":       "#95a5a6",   # Grey (transient or no contact state)
 }
 state     = agent.current_state
 directive = agent.current_directive
