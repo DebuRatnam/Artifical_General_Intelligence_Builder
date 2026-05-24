@@ -1,0 +1,235 @@
+{
+  "nodes": [
+    {
+      "id": "sensors_data_harvester_token_queue",
+      "label": "token_queue",
+      "file_type": "code",
+      "source_file": "sensors/data_harvester.py",
+      "source_location": "line 19"
+    },
+    {
+      "id": "sensors_data_harvester_parse_line",
+      "label": "_parse_line",
+      "file_type": "code",
+      "source_file": "sensors/data_harvester.py",
+      "source_location": "line 28"
+    },
+    {
+      "id": "sensors_data_harvester_reader_loop",
+      "label": "_reader_loop",
+      "file_type": "code",
+      "source_file": "sensors/data_harvester.py",
+      "source_location": "line 53"
+    },
+    {
+      "id": "sensors_data_harvester_start",
+      "label": "start",
+      "file_type": "code",
+      "source_file": "sensors/data_harvester.py",
+      "source_location": "line 71"
+    },
+    {
+      "id": "sensors_data_harvester_start_mock",
+      "label": "start_mock",
+      "file_type": "code",
+      "source_file": "sensors/data_harvester.py",
+      "source_location": "line 88"
+    },
+    {
+      "id": "firmware_main_setup",
+      "label": "setup",
+      "file_type": "code",
+      "source_file": "firmware/main.c",
+      "source_location": "line 46"
+    },
+    {
+      "id": "firmware_main_loop",
+      "label": "loop",
+      "file_type": "code",
+      "source_file": "firmware/main.c",
+      "source_location": "line 56"
+    },
+    {
+      "id": "firmware_main_qmi8658_read_az",
+      "label": "qmi8658_read_az",
+      "file_type": "code",
+      "source_file": "firmware/main.c",
+      "source_location": "line 25"
+    },
+    {
+      "id": "firmware_main_read_audio_sample",
+      "label": "read_audio_sample",
+      "file_type": "code",
+      "source_file": "firmware/main.c",
+      "source_location": "line 40"
+    },
+    {
+      "id": "firmware_dsp_filter_init",
+      "label": "dsp_filter_init",
+      "file_type": "code",
+      "source_file": "firmware/dsp_filter.c",
+      "source_location": "line 32"
+    },
+    {
+      "id": "firmware_dsp_get_peak_hz",
+      "label": "dsp_get_peak_hz",
+      "file_type": "code",
+      "source_file": "firmware/dsp_filter.c",
+      "source_location": "line 42"
+    },
+    {
+      "id": "firmware_dsp_compute_hann_window",
+      "label": "compute_hann_window",
+      "file_type": "code",
+      "source_file": "firmware/dsp_filter.c",
+      "source_location": "line 22"
+    },
+    {
+      "id": "agents_agent_simulator_classify",
+      "label": "classify",
+      "file_type": "code",
+      "source_file": "agents/agent_simulator.py",
+      "source_location": "line 37"
+    },
+    {
+      "id": "agents_agent_simulator_contact_detector",
+      "label": "ContactDetector",
+      "file_type": "code",
+      "source_file": "agents/agent_simulator.py",
+      "source_location": "line 53"
+    },
+    {
+      "id": "agents_agent_simulator_run",
+      "label": "run",
+      "file_type": "code",
+      "source_file": "agents/agent_simulator.py",
+      "source_location": "line 87"
+    },
+    {
+      "id": "agents_agent_simulator_start",
+      "label": "start",
+      "file_type": "code",
+      "source_file": "agents/agent_simulator.py",
+      "source_location": "line 126"
+    },
+    {
+      "id": "agents_multimodal_agent_unified_embodied_agent",
+      "label": "UnifiedEmbodiedAgent",
+      "file_type": "code",
+      "source_file": "agents/multimodal_agent.py",
+      "source_location": "line 11"
+    },
+    {
+      "id": "agents_multimodal_agent_generate_grounded_summary",
+      "label": "generate_grounded_summary",
+      "file_type": "code",
+      "source_file": "agents/multimodal_agent.py",
+      "source_location": "line 34"
+    },
+    {
+      "id": "perception_clip_encoder_clip_encoder",
+      "label": "CLIPEncoder",
+      "file_type": "code",
+      "source_file": "perception/clip_encoder.py",
+      "source_location": "line 27"
+    },
+    {
+      "id": "perception_clip_encoder_encode_image",
+      "label": "encode_image",
+      "file_type": "code",
+      "source_file": "perception/clip_encoder.py",
+      "source_location": "line 71"
+    },
+    {
+      "id": "perception_clip_encoder_encode_text",
+      "label": "encode_text",
+      "file_type": "code",
+      "source_file": "perception/clip_encoder.py",
+      "source_location": "line 91"
+    },
+    {
+      "id": "perception_object_memory_object_card",
+      "label": "ObjectCard",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 34"
+    },
+    {
+      "id": "perception_object_memory_object_memory",
+      "label": "ObjectMemory",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 60"
+    },
+    {
+      "id": "perception_object_memory_upsert_visual",
+      "label": "upsert_visual",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 148"
+    },
+    {
+      "id": "perception_object_memory_update_tactile",
+      "label": "update_tactile",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 186"
+    },
+    {
+      "id": "perception_object_memory_update_audio",
+      "label": "update_audio",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 220"
+    },
+    {
+      "id": "perception_object_memory_nearest_visual",
+      "label": "nearest_visual",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 240"
+    },
+    {
+      "id": "perception_object_memory_nearest_tactile",
+      "label": "nearest_tactile",
+      "file_type": "code",
+      "source_file": "perception/object_memory.py",
+      "source_location": "line 262"
+    }
+  ],
+  "edges": [
+    {"source": "sensors_data_harvester_reader_loop", "target": "sensors_data_harvester_parse_line", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "sensors/data_harvester.py", "weight": 1.0},
+    {"source": "sensors_data_harvester_reader_loop", "target": "sensors_data_harvester_token_queue", "relation": "shares_data_with", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "sensors/data_harvester.py", "weight": 1.0},
+    {"source": "sensors_data_harvester_start", "target": "sensors_data_harvester_reader_loop", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "sensors/data_harvester.py", "weight": 1.0},
+    {"source": "sensors_data_harvester_start_mock", "target": "sensors_data_harvester_token_queue", "relation": "shares_data_with", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "sensors/data_harvester.py", "weight": 1.0},
+    {"source": "firmware_main_loop", "target": "firmware_main_read_audio_sample", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/main.c", "weight": 1.0},
+    {"source": "firmware_main_loop", "target": "firmware_main_qmi8658_read_az", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/main.c", "weight": 1.0},
+    {"source": "firmware_main_loop", "target": "firmware_dsp_get_peak_hz", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/main.c", "weight": 1.0},
+    {"source": "firmware_main_setup", "target": "firmware_dsp_filter_init", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/main.c", "weight": 1.0},
+    {"source": "firmware_dsp_filter_init", "target": "firmware_dsp_compute_hann_window", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/dsp_filter.c", "weight": 1.0},
+    {"source": "firmware_dsp_get_peak_hz", "target": "firmware_dsp_compute_hann_window", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/dsp_filter.c", "weight": 1.0},
+    {"source": "agents_agent_simulator_run", "target": "sensors_data_harvester_token_queue", "relation": "shares_data_with", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/agent_simulator.py", "weight": 1.0},
+    {"source": "agents_agent_simulator_run", "target": "agents_agent_simulator_classify", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/agent_simulator.py", "weight": 1.0},
+    {"source": "agents_agent_simulator_run", "target": "agents_agent_simulator_contact_detector", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/agent_simulator.py", "weight": 1.0},
+    {"source": "agents_agent_simulator_classify", "target": "perception_object_memory_nearest_tactile", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/agent_simulator.py", "weight": 1.0},
+    {"source": "agents_agent_simulator_start", "target": "agents_agent_simulator_run", "relation": "calls", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/agent_simulator.py", "weight": 1.0},
+    {"source": "agents_multimodal_agent_generate_grounded_summary", "target": "agents_multimodal_agent_unified_embodied_agent", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/multimodal_agent.py", "weight": 1.0},
+    {"source": "perception_clip_encoder_encode_image", "target": "perception_clip_encoder_clip_encoder", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "perception/clip_encoder.py", "weight": 1.0},
+    {"source": "perception_clip_encoder_encode_text", "target": "perception_clip_encoder_clip_encoder", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "perception/clip_encoder.py", "weight": 1.0},
+    {"source": "perception_object_memory_upsert_visual", "target": "perception_clip_encoder_encode_image", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.75, "source_file": "perception/object_memory.py", "weight": 1.0},
+    {"source": "perception_object_memory_nearest_visual", "target": "perception_clip_encoder_encode_image", "relation": "semantically_similar_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "perception/object_memory.py", "weight": 1.0},
+    {"source": "perception_object_memory_update_tactile", "target": "perception_object_memory_object_card", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "perception/object_memory.py", "weight": 1.0},
+    {"source": "perception_object_memory_update_audio", "target": "perception_object_memory_object_card", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "perception/object_memory.py", "weight": 1.0},
+    {"source": "perception_object_memory_nearest_tactile", "target": "perception_object_memory_object_card", "relation": "references", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "perception/object_memory.py", "weight": 1.0},
+    {"source": "agents_agent_simulator_run", "target": "perception_object_memory_object_memory", "relation": "shares_data_with", "confidence": "INFERRED", "confidence_score": 0.95, "source_file": "agents/agent_simulator.py", "weight": 1.0},
+    {"source": "firmware_main_loop", "target": "sensors_data_harvester_token_queue", "relation": "conceptually_related_to", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "firmware/main.c", "weight": 1.0}
+  ],
+  "hyperedges": [
+    {"id": "sensor_ingestion_pipeline", "label": "Sensor Ingestion Pipeline", "nodes": ["firmware_main_loop", "sensors_data_harvester_reader_loop", "sensors_data_harvester_parse_line"], "relation": "participate_in", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/main.c, sensors/data_harvester.py"},
+    {"id": "audio_dsp_chain", "label": "Audio DSP Processing Chain", "nodes": ["firmware_main_read_audio_sample", "firmware_dsp_compute_hann_window", "firmware_dsp_get_peak_hz", "firmware_main_loop"], "relation": "participate_in", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "firmware/main.c, firmware/dsp_filter.c"},
+    {"id": "tactile_memory_inference", "label": "Tactile Memory and Inference", "nodes": ["agents_agent_simulator_classify", "perception_object_memory_nearest_tactile", "perception_object_memory_update_tactile"], "relation": "participate_in", "confidence": "EXTRACTED", "confidence_score": 1.0, "source_file": "agents/agent_simulator.py, perception/object_memory.py"},
+    {"id": "multimodal_object_representation", "label": "Multimodal Object Memory System", "nodes": ["perception_object_memory_object_card", "perception_object_memory_upsert_visual", "perception_object_memory_update_tactile", "perception_object_memory_update_audio", "perception_clip_encoder_encode_image"], "relation": "form", "confidence": "INFERRED", "confidence_score": 0.85, "source_file": "perception/object_memory.py, perception/clip_encoder.py"}
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

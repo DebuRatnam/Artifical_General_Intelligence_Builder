@@ -149,7 +149,7 @@ Open that URL in a browser. You'll see:
 ### 4. Test It
 
 **Without hardware (mock mode, default):**
-- Camera feed should show live camera
+- Camera feed displays live real-time camera stream via browser `getUserMedia` API
 - Click **⚡ Observe scene (force VLM)** → llava analyzes frame
 - Check the **Agent's Raw Perceptual Output** section to see what llava detected
 - Detected objects appear on the 2D map with emoji icons
@@ -216,14 +216,83 @@ arduino-cli compile --fqbn tuyaopen:arm:T5 .
 python -m serial.tools.miniterm /dev/ttyUSB0 460800
 ```
 
+### Physical Attachment
+
+1. **Board + Glove:** Strap the T5 board to the back of a glove or hand using:
+   - Velcro strips (industrial-strength, both sides)
+   - Elastic band around wrist/palm
+   - Medical tape (comfortable, removable)
+
+2. **Orientation:** IMU Z-axis should point upward (perpendicular to palm). Microphone should face outward to capture ambient sound.
+
+3. **Cable routing:** USB micro-B cable goes from board to host laptop. Keep cable slack to avoid tugging during movement.
+
+### Driver Installation (USB Serial)
+
+Board uses **WCH CH343 USB-to-serial chip** for telemetry stream. Most systems auto-detect, but manual install may be needed:
+
+**macOS:**
+```bash
+# Download CH343 driver from WCH: https://www.wch.cn/downloads/category/63.html
+# Or via homebrew (if available):
+brew install wch-ch34x-usb-serial-driver
+
+# Verify connection:
+ls -la /dev/tty.* | grep -i ch343  # Should show /dev/tty.usbserial-*
+```
+
+**Windows:**
+- Download driver from: https://www.wch.cn/downloads/category/63.html
+- Run installer, reboot
+- Device Manager should show board as COM port (e.g., COM3)
+
+**Linux:**
+- Usually auto-detected as `/dev/ttyUSB0`
+- If not: `sudo modprobe ch343` and replug USB
+- Set permissions: `sudo usermod -a -G dialout $USER` (then logout/login)
+
+### Hardware Diagnostics
+
+If board not recognized after connection:
+
+```bash
+# Check connected USB devices
+lsusb | grep -i ch343       # Linux
+system_profiler SPUSBDataType | grep -i ch343  # macOS
+
+# Check serial port
+ls /dev/tty*                # macOS/Linux
+# Windows: Device Manager → Ports (COM & LPT)
+
+# Test serial stream (after finding port)
+python -m serial.tools.miniterm /dev/ttyUSB0 460800
+# Should see CSV lines: 104721,0.83,3412,0017
+
+# If no output:
+#   1. Verify baud rate matches firmware (460800)
+#   2. Re-flash firmware via Arduino IDE
+#   3. Try different USB port
+#   4. Check USB cable is data-capable (not charge-only)
+```
+
 ### Connect on Host
 
-Disable mock mode in Streamlit sidebar:
+**FastAPI/React frontend (recommended):**
+```bash
+./scripts/run_dev.sh
+# Then in sidebar on http://localhost:5173:
+# - Board mode → uncheck "Mock mode (no hardware)"
+# - Serial port → `/dev/ttyUSB0` (or your detected port)
+# - Baud rate: `460800`
+```
+
+**Streamlit (legacy):**
+Disable mock mode in sidebar:
 - **Mock mode** → uncheck
 - **Serial port** → `/dev/ttyUSB0` (or your port)
 - Baud rate should auto-detect: `460800`
 
-The agent will now consume tactile + audio telemetry from the board.
+The agent will now consume tactile + audio telemetry from the board in real-time.
 
 ---
 
@@ -240,8 +309,10 @@ The agent will now consume tactile + audio telemetry from the board.
 
 ### VLM not detecting objects
 - **Check raw output:** Click "⚡ Observe scene" → look at **Agent's Raw Perceptual Output**
-- Moondream has limits; try: better lighting, different angle, or larger objects
-- To swap VLM: edit `backend/main_gui.py` (look for `vlm_model = st.sidebar.text_input(...)`) and change `llava` to another Ollama model
+- **VLM has strict validation:** llava is filtered to ONLY confident, clearly visible objects (see `perception/world_model.py` prompt template). Dim lighting, blurry frames, or small objects may be skipped by design.
+- **If still hallucinating:** Try better lighting, different angle, or larger objects
+- **Reduce false positives:** The prompt enforces `CRITICAL: If you are uncertain about an object, do NOT include it` and caps output at 4 objects per frame
+- **To swap VLM:** Edit `backend/main_gui.py` (look for `vlm_model = st.sidebar.text_input(...)`) and change `llava` to another Ollama model
   ```python
   vlm_model = st.sidebar.text_input("VLM model (Ollama)", value="llava-phi")  # or "minicpm-v"
   ```

@@ -1,83 +1,13 @@
 {
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/dsp_filter.h": {
-    "mtime": 1779451468.0,
-    "ast_hash": "156994d08726a0ac52ed86470b0f2140",
-    "semantic_hash": "156994d08726a0ac52ed86470b0f2140"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/agent_simulator.py": {
-    "mtime": 1779596108.3868966,
-    "ast_hash": "87da61b4c6dc51c4185c5c81153a5d5b",
-    "semantic_hash": "87da61b4c6dc51c4185c5c81153a5d5b"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/main.c": {
-    "mtime": 1779592844.486564,
-    "ast_hash": "6cc620c23ce85799d9694d188d560f96",
-    "semantic_hash": "6cc620c23ce85799d9694d188d560f96"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/dsp_filter.c": {
-    "mtime": 1779592878.4604924,
-    "ast_hash": "deff5c73257d702e1a80aabf0abf5adc",
-    "semantic_hash": "deff5c73257d702e1a80aabf0abf5adc"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/main_gui.py": {
-    "mtime": 1779613870.583717,
-    "ast_hash": "767bf698b1ca660f2f6d1b2f2a7bae8e",
-    "semantic_hash": "767bf698b1ca660f2f6d1b2f2a7bae8e"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/data_harvester.py": {
-    "mtime": 1779592928.1770923,
-    "ast_hash": "f2547711d6917a60c78b7a37ee734340",
-    "semantic_hash": "f2547711d6917a60c78b7a37ee734340"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/multimodal_agent.py": {
-    "mtime": 1779608684.4845712,
-    "ast_hash": "141bd7486f0443b90fe313817affb1e9",
-    "semantic_hash": "141bd7486f0443b90fe313817affb1e9"
-  },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/requirements.txt": {
     "mtime": 1779615021.729851,
     "ast_hash": "cda166e98b1df0a2def175cd58bc9f2e",
     "semantic_hash": "cda166e98b1df0a2def175cd58bc9f2e"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/CLAUDE.md": {
-    "mtime": 1779615129.731374,
-    "ast_hash": "232fcd0acab279e82058b2d34b0aef85",
-    "semantic_hash": "232fcd0acab279e82058b2d34b0aef85"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/world_model.py": {
-    "mtime": 1779609984.2318618,
-    "ast_hash": "7369fa69665f7f113fb66cfd3f527472",
-    "semantic_hash": "7369fa69665f7f113fb66cfd3f527472"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/world_map.py": {
-    "mtime": 1779593034.384295,
-    "ast_hash": "672266533017095a1314fdd714fc0c7d",
-    "semantic_hash": "672266533017095a1314fdd714fc0c7d"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/FILES.md": {
-    "mtime": 1779601951.991424,
-    "ast_hash": "2b49306b99daeec8236735225bbe8ab2",
-    "semantic_hash": "2b49306b99daeec8236735225bbe8ab2"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/server.py": {
-    "mtime": 1779614190.956337,
-    "ast_hash": "b474216c49710368bf36e73424bd26c7",
-    "semantic_hash": "b474216c49710368bf36e73424bd26c7"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/object_memory.py": {
-    "mtime": 1779610320.2067623,
-    "ast_hash": "7d8c9a2b7dc009c2b02f87d6e0de2cc6",
-    "semantic_hash": "7d8c9a2b7dc009c2b02f87d6e0de2cc6"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/clip_encoder.py": {
-    "mtime": 1779595979.6673038,
-    "ast_hash": "7409c023596879be89004f3729a8fdab",
-    "semantic_hash": "7409c023596879be89004f3729a8fdab"
-  },
-  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/run_dev.sh": {
-    "mtime": 1779615044.5210862,
-    "ast_hash": "29ff8a57931571e76a55bcee2d1fbed2",
-    "semantic_hash": "29ff8a57931571e76a55bcee2d1fbed2"
+    "mtime": 1779615769.5378215,
+    "ast_hash": "44a742e8d817dc3c4d337ad953ea9d99",
+    "semantic_hash": "44a742e8d817dc3c4d337ad953ea9d99"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/frontend/tailwind.config.js": {
     "mtime": 1779614396.7368114,
@@ -120,9 +50,9 @@
     "semantic_hash": "a0f319d1dc81a2f4eab2b3e6159ce969"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/frontend/src/components/CameraFeed.jsx": {
-    "mtime": 1779614529.5821865,
-    "ast_hash": "d91753873a12f1a53f2b598ff3c98e2c",
-    "semantic_hash": "d91753873a12f1a53f2b598ff3c98e2c"
+    "mtime": 1779619455.76124,
+    "ast_hash": "2f4c4b7e3d67cdb8e96fa5c4d64a52a7",
+    "semantic_hash": "2f4c4b7e3d67cdb8e96fa5c4d64a52a7"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/frontend/src/components/WaveformCanvas.jsx": {
     "mtime": 1779614786.28632,
@@ -130,9 +60,9 @@
     "semantic_hash": "cde7f2035a0d8d13e87224832d352aaa"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/frontend/src/components/WorldMap.jsx": {
-    "mtime": 1779614862.1826267,
-    "ast_hash": "66a8eb92d1335aaf285ceed8c170720a",
-    "semantic_hash": "66a8eb92d1335aaf285ceed8c170720a"
+    "mtime": 1779618521.1339495,
+    "ast_hash": "9324ff99ee676068684c0b4c368ba7a2",
+    "semantic_hash": "9324ff99ee676068684c0b4c368ba7a2"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/frontend/src/components/TelemetryStream.jsx": {
     "mtime": 1779614802.6003542,
@@ -155,13 +85,108 @@
     "semantic_hash": "72be181110f130d44bf9b524d28d4ab5"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/README.md": {
-    "mtime": 1779615102.1185486,
-    "ast_hash": "d56a92205cc0ff11b2162bbbccf36a79",
-    "semantic_hash": "d56a92205cc0ff11b2162bbbccf36a79"
+    "mtime": 1779615826.3689253,
+    "ast_hash": "fec59cf96db40ab83918833cd531e9c5",
+    "semantic_hash": "fec59cf96db40ab83918833cd531e9c5"
   },
   "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/frontend/index.html": {
     "mtime": 1779614421.3052218,
     "ast_hash": "a0de3dffd6c432a2ca76f0ac08a16dd1",
     "semantic_hash": "a0de3dffd6c432a2ca76f0ac08a16dd1"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/sensors/__init__.py": {
+    "mtime": 1779615595.96265,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/sensors/data_harvester.py": {
+    "mtime": 1779592928.1770923,
+    "ast_hash": "f2547711d6917a60c78b7a37ee734340",
+    "semantic_hash": "f2547711d6917a60c78b7a37ee734340"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/firmware/dsp_filter.h": {
+    "mtime": 1779451468.0,
+    "ast_hash": "156994d08726a0ac52ed86470b0f2140",
+    "semantic_hash": "156994d08726a0ac52ed86470b0f2140"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/firmware/main.c": {
+    "mtime": 1779592844.486564,
+    "ast_hash": "6cc620c23ce85799d9694d188d560f96",
+    "semantic_hash": "6cc620c23ce85799d9694d188d560f96"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/firmware/dsp_filter.c": {
+    "mtime": 1779592878.4604924,
+    "ast_hash": "deff5c73257d702e1a80aabf0abf5adc",
+    "semantic_hash": "deff5c73257d702e1a80aabf0abf5adc"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/.claude/settings.local.json": {
+    "mtime": 1779615740.3276868,
+    "ast_hash": "2422d294b72f1543ed4a0a7dc261ea1a",
+    "semantic_hash": "2422d294b72f1543ed4a0a7dc261ea1a"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/agents/agent_simulator.py": {
+    "mtime": 1779615664.8860633,
+    "ast_hash": "7e222c7b9ca912b9ec339208345a951b",
+    "semantic_hash": "7e222c7b9ca912b9ec339208345a951b"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/agents/__init__.py": {
+    "mtime": 1779615595.962777,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/agents/multimodal_agent.py": {
+    "mtime": 1779608684.4845712,
+    "ast_hash": "141bd7486f0443b90fe313817affb1e9",
+    "semantic_hash": "141bd7486f0443b90fe313817affb1e9"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/backend/server.py": {
+    "mtime": 1779615637.5686927,
+    "ast_hash": "097ace9e2b0766e5da6e2df6ec6f83db",
+    "semantic_hash": "097ace9e2b0766e5da6e2df6ec6f83db"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/backend/__init__.py": {
+    "mtime": 1779615595.9628236,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/backend/main_gui.py": {
+    "mtime": 1779615655.760439,
+    "ast_hash": "3c93870bb2425493b96a372a7917c52e",
+    "semantic_hash": "3c93870bb2425493b96a372a7917c52e"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/scripts/run_dev.sh": {
+    "mtime": 1779615678.515572,
+    "ast_hash": "22bc0acba827a38c177808e87d9bb676",
+    "semantic_hash": "22bc0acba827a38c177808e87d9bb676"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/perception/object_memory.py": {
+    "mtime": 1779610320.2067623,
+    "ast_hash": "7d8c9a2b7dc009c2b02f87d6e0de2cc6",
+    "semantic_hash": "7d8c9a2b7dc009c2b02f87d6e0de2cc6"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/perception/__init__.py": {
+    "mtime": 1779615595.9627264,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/perception/clip_encoder.py": {
+    "mtime": 1779595979.6673038,
+    "ast_hash": "7409c023596879be89004f3729a8fdab",
+    "semantic_hash": "7409c023596879be89004f3729a8fdab"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/perception/world_model.py": {
+    "mtime": 1779619465.5382338,
+    "ast_hash": "f95494a9a88a00a4aa6f28d4ee61798b",
+    "semantic_hash": "f95494a9a88a00a4aa6f28d4ee61798b"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/perception/world_map.py": {
+    "mtime": 1779615614.710134,
+    "ast_hash": "a2a829cc035fbf90b62f7827c7979262",
+    "semantic_hash": "a2a829cc035fbf90b62f7827c7979262"
+  },
+  "/Users/deburatnam/Desktop/HackStorm_Hackathon/files/docs/FILES.md": {
+    "mtime": 1779601951.991424,
+    "ast_hash": "2b49306b99daeec8236735225bbe8ab2",
+    "semantic_hash": "2b49306b99daeec8236735225bbe8ab2"
   }
 }

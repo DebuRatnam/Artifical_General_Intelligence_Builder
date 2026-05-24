@@ -1,0 +1,826 @@
+{
+  "nodes": [
+    {
+      "id": "frontend_camerafeed_component",
+      "label": "CameraFeed React Component",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CameraFeed.jsx",
+      "source_location": null
+    },
+    {
+      "id": "frontend_camerafeed_getusermediacall",
+      "label": "getUserMedia video capture",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CameraFeed.jsx",
+      "source_location": "line 9"
+    },
+    {
+      "id": "frontend_worldmap_component",
+      "label": "WorldMap React Component",
+      "file_type": "code",
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "source_location": null
+    },
+    {
+      "id": "frontend_worldmap_useanimatedscene",
+      "label": "useAnimatedScene hook integration",
+      "file_type": "code",
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "source_location": "line 3, 18"
+    },
+    {
+      "id": "frontend_worldmap_rendering",
+      "label": "Scene object rendering with EMA smoothing",
+      "file_type": "code",
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "source_location": "line 85-127"
+    },
+    {
+      "id": "frontend_worldmap_audiostrip",
+      "label": "Audio source annotation strip",
+      "file_type": "code",
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "source_location": "line 44-59"
+    },
+    {
+      "id": "perception_world_model_class",
+      "label": "WorldModel persistent scene class",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 199-430"
+    },
+    {
+      "id": "perception_world_model_observe_method",
+      "label": "observe() method for perception cycle",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 376-423"
+    },
+    {
+      "id": "perception_world_model_scene_dataclass",
+      "label": "Scene persistent state container",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 82-103"
+    },
+    {
+      "id": "perception_world_model_sceneobject",
+      "label": "SceneObject with confidence decay",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 54-61"
+    },
+    {
+      "id": "perception_world_model_audiosource",
+      "label": "AudioSource with freq_hz binding",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 64-69"
+    },
+    {
+      "id": "perception_world_model_handpose",
+      "label": "HandPose for contact detection",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 74-78"
+    },
+    {
+      "id": "perception_world_model_vlm_binding",
+      "label": "VLM-based audio frequency binding",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 304-326"
+    },
+    {
+      "id": "perception_world_model_clip_fast_path",
+      "label": "CLIP-based fast path recognition",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 351-371"
+    },
+    {
+      "id": "perception_world_model_object_memory",
+      "label": "ObjectMemory persistent storage integration",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 43, 224"
+    },
+    {
+      "id": "perception_world_model_clip_encoder",
+      "label": "CLIPEncoder frame fingerprinting",
+      "file_type": "code",
+      "source_file": "perception/world_model.py",
+      "source_location": "line 44, 225"
+    },
+    {
+      "id": "perception_world_map_render",
+      "label": "render_scene Plotly figure generation",
+      "file_type": "code",
+      "source_file": "perception/world_map.py",
+      "source_location": "line 28-109"
+    },
+    {
+      "id": "perception_world_map_objects_layer",
+      "label": "Scene objects emoji marker layer",
+      "file_type": "code",
+      "source_file": "perception/world_map.py",
+      "source_location": "line 32-70"
+    },
+    {
+      "id": "perception_world_map_audio_strip",
+      "label": "Audio sources annotation strip",
+      "file_type": "code",
+      "source_file": "perception/world_map.py",
+      "source_location": "line 79-94"
+    },
+    {
+      "id": "backend_server_api",
+      "label": "FastAPI backend application",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 102"
+    },
+    {
+      "id": "backend_server_observe_endpoint",
+      "label": "/api/observe endpoint handler",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 216-238"
+    },
+    {
+      "id": "backend_server_camera_capture",
+      "label": "cv2.VideoCapture camera integration",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 66, 91"
+    },
+    {
+      "id": "backend_server_lifespan",
+      "label": "FastAPI lifespan with thread startup",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 74-100"
+    },
+    {
+      "id": "backend_server_ws_telemetry",
+      "label": "/ws/telemetry WebSocket stream",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 290-327"
+    },
+    {
+      "id": "backend_server_chat_endpoint",
+      "label": "/api/chat grounded response handler",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 269-286"
+    },
+    {
+      "id": "backend_server_memory_endpoint",
+      "label": "/api/memory ObjectMemory inspector",
+      "file_type": "code",
+      "source_file": "backend/server.py",
+      "source_location": "line 241-266"
+    },
+    {
+      "id": "backend_main_gui_streamlit",
+      "label": "Streamlit legacy dashboard",
+      "file_type": "code",
+      "source_file": "backend/main_gui.py",
+      "source_location": "line 1-20"
+    },
+    {
+      "id": "backend_main_gui_camera_panel",
+      "label": "Egocentric camera feed panel",
+      "file_type": "code",
+      "source_file": "backend/main_gui.py",
+      "source_location": "line 129-149"
+    },
+    {
+      "id": "backend_main_gui_world_map_panel",
+      "label": "2D world map rendering panel",
+      "file_type": "code",
+      "source_file": "backend/main_gui.py",
+      "source_location": "line 163-212"
+    },
+    {
+      "id": "backend_main_gui_chat_panel",
+      "label": "Grounded chat interface",
+      "file_type": "code",
+      "source_file": "backend/main_gui.py",
+      "source_location": "line 245-306"
+    },
+    {
+      "id": "backend_main_gui_build_chat_context",
+      "label": "RAG context builder for chat grounding",
+      "file_type": "code",
+      "source_file": "backend/main_gui.py",
+      "source_location": "line 257-279"
+    },
+    {
+      "id": "backend_main_gui_memory_inspector",
+      "label": "ObjectMemory DataFrame inspector",
+      "file_type": "code",
+      "source_file": "backend/main_gui.py",
+      "source_location": "line 219-243"
+    },
+    {
+      "id": "claude_md_architecture",
+      "label": "Two Pillars: world model + UI design",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 73-106"
+    },
+    {
+      "id": "claude_md_spatial_convention",
+      "label": "Spatial coordinate system [0,1]",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 234-239"
+    },
+    {
+      "id": "claude_md_hardware_setup",
+      "label": "Tuya T5 board + serial protocol",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 110-218"
+    },
+    {
+      "id": "claude_md_world_model_conventions",
+      "label": "VLM output parsing + audio bands",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 233-263"
+    },
+    {
+      "id": "claude_md_thread_safety",
+      "label": "token_queue producer-consumer pattern",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": "line 281-295"
+    },
+    {
+      "id": "readme_architecture",
+      "label": "Data-driven perception architecture",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": "line 269-285"
+    },
+    {
+      "id": "readme_dual_path_perception",
+      "label": "Fast (CLIP) + Slow (VLM) paths",
+      "file_type": "rationale",
+      "source_file": "README.md",
+      "source_location": "line 281-283"
+    },
+    {
+      "id": "requirements_fastapi",
+      "label": "FastAPI dependency specification",
+      "file_type": "code",
+      "source_file": "requirements.txt",
+      "source_location": "line 10"
+    },
+    {
+      "id": "requirements_pytorch_torch",
+      "label": "PyTorch CLIP encoder dependency",
+      "file_type": "code",
+      "source_file": "requirements.txt",
+      "source_location": "line 15-16"
+    }
+  ],
+  "edges": [
+    {
+      "source": "frontend_camerafeed_component",
+      "target": "frontend_camerafeed_getusermediacall",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CameraFeed.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_component",
+      "target": "frontend_worldmap_useanimatedscene",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_component",
+      "target": "frontend_worldmap_rendering",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_rendering",
+      "target": "frontend_worldmap_audiostrip",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_camerafeed_component",
+      "target": "backend_server_camera_capture",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "frontend/src/components/CameraFeed.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_component",
+      "target": "perception_world_model_scene_dataclass",
+      "relation": "receives_data_from",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_rendering",
+      "target": "perception_world_model_sceneobject",
+      "relation": "renders",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_rendering",
+      "target": "perception_world_model_audiosource",
+      "relation": "renders",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_class",
+      "target": "perception_world_model_observe_method",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_observe_method",
+      "target": "perception_world_model_scene_dataclass",
+      "relation": "updates",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_observe_method",
+      "target": "perception_world_model_clip_fast_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_observe_method",
+      "target": "perception_world_model_vlm_binding",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_class",
+      "target": "perception_world_model_object_memory",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_class",
+      "target": "perception_world_model_clip_encoder",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_model_clip_fast_path",
+      "target": "perception_world_model_clip_encoder",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_map_render",
+      "target": "perception_world_map_objects_layer",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_map.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_map_render",
+      "target": "perception_world_map_audio_strip",
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_map.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_map_objects_layer",
+      "target": "perception_world_model_sceneobject",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_map.py",
+      "weight": 1.0
+    },
+    {
+      "source": "perception_world_map_audio_strip",
+      "target": "perception_world_model_audiosource",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_map.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_api",
+      "target": "backend_server_observe_endpoint",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_observe_endpoint",
+      "target": "backend_server_camera_capture",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_observe_endpoint",
+      "target": "perception_world_model_class",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_observe_endpoint",
+      "target": "perception_world_model_observe_method",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_api",
+      "target": "backend_server_ws_telemetry",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_api",
+      "target": "backend_server_chat_endpoint",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_chat_endpoint",
+      "target": "perception_world_model_class",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_api",
+      "target": "backend_server_memory_endpoint",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_lifespan",
+      "target": "perception_world_model_class",
+      "relation": "instantiates",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_lifespan",
+      "target": "backend_server_camera_capture",
+      "relation": "initializes",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_streamlit",
+      "target": "backend_main_gui_camera_panel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_streamlit",
+      "target": "backend_main_gui_world_map_panel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_streamlit",
+      "target": "backend_main_gui_chat_panel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_streamlit",
+      "target": "backend_main_gui_memory_inspector",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_world_map_panel",
+      "target": "perception_world_model_class",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_world_map_panel",
+      "target": "perception_world_model_observe_method",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_world_map_panel",
+      "target": "perception_world_map_render",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_chat_panel",
+      "target": "backend_main_gui_build_chat_context",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_build_chat_context",
+      "target": "perception_world_model_scene_dataclass",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_main_gui_memory_inspector",
+      "target": "perception_world_model_object_memory",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_architecture",
+      "target": "perception_world_model_class",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_architecture",
+      "target": "perception_world_map_render",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_spatial_convention",
+      "target": "perception_world_model_sceneobject",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "weight": 1.0
+    },
+    {
+      "source": "claude_md_world_model_conventions",
+      "target": "perception_world_model_observe_method",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_architecture",
+      "target": "perception_world_model_class",
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_dual_path_perception",
+      "target": "perception_world_model_clip_fast_path",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "weight": 1.0
+    },
+    {
+      "source": "requirements_fastapi",
+      "target": "backend_server_api",
+      "relation": "enables",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "requirements.txt",
+      "weight": 1.0
+    },
+    {
+      "source": "requirements_pytorch_torch",
+      "target": "perception_world_model_clip_encoder",
+      "relation": "enables",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "requirements.txt",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_worldmap_component",
+      "target": "backend_server_observe_endpoint",
+      "relation": "consumes_data_from",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "frontend/src/components/WorldMap.jsx",
+      "weight": 1.0
+    },
+    {
+      "source": "backend_server_observe_endpoint",
+      "target": "frontend_worldmap_component",
+      "relation": "serves_data_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "backend/server.py",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "camera_capture_workflow",
+      "label": "Camera capture workflow",
+      "nodes": [
+        "frontend_camerafeed_component",
+        "frontend_camerafeed_getusermediacall",
+        "backend_server_camera_capture",
+        "perception_world_model_observe_method"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "frontend/src/components/CameraFeed.jsx"
+    },
+    {
+      "id": "perception_pipeline",
+      "label": "Complete perception pipeline",
+      "nodes": [
+        "perception_world_model_observe_method",
+        "perception_world_model_clip_fast_path",
+        "perception_world_model_vlm_binding",
+        "perception_world_model_scene_dataclass",
+        "perception_world_model_object_memory"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py"
+    },
+    {
+      "id": "world_map_rendering",
+      "label": "2D world map rendering pipeline",
+      "nodes": [
+        "perception_world_map_render",
+        "perception_world_map_objects_layer",
+        "perception_world_map_audio_strip",
+        "frontend_worldmap_component",
+        "frontend_worldmap_rendering"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_map.py"
+    },
+    {
+      "id": "backend_api_surface",
+      "label": "Backend REST + WebSocket API surface",
+      "nodes": [
+        "backend_server_api",
+        "backend_server_observe_endpoint",
+        "backend_server_chat_endpoint",
+        "backend_server_memory_endpoint",
+        "backend_server_ws_telemetry"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/server.py"
+    },
+    {
+      "id": "streamlit_dashboard",
+      "label": "Legacy Streamlit dashboard panels",
+      "nodes": [
+        "backend_main_gui_streamlit",
+        "backend_main_gui_camera_panel",
+        "backend_main_gui_world_map_panel",
+        "backend_main_gui_chat_panel",
+        "backend_main_gui_memory_inspector"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/main_gui.py"
+    },
+    {
+      "id": "scene_representation",
+      "label": "Persistent scene representation",
+      "nodes": [
+        "perception_world_model_scene_dataclass",
+        "perception_world_model_sceneobject",
+        "perception_world_model_audiosource",
+        "perception_world_model_handpose"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "perception/world_model.py"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

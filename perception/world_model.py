@@ -106,6 +106,9 @@ class Scene:
 # ── VLM prompt template ──────────────────────────────────────────────────────
 _PROMPT_TEMPLATE = """You are a grounded perceptual agent mapping a room.
 CRITICAL: Output ONLY object lines. NO explanation, NO other text.
+CRITICAL: ONLY list objects you can CLEARLY and CONFIDENTLY see in this image.
+CRITICAL: If you are uncertain about an object, do NOT include it.
+CRITICAL: If the image is dark, blurry, or shows nothing clearly, output NOTHING.
 
 EXACT FORMAT - One line per object:
 - OBJECT_NAME | POSITION EMOJI
@@ -118,18 +121,19 @@ EXAMPLES:
 - LAMP | top-left 💡
 - PERSON | middle-center 👤
 
-For sounds (OPTIONAL):
+For sounds (OPTIONAL, only if object is VISIBLY a sound source):
 SOUND: OBJECT_NAME | EMOJI
 
 Rules:
-- Write object name (what it IS, not description)
+- Write object name (what it IS, not a description)
 - Max 4 objects
+- Only objects ACTUALLY VISIBLE in the image — no guesses
 - Each line starts with "-" (dash and space)
-- No extra text
+- No extra text, no commentary
 
 Current audio: {fft_hz} Hz, vibration: {accel_g:.2f} g
 
-BEGIN OUTPUT (ONLY valid lines):
+BEGIN OUTPUT (ONLY valid lines for objects you can clearly see):
 """
 
 # Asked separately after object extraction so the VLM can think about
