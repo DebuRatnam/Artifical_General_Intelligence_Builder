@@ -1,6 +1,26 @@
+import { useEffect, useRef } from 'react'
 import { Camera, ScanLine } from 'lucide-react'
 
 export default function CameraFeed({ summary, observing, lastObservedAt }) {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    let stream = null
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+      .then((s) => {
+        stream = s
+        if (videoRef.current) {
+          videoRef.current.srcObject = s
+        }
+      })
+      .catch(() => {
+        // camera permission denied or unavailable — placeholder stays
+      })
+    return () => {
+      if (stream) stream.getTracks().forEach((t) => t.stop())
+    }
+  }, [])
+
   return (
     <div className="panel flex flex-col">
       <div className="panel-header">
@@ -13,10 +33,18 @@ export default function CameraFeed({ summary, observing, lastObservedAt }) {
         </span>
       </div>
 
-      <div className="relative aspect-video bg-black/60 grid-bg overflow-hidden">
-        {/* Frames are captured server-side per /api/observe call. The
-            placeholder shows scanline animation while observing. */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-600">
+      <div className="relative aspect-video bg-black/60 overflow-hidden">
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* fallback placeholder shown when video stream not yet active */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-600 pointer-events-none"
+             style={{ opacity: 0 }}>
           <Camera size={32} strokeWidth={1.2} />
           <span className="text-xs mt-2 font-mono">no preview — host-side capture</span>
         </div>
