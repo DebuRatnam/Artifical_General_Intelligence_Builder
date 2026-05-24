@@ -17,6 +17,8 @@ static uint16_t _buf_size    = FFT_SIZE;
 // ── Hann window coefficients (pre-computed at init) ──────────────────────────
 static float hann_win[FFT_SIZE];
 
+// Precompute Hann window coefficients into the static `hann_win` table.
+// Called once during init so the per-frame FFT path only multiplies.
 static void compute_hann_window(uint16_t n) {
     for (uint16_t i = 0; i < n; i++) {
         hann_win[i] = 0.5f * (1.0f - arm_cos_f32(2.0f * PI * i / (n - 1)));
@@ -24,6 +26,9 @@ static void compute_hann_window(uint16_t n) {
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────
+// One-time init. Stores the sample rate (used for bin→Hz conversion),
+// initializes the CMSIS-DSP real-FFT instance for FFT_SIZE, and
+// precomputes the Hann window. Call once from setup().
 void dsp_filter_init(uint32_t sample_rate, uint16_t buf_size) {
     _sample_rate = sample_rate;
     _buf_size    = buf_size;
@@ -31,6 +36,9 @@ void dsp_filter_init(uint32_t sample_rate, uint16_t buf_size) {
     compute_hann_window(FFT_SIZE);
 }
 
+// Compute the dominant frequency (Hz) of an audio buffer.
+// Steps: Hann-window → real FFT → magnitude spectrum → argmax (skip
+// the DC bin) → convert bin index to Hz. Returns 0..(sample_rate/2).
 uint16_t dsp_get_peak_hz(float *samples, uint16_t n) {
     // Apply Hann window
     for (uint16_t i = 0; i < n; i++) {

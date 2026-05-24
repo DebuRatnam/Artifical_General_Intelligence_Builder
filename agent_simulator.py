@@ -1,7 +1,16 @@
 """
 agent_simulator.py
-Heuristic physical agent: Perceive → Reason → Act.
-Classifies material state from sensor tokens and emits kinematic directives.
+Memory-backed tactile classifier and contact-event detector.
+
+What changed vs the original heuristic version:
+  • The hard-coded POLICIES dict (Dry Leaves / Dense Sticks / Unknown)
+    is gone. There is no fixed material vocabulary.
+  • classify() now consults the persistent ObjectMemory: if a tactile
+    signature has been bootstrapped for any known label, nearest-
+    neighbour returns that label. Otherwise None.
+  • A simple contact-event detector watches for accel spikes and asks
+    the world model to bind the spike to the visible object closest
+    to the hand. That is the bootstrap path that grows the memory.
 
 Can be imported by main_gui.py or run standalone for testing:
     python3 agent_simulator.py --mock
@@ -10,120 +19,116 @@ Can be imported by main_gui.py or run standalone for testing:
 import argparse
 import threading
 import time
-from dataclasses import dataclass
+from typing import Optional
 
-# ── Material state definitions ────────────────────────────────────────────────
-
-@dataclass
-class Policy:
-    state: str
-    velocity_pct: float    # % change from nominal (0 = no change)
-    pitch_deg: float       # blade pitch offset in degrees
-    torque_scale: float    # multiplier on nominal joint torque
-    dwell_ms: int = 0      # extra dwell time at contact point
-
-
-# This is where we will add items for our demo.
-POLICIES: dict[str, Policy] = {
-    "Dry Leaves": Policy(
-        state="Dry Leaves",
-        velocity_pct=-10.0,  # Slow down slightly to handle brittle material
-        pitch_deg=1.0,
-        torque_scale=0.5,   # Low torque required for delicate surfaces
-    ),
-    "Dense Sticks": Policy(
-        state="Dense Sticks",
-        velocity_pct=-30.0,  # Slow down heavily for solid obstacles
-        pitch_deg=4.0,       # Increase tool pitch clearance
-        torque_scale=2.2,    # High torque scaling to move against resistance
-    ),
-    "Unknown": Policy(
-        state="Unknown",
-        velocity_pct=0.0,
-        pitch_deg=0.0,
-        torque_scale=1.0,
-    )
-}
+# ── Shared state — read by main_gui.py ────────────────────────────────────────
+# current_label is whatever the most recent (accel, fft) sample classified
+# to according to memory. None until at least one tactile signature has
+# been bootstrapped. directive is a short human-readable status line.
+current_label: Optional[str] = None
+current_directive: str = "Listening — no tactile signature learned yet."
+current_distance: float = 0.0   # σ-distance from nearest learned sig
+last_contact_ts: float = 0.0
 
 
-# ── Perceive: classify material from raw token ─────────────────────────────────
-
-def classify(accel_g: float, fft_peak_hz: int) -> str:
-    """
-    Classifies organic materials based on vibrational friction (g-force)
-    and acoustic resonance peaks (Hz).
-    """
-    # Dry leaves generate high-frequency cracking noises but minimal heavy vibration
-    if accel_g < 0.5 and fft_peak_hz > 1200:
-        return "Dry Leaves"
-        
-    # Dense sticks generate low-frequency heavy impacts/thuds when scraped
-    elif accel_g >= 1.0 and fft_peak_hz < 600:
-        return "Dense Sticks"
-        
-    return "Unknown"
+# Memory-backed classifier. Returns the label of the closest learned
+# tactile signature, or None if memory is empty / nothing is within
+# the σ-gate. No hard-coded thresholds; everything is data-driven.
+def classify(memory, accel_g: float, fft_peak_hz: int) -> Optional[tuple[str, float]]:
+    return memory.nearest_tactile(accel_g, fft_peak_hz)
 
 
-# ── Reason + Act: map state to directive string ────────────────────────────────
-
-def emit_directive(policy: Policy) -> str:
-    if policy.state == "Unknown":
-        return "ACTION: HOLD — maintain last known state"
-    dwell = f", dwell=+{policy.dwell_ms}ms" if policy.dwell_ms else ""
-    sign = "+" if policy.velocity_pct >= 0 else ""
-    return (
-        f"ACTION: velocity={sign}{policy.velocity_pct:.0f}%, "
-        f"pitch=+{policy.pitch_deg}°, "
-        f"torque={policy.torque_scale}x"
-        f"{dwell}"
-    )
+# Format a classification result as a short human-readable directive.
+# Used as the subtitle of the dynamic banner in main_gui.py.
+def emit_directive(label: Optional[str], dist: float) -> str:
+    if label is None:
+        return "Listening — no tactile signature matched. Pick something up to teach me."
+    return f"Touching: {label}  (σ={dist:.2f} from learned signature)"
 
 
-# ── Main agent loop (runs in its own thread) ──────────────────────────────────
+# Cheap contact-event detector. Returns True if the latest sample looks
+# like the start of a touch: a meaningful jump in accel away from a
+# rolling baseline. Uses a tiny EMA baseline rather than a fixed
+# threshold so it adapts to ambient vibration.
+class ContactDetector:
+    # baseline_alpha controls how fast the rest-state vibration baseline
+    # adapts. spike_g is the absolute jump above baseline that counts as
+    # a contact. refractory_s suppresses repeat fires after a true touch.
+    def __init__(self, baseline_alpha: float = 0.05,
+                 spike_g: float = 0.35, refractory_s: float = 0.6):
+        self.baseline = 0.0
+        self.alpha = baseline_alpha
+        self.spike_g = spike_g
+        self.refractory_s = refractory_s
+        self._last_fire = 0.0
+        self._primed = False
 
-# Shared state — read by main_gui.py
-current_state: str = "Unknown"
-current_directive: str = "ACTION: HOLD — waiting for data"
-last_policy: Policy = POLICIES["Unknown"]
+    # Feed one accel sample; returns True exactly on the rising edge of
+    # a contact event. Mutates the internal baseline so the detector
+    # stays calibrated to the current ambient noise floor.
+    def step(self, accel_g: float) -> bool:
+        if not self._primed:
+            self.baseline = accel_g
+            self._primed = True
+            return False
+        delta = accel_g - self.baseline
+        self.baseline = (1 - self.alpha) * self.baseline + self.alpha * accel_g
+        now = time.time()
+        if delta > self.spike_g and (now - self._last_fire) > self.refractory_s:
+            self._last_fire = now
+            return True
+        return False
 
 
-def run(token_queue, stop_event: threading.Event | None = None) -> None:
-    """
-    Pull tokens from token_queue and update shared agent state.
-    Call this in a daemon thread from main_gui.py.
-    """
-    global current_state, current_directive, last_policy
+# Main consumer loop. Pulls tokens from token_queue, classifies each
+# sample against memory, and triggers a contact-binding call on the
+# world model when a spike is detected. world_model is optional — if
+# None, the loop still classifies but cannot bootstrap new objects.
+def run(token_queue, memory, world_model=None,
+        stop_event: Optional[threading.Event] = None) -> None:
+    global current_label, current_directive, current_distance, last_contact_ts
+    detector = ContactDetector()
 
     while stop_event is None or not stop_event.is_set():
         try:
             token = token_queue.get(timeout=1.0)
             _, accel_g, fft_peak_hz, _ = token
 
-            state = classify(accel_g, fft_peak_hz)
+            # 1. Classify against learned signatures (no thresholds).
+            hit = classify(memory, accel_g, fft_peak_hz)
+            if hit is not None:
+                current_label, current_distance = hit
+            else:
+                current_distance = 0.0
+                # Leave current_label sticky so the banner doesn't flicker
+                # between transient/idle samples; it'll update on next hit.
 
-            # Hold last known state on Unknown
-            if state == "Unknown":
-                state = last_policy.state
+            current_directive = emit_directive(current_label, current_distance)
 
-            policy = POLICIES[state]
-            directive = emit_directive(policy)
-
-            # Update shared globals (reads are atomic in CPython)
-            current_state = state
-            current_directive = directive
-            last_policy = policy
-
+            # 2. Contact event → ask world model to bind the spike to
+            #    whichever visible object the hand is closest to. This is
+            #    how new tactile signatures get learned (bootstrap path).
+            if detector.step(accel_g) and world_model is not None:
+                bound = world_model.handle_contact(accel_g, fft_peak_hz)
+                if bound:
+                    last_contact_ts = time.time()
+                    current_label = bound
+                    current_directive = (
+                        f"Learned touch: {bound}  "
+                        f"(accel={accel_g:.2f}g, fft={fft_peak_hz}Hz)"
+                    )
         except Exception:
             continue
 
 
-def start(token_queue) -> threading.Thread:
-    """Start agent loop as daemon thread. Returns thread."""
+# Spawn the classifier loop as a daemon thread. Daemon so it dies with
+# the host process; returns the Thread handle.
+def start(token_queue, memory, world_model=None) -> threading.Thread:
     t = threading.Thread(
         target=run,
-        args=(token_queue,),
+        args=(token_queue, memory, world_model),
         daemon=True,
-        name='agent-simulator'
+        name='agent-simulator',
     )
     t.start()
     return t
@@ -134,20 +139,25 @@ def start(token_queue) -> threading.Thread:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--mock', action='store_true', help='Run with mock serial data')
+    parser.add_argument('--db', default='object_memory.db', help='ObjectMemory SQLite path')
     args = parser.parse_args()
+
+    from object_memory import ObjectMemory
+    mem = ObjectMemory(db_path=args.db)
 
     if args.mock:
         from data_harvester import token_queue, start_mock
         start_mock()
     else:
-        from data_harvester import token_queue, start
-        start()
+        from data_harvester import token_queue, start as start_serial
+        start_serial()
 
+    start(token_queue, mem)
     print("Agent running. Press Ctrl+C to stop.\n")
-    prev_state = None
+    prev = None
     while True:
-        if current_state != prev_state:
-            print(f"  State     : {current_state}")
+        if current_label != prev:
+            print(f"  Label     : {current_label}")
             print(f"  Directive : {current_directive}\n")
-            prev_state = current_state
+            prev = current_label
         time.sleep(0.05)

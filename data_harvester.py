@@ -22,6 +22,9 @@ token_queue: Queue = Queue(maxsize=512)
 # [timestamp_ms (int), accel_g (float), fft_peak_hz (int), frame_id (int)]
 
 
+# Parse one raw serial line into a 4-element token list.
+# Format: "<ts_ms>,<accel_g>,<fft_peak_hz>,<frame_id>". Returns None on
+# any parse error (malformed line, wrong field count, non-numeric).
 def _parse_line(line: str) -> list | None:
     """Parse a CSV serial line into a token. Returns None on bad packet."""
     try:
@@ -33,6 +36,8 @@ def _parse_line(line: str) -> list | None:
         return None
 
 
+# Non-blocking enqueue. If the queue is full we evict the oldest entry
+# so the producer (serial reader) never stalls behind a slow consumer.
 def _push(token: list) -> None:
     """Push token to queue; drop oldest if full."""
     try:
@@ -42,6 +47,9 @@ def _push(token: list) -> None:
         token_queue.put_nowait(token)
 
 
+# Background reader thread. Opens the serial port, then loops reading
+# one line at a time, parsing it, and pushing the token. On serial
+# error it logs and reconnects with a 2s backoff. Exits when stop_event is set.
 def _reader_loop(port: str, baud: int, stop_event: threading.Event) -> None:
     """Background thread: read serial, parse, push to queue."""
     while not stop_event.is_set():
@@ -58,6 +66,8 @@ def _reader_loop(port: str, baud: int, stop_event: threading.Event) -> None:
             time.sleep(2.0)
 
 
+# Spawn the serial reader as a daemon thread so it dies with the host
+# process. Returns the Thread handle for the caller (rarely needed).
 def start(port: str = '/dev/ttyUSB0', baud: int = 460800) -> threading.Thread:
     """Start the serial reader as a daemon thread. Returns the thread."""
     stop_event = threading.Event()
@@ -72,10 +82,15 @@ def start(port: str = '/dev/ttyUSB0', baud: int = 460800) -> threading.Thread:
 
 
 # ── Mock producer (no hardware needed) ───────────────────────────────────────
+# Hardware-free producer. Generates random (but plausibly-ranged) tokens
+# at a fixed rate so the rest of the host stack can be exercised end-to-end
+# without the T5 board attached. Useful for UI dev and CI.
 def start_mock(hz: int = 100) -> threading.Thread:
     """Inject synthetic tokens at a fixed rate for testing without hardware."""
     import random
 
+    # Inner thread body. Emits one synthetic token per (1/hz) seconds
+    # until the daemon thread is terminated by the process exiting.
     def _mock_loop():
         frame_id = 0
         while True:

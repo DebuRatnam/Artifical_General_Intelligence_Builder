@@ -1,98 +1,107 @@
 # Graph Report - .  (2026-05-23)
 
 ## Corpus Check
-- 5 files · ~3,070 words
+- 11 files · ~6,594 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 66 nodes · 83 edges · 7 communities
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.84)
-- Token cost: 0 input · 0 output
+- 117 nodes · 164 edges · 10 communities (9 shown, 1 thin omitted)
+- Extraction: 88% EXTRACTED · 12% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.88)
+- Token cost: 12,000 input · 8,000 output
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Heuristic PRA Policy Engine|Heuristic PRA Policy Engine]]
-- [[_COMMUNITY_Serial Data Harvester|Serial Data Harvester]]
-- [[_COMMUNITY_Multimodal VLM Agent|Multimodal VLM Agent]]
-- [[_COMMUNITY_Thread-Safe State & Queue|Thread-Safe State & Queue]]
-- [[_COMMUNITY_DSP  FFT Firmware|DSP / FFT Firmware]]
-- [[_COMMUNITY_Material Policy Configs|Material Policy Configs]]
-- [[_COMMUNITY_Project Architecture Rationale|Project Architecture Rationale]]
+- [[_COMMUNITY_World Model & Map Rendering|World Model & Map Rendering]]
+- [[_COMMUNITY_Tactile State & Thread Plumbing|Tactile State & Thread Plumbing]]
+- [[_COMMUNITY_Serial Telemetry Ingest|Serial Telemetry Ingest]]
+- [[_COMMUNITY_Heuristic Tactile Classifier|Heuristic Tactile Classifier]]
+- [[_COMMUNITY_Firmware DSP & Constraints|Firmware DSP & Constraints]]
+- [[_COMMUNITY_VLM Parsing & Audio Binding|VLM Parsing & Audio Binding]]
+- [[_COMMUNITY_Legacy Multimodal Agent|Legacy Multimodal Agent]]
+- [[_COMMUNITY_Project Rationale|Project Rationale]]
+- [[_COMMUNITY_Grounded Perception Concept|Grounded Perception Concept]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `run()` - 9 edges
-2. `classify()` - 8 edges
-3. `generate_grounded_summary()` - 8 edges
-4. `Streamlit Dashboard (main_gui.py)` - 6 edges
-5. `_warmup()` - 5 edges
-6. `loop()` - 4 edges
-7. `_reader_loop()` - 4 edges
-8. `UnifiedEmbodiedAgent` - 4 edges
-9. `emit_directive()` - 4 edges
-10. `start()` - 4 edges
+1. `run()` - 13 edges
+2. `main_gui (Streamlit app)` - 10 edges
+3. `classify()` - 9 edges
+4. `_parse_vlm_output()` - 9 edges
+5. `generate_grounded_summary()` - 8 edges
+6. `Scene` - 7 edges
+7. `Streamlit Dashboard (main_gui.py)` - 6 edges
+8. `WorldModel.observe` - 6 edges
+9. `CLAUDE.md (project rules)` - 6 edges
+10. `loop()` - 5 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `run()` --implements--> `Thread Safety Pattern (daemon threads + Queue)`  [INFERRED]
-  agent_simulator.py → CLAUDE.md
+- `loop()` --implements--> `CSV Serial Telemetry Protocol (460800 baud)`  [INFERRED]
+  main.c → CLAUDE.md
 - `Serial Protocol (CSV format)` --conceptually_related_to--> `classify()`  [INFERRED]
   CLAUDE.md → agent_simulator.py
 - `classify()` --semantically_similar_to--> `generate_grounded_summary()`  [INFERRED] [semantically similar]
   agent_simulator.py → multimodal_agent.py
-- `Perceive-Reason-Act Loop Pattern` --semantically_similar_to--> `generate_grounded_summary()`  [INFERRED] [semantically similar]
-  agent_simulator.py → multimodal_agent.py
-- `Camera Feed (OpenCV capture)` --shares_data_with--> `generate_grounded_summary()`  [INFERRED]
-  main_gui.py → multimodal_agent.py
+- `classify()` --semantically_similar_to--> `WorldModel._bind_audio`  [INFERRED] [semantically similar]
+  agent_simulator.py → world_model.py
+- `run()` --implements--> `Thread Safety Pattern (daemon threads + Queue)`  [INFERRED]
+  agent_simulator.py → CLAUDE.md
 
 ## Hyperedges (group relationships)
-- **Multi-Modal Sensor Fusion Pipeline** — main_gui_trigger_sensory_alignment, multimodal_agent_generate_grounded_summary, agent_simulator_classify [EXTRACTED 0.95]
-- **Thread-Safe Producer-Consumer Pattern** — claude_md_token_queue, agent_simulator_run, main_gui_token_queue_consumer [EXTRACTED 0.95]
-- **Perceive-Reason-Act Architecture** — agent_simulator_classify, agent_simulator_emit_directive, agent_simulator_run [EXTRACTED 1.00]
+- **End-to-end CSV telemetry pipeline (firmware → host queue → consumers)** — files_main_loop, files_data_harvester_reader_loop, files_data_harvester_token_queue, files_agent_simulator_run, files_main_gui_module [INFERRED 0.95]
+- **WorldModel observe cycle: query → parse → bind audio → decay** — files_world_model_observe, files_world_model_query_vlm, files_world_model_parse_vlm_output, files_world_model_bind_audio, files_world_model_decay [EXTRACTED 1.00]
+- **Scene rendering chain: WorldModel.scene → render_scene → Streamlit map** — files_world_model_scene, files_world_map_render_scene, files_main_gui_module [EXTRACTED 1.00]
 
-## Communities (7 total, 0 thin omitted)
+## Communities (10 total, 1 thin omitted)
 
-### Community 0 - "Heuristic PRA Policy Engine"
-Cohesion: 0.17
-Nodes (14): classify(), emit_directive(), last_policy (shared global), Perceive-Reason-Act Loop Pattern, Policy Dataclass, run(), start(), Serial Protocol (CSV format) (+6 more)
+### Community 0 - "World Model & Map Rendering"
+Cohesion: 0.13
+Nodes (15): world_map.py Render a 2D top-down iconographic map of the agent's current Scene., render_scene(), AudioSource, _OBJECT_RE, _parse_vlm_output(), POS_X, POS_Y, world_model.py LeCun-style grounded world model: builds and maintains a persiste (+7 more)
 
-### Community 1 - "Serial Data Harvester"
+### Community 1 - "Tactile State & Thread Plumbing"
+Cohesion: 0.12
+Nodes (22): current_directive (shared global), current_state (shared global), last_policy (shared global), run(), start(), Thread Safety Pattern (daemon threads + Queue), token_queue (thread-safe Queue), current_directive (+14 more)
+
+### Community 2 - "Serial Telemetry Ingest"
 Cohesion: 0.18
-Nodes (12): _parse_line(), _push(), data_harvester.py Non-blocking serial reader. Runs in a daemon thread and pushes, Parse a CSV serial line into a token. Returns None on bad packet., Push token to queue; drop oldest if full., Background thread: read serial, parse, push to queue., Start the serial reader as a daemon thread. Returns the thread., Inject synthetic tokens at a fixed rate for testing without hardware. (+4 more)
+Nodes (13): CSV Serial Telemetry Protocol (460800 baud), _parse_line(), _push(), data_harvester.py Non-blocking serial reader. Runs in a daemon thread and pushes, Parse a CSV serial line into a token. Returns None on bad packet., Push token to queue; drop oldest if full., Background thread: read serial, parse, push to queue., Start the serial reader as a daemon thread. Returns the thread. (+5 more)
 
-### Community 2 - "Multimodal VLM Agent"
+### Community 3 - "Heuristic Tactile Classifier"
+Cohesion: 0.17
+Nodes (12): classify(), Dense Sticks Policy, Dry Leaves Policy, emit_directive(), Perceive-Reason-Act Loop Pattern, POLICIES Dict, Policy Dataclass, Serial Protocol (CSV format) (+4 more)
+
+### Community 4 - "Firmware DSP & Constraints"
+Cohesion: 0.23
+Nodes (11): CLAUDE.md (project rules), arduino-TuyaOpen framework choice, FFT size = 512 invariant, LeCun-style persistent world model, compute_hann_window(), dsp_get_peak_hz, dsp_filter_init, loop() (+3 more)
+
+### Community 5 - "VLM Parsing & Audio Binding"
+Cohesion: 0.15
+Nodes (12): Audio frequency → visible emitter binding, Scene confidence decay (half-life), Legacy one-shot VLM summary path (multimodal_agent), Strict line-format VLM prompt template, UnifiedEmbodiedAgent.generate_grounded_summary, WorldModel._bind_audio, Scene.decay, _freq_band() (+4 more)
+
+### Community 6 - "Legacy Multimodal Agent"
 Cohesion: 0.20
-Nodes (10): host_app/multimodal_agent.py Unified Perceptual Agent: Integrates CV matrices an, Checks if ollama is running and has the model pulled., Ingests vision frame, audio bins, and tactile forces simultaneously          to, UnifiedEmbodiedAgent, vlm_agent Session State, generate_grounded_summary(), Late-Fusion Multi-Modal Context Pattern, Moondream VLM (Ollama) (+2 more)
+Nodes (10): host_app/multimodal_agent.py Unified Perceptual Agent: Integrates CV matrices an, Checks if ollama is running and has the model pulled., Ingests vision frame, audio bins, and tactile forces simultaneously          to, UnifiedEmbodiedAgent._warmup, vlm_agent Session State, generate_grounded_summary(), Late-Fusion Multi-Modal Context Pattern, Moondream VLM (Ollama) (+2 more)
 
-### Community 3 - "Thread-Safe State & Queue"
-Cohesion: 0.20
-Nodes (10): current_directive (shared global), current_state (shared global), Thread Safety Pattern (daemon threads + Queue), token_queue (thread-safe Queue), Camera Feed (OpenCV capture), Rolling Deque Buffers (accel/fft/ts), STATE_COLORS Map, Streamlit Dashboard (main_gui.py) (+2 more)
-
-### Community 4 - "DSP / FFT Firmware"
-Cohesion: 0.36
-Nodes (7): compute_hann_window(), dsp_filter_init(), dsp_get_peak_hz(), loop(), qmi8658_read_az(), read_audio_sample(), setup()
-
-### Community 5 - "Material Policy Configs"
-Cohesion: 0.67
-Nodes (3): Dense Sticks Policy, Dry Leaves Policy, POLICIES Dict
-
-### Community 6 - "Project Architecture Rationale"
+### Community 7 - "Project Rationale"
 Cohesion: 0.67
 Nodes (3): Arduino TuyaOpen vs TuyaOS SDK Rationale, Embodi-Align Project (CLAUDE.md), FFT Buffer = 512 Constraint
 
 ## Knowledge Gaps
-- **9 isolated node(s):** `Policy`, `Policy Dataclass`, `last_policy (shared global)`, `Dry Leaves Policy`, `Dense Sticks Policy` (+4 more)
+- **19 isolated node(s):** `Policy`, `Policy Dataclass`, `last_policy (shared global)`, `Dry Leaves Policy`, `Dense Sticks Policy` (+14 more)
   These have ≤1 connection - possible missing edges or undocumented components.
+- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `classify()` connect `Heuristic PRA Policy Engine` to `Multimodal VLM Agent`, `Material Policy Configs`?**
-  _High betweenness centrality (0.291) - this node is a cross-community bridge._
-- **Why does `generate_grounded_summary()` connect `Multimodal VLM Agent` to `Heuristic PRA Policy Engine`, `Thread-Safe State & Queue`?**
-  _High betweenness centrality (0.254) - this node is a cross-community bridge._
-- **Why does `run()` connect `Heuristic PRA Policy Engine` to `Thread-Safe State & Queue`?**
-  _High betweenness centrality (0.158) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `classify()` (e.g. with `Serial Protocol (CSV format)` and `generate_grounded_summary()`) actually correct?**
-  _`classify()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `classify()` connect `Heuristic Tactile Classifier` to `Tactile State & Thread Plumbing`, `VLM Parsing & Audio Binding`, `Legacy Multimodal Agent`?**
+  _High betweenness centrality (0.279) - this node is a cross-community bridge._
+- **Why does `main_gui (Streamlit app)` connect `Tactile State & Thread Plumbing` to `World Model & Map Rendering`, `Serial Telemetry Ingest`, `VLM Parsing & Audio Binding`?**
+  _High betweenness centrality (0.256) - this node is a cross-community bridge._
+- **Why does `run()` connect `Tactile State & Thread Plumbing` to `Heuristic Tactile Classifier`?**
+  _High betweenness centrality (0.197) - this node is a cross-community bridge._
+- **Are the 3 inferred relationships involving `classify()` (e.g. with `Serial Protocol (CSV format)` and `generate_grounded_summary()`) actually correct?**
+  _`classify()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 3 inferred relationships involving `generate_grounded_summary()` (e.g. with `classify()` and `Perceive-Reason-Act Loop Pattern`) actually correct?**
   _`generate_grounded_summary()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Policy`, `agent_simulator.py Heuristic physical agent: Perceive → Reason → Act. Classifies`, `Map sensor signatures to material state.      Signatures (from CLAUDE.md):` to the rest of the system?**
-  _27 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _43 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `World Model & Map Rendering` be split into smaller, more focused modules?**
+  _Cohesion score 0.13043478260869565 - nodes in this community are weakly interconnected._

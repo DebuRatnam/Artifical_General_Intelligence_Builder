@@ -1,56 +1,85 @@
 """
 main_gui.py
-Streamlit dashboard: egocentric camera feed, live tactile line charts,
-and colored agent state overlay.
+Streamlit dashboard for the embodi-align grounded perceptual agent.
+
+Panels:
+  1. Egocentric camera feed + tactile / audio line charts.
+  2. Dynamic tactile banner (color from label hash, no hard-coded states).
+  3. 2D world map (VLM-extracted objects, audio peaks bound by the VLM).
+  4. Memory inspector (every learned ObjectCard with its modalities).
+  5. Chat panel — ask the agent questions; replies are grounded in the
+     current Scene + ObjectMemory via an Ollama chat model.
 
 Launch:
-    streamlit run host_app/main_gui.py
-
-Flags (set in sidebar):
-    --mock    Use synthetic data (no hardware required)
-    --port    Serial port (default /dev/ttyUSB0)
+    streamlit run main_gui.py
 """
 
-import threading
+import hashlib
 import time
 from collections import deque
 
 import cv2
 import numpy as np
+import ollama
 import streamlit as st
-from multimodal_agent import UnifiedEmbodiedAgent
+
+from world_model import WorldModel
+from world_map import render_scene
+
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Embodi-Align",
+    page_title="Embodi-Align — Grounded World Model",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # ── Sidebar controls ──────────────────────────────────────────────────────────
 st.sidebar.title("Embodi-Align")
-st.sidebar.markdown("Cross-Embodiment Data Harvester")
+st.sidebar.markdown("**Grounded Perceptual Agent** — audio + vision + tactile memory")
 use_mock = st.sidebar.checkbox("Mock mode (no hardware)", value=True)
 serial_port = st.sidebar.text_input("Serial port", value="/dev/ttyUSB0")
 baud_rate = st.sidebar.number_input("Baud rate", value=460800, step=1)
 window_size = st.sidebar.slider("Plot window (samples)", 50, 500, 200)
+auto_observe = st.sidebar.checkbox("Auto-observe every N sec", value=False)
+auto_period = st.sidebar.slider("Auto period (s)", 2, 30, 6)
+vlm_model = st.sidebar.text_input("VLM model (Ollama)", value="moondream")
+chat_model = st.sidebar.text_input("Chat model (Ollama)", value="qwen2.5:3b")
+memory_path = st.sidebar.text_input("Memory DB path", value="object_memory.db")
 
-# ── Start harvester + agent (once per session via st.session_state) ───────────
+
+# Stable color from a label string. Used by the dynamic tactile banner
+# so each learned object gets its own consistent banner color without
+# any hard-coded color table.
+def label_color(label: str) -> str:
+    if not label:
+        return "#7f8c8d"
+    h = hashlib.md5(label.encode()).hexdigest()
+    return f"#{h[:6]}"
+
+
+# ── One-time session bootstrap ────────────────────────────────────────────────
 if 'started' not in st.session_state:
     from data_harvester import token_queue, start, start_mock
     import agent_simulator as agent
-    from multimodal_agent import UnifiedEmbodiedAgent
 
-    # Initialize your new multimodal VLM brain & default state
-    st.session_state.vlm_agent = UnifiedEmbodiedAgent(model_name="moondream")
-    st.session_state.agent_thought = "Awaiting sensory vector alignment trigger..."
+    st.session_state.world_model = WorldModel(
+        model_name=vlm_model,
+        memory_path=memory_path,
+    )
+    st.session_state.chat_history = []
+    st.session_state.agent_thought = "Awaiting first sensory observation…"
+    st.session_state.last_auto_obs = 0.0
 
     if use_mock:
         start_mock(hz=100)
     else:
         start(port=serial_port, baud=baud_rate)
-        
-    agent.start(token_queue)
+    # Pass memory + world_model into the agent loop so contact events
+    # can bootstrap tactile signatures into long-term memory.
+    agent.start(token_queue,
+                memory=st.session_state.world_model.memory,
+                world_model=st.session_state.world_model)
     st.session_state.started = True
 
 import agent_simulator as agent
@@ -58,128 +87,223 @@ from data_harvester import token_queue
 
 # ── Rolling buffers ───────────────────────────────────────────────────────────
 if 'accel_buf' not in st.session_state:
-    st.session_state.accel_buf   = deque(maxlen=window_size)
-    st.session_state.fft_buf     = deque(maxlen=window_size)
-    st.session_state.ts_buf      = deque(maxlen=window_size)
+    st.session_state.accel_buf = deque(maxlen=window_size)
+    st.session_state.fft_buf   = deque(maxlen=window_size)
+    st.session_state.ts_buf    = deque(maxlen=window_size)
 
 accel_buf = st.session_state.accel_buf
 fft_buf   = st.session_state.fft_buf
 ts_buf    = st.session_state.ts_buf
 
-# ── Drain queue into buffers ──────────────────────────────────────────────────
+# Drain queue
 drained = 0
 while not token_queue.empty() and drained < 50:
-    token = token_queue.get_nowait()
-    ts_buf.append(token[0])
-    accel_buf.append(token[1])
-    fft_buf.append(token[2])
+    t = token_queue.get_nowait()
+    ts_buf.append(t[0]); accel_buf.append(t[1]); fft_buf.append(t[2])
     drained += 1
 
-# ── State colour map ──────────────────────────────────────────────────────────
-STATE_COLORS = {
-    "Dry Leaves":   "#2ecc71",   # Green (safe/brittle material)
-    "Dense Sticks":  "#e74c3c",   # Red (high-torque obstacle hazard)
-    "Unknown":       "#95a5a6",   # Grey (transient or no contact state)
-}
-state     = agent.current_state
+# ── Dynamic tactile banner ────────────────────────────────────────────────────
+label = agent.current_label
 directive = agent.current_directive
-color     = STATE_COLORS.get(state, "#95a5a6")
+color = label_color(label or "")
 
-# ── Layout ────────────────────────────────────────────────────────────────────
+banner_label = label if label else "Awaiting tactile signal"
 st.markdown(f"""
 <div style="background:{color};padding:12px 20px;border-radius:8px;margin-bottom:12px;">
-  <h2 style="margin:0;color:white;">⬤ {state}</h2>
+  <h2 style="margin:0;color:white;">⬤ Tactile: {banner_label}</h2>
   <p style="margin:4px 0 0 0;color:white;font-family:monospace;">{directive}</p>
 </div>
 """, unsafe_allow_html=True)
 
+# ── Row 1: Camera + tactile plots ─────────────────────────────────────────────
 col_cam, col_plots = st.columns([1, 1])
 
-# ── Camera feed ───────────────────────────────────────────────────────────────
 with col_cam:
     st.subheader("Egocentric Camera")
     cam_placeholder = st.empty()
 
-    # Try to grab a real camera frame; fall back to a blank placeholder
-    cap = cv2.VideoCapture(0)
+    # Cache camera in session_state to avoid open/close flicker on every rerun
+    if 'cap' not in st.session_state:
+        st.session_state.cap = cv2.VideoCapture(0)
+    cap = st.session_state.cap
+
     if cap.isOpened():
         ret, frame = cap.read()
-        cap.release()
         if ret:
-            st.session_state.latest_raw_frame = frame.copy() 
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            cam_placeholder.image(frame_rgb, use_column_width=True)
+            st.session_state.latest_raw_frame = frame.copy()
+            cam_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), use_column_width=True)
         else:
             cam_placeholder.info("Camera opened but frame read failed.")
     else:
-        # Show a blank grey placeholder with label
         blank = np.full((480, 640, 3), 50, dtype=np.uint8)
         cv2.putText(blank, "Camera unavailable", (160, 240),
                     cv2.FONT_HERSHEY_SIMPLEX, 1.0, (200, 200, 200), 2)
         cam_placeholder.image(blank, use_column_width=True)
 
-# ── Tactile plots ─────────────────────────────────────────────────────────────
 with col_plots:
     st.subheader("Acceleration (g)")
     if accel_buf:
         st.line_chart(list(accel_buf))
     else:
         st.info("Waiting for sensor data…")
-
     st.subheader("FFT Peak Frequency (Hz)")
     if fft_buf:
         st.line_chart(list(fft_buf))
     else:
         st.info("Waiting for sensor data…")
 
-# ── Metrics row ───────────────────────────────────────────────────────────────
-m1, m2, m3 = st.columns(3)
-m1.metric("Last Accel",    f"{accel_buf[-1]:.3f} g"  if accel_buf else "—")
-m2.metric("Last FFT Peak", f"{fft_buf[-1]} Hz"       if fft_buf   else "—")
-m3.metric("Tokens received", len(ts_buf))
-
-# ── Auto-refresh every 100 ms ─────────────────────────────────────────────────
-time.sleep(0.1)
-st.rerun()
-
-# ── 🧠 Yann LeCun-inspired Multimodal World Model (INSERTED HERE) ─────────────
+# ── Row 2: Grounded 2D World Map ──────────────────────────────────────────────
 st.markdown("---")
-st.header("🧠 Grounded Perceptual Agent Brain")
+st.header("🧠 Grounded 2D World Map")
+st.caption(
+    "Fast path: CLIP fingerprints the frame and reuses cached labels from "
+    "ObjectMemory. Slow path: VLM extracts objects + hand pose, then the "
+    "FFT peak is bound to a visible emitter (also via the VLM, no hard-coded "
+    "frequency table)."
+)
 
-col_action, col_thought = st.columns([1, 2])
+current_accel = accel_buf[-1] if accel_buf else 0.0
+current_fft   = fft_buf[-1]   if fft_buf   else 0
 
-with col_action:
-    st.write(
-        "Clicking below freezes the current visual matrix and hardware "
-        "telemetry vectors, passing them into the unified VLM agent loop."
+# Auto-observe trigger
+should_observe = False
+force_vlm = False
+if auto_observe and (time.time() - st.session_state.last_auto_obs) > auto_period:
+    should_observe = True
+    st.session_state.last_auto_obs = time.time()
+
+col_ctrl, col_map = st.columns([1, 3])
+with col_ctrl:
+    if st.button("⚡ Observe scene (force VLM)", type="primary"):
+        should_observe = True
+        force_vlm = True
+    if st.button("⚡ Quick observe (fast path)"):
+        should_observe = True
+    if st.button("🧹 Reset world model (keep memory)"):
+        st.session_state.world_model.reset()
+        st.session_state.agent_thought = "World model reset (memory retained)."
+    st.metric("Objects in scene", len(st.session_state.world_model.scene.objects))
+    st.metric("Audio sources",    len(st.session_state.world_model.scene.audio_sources))
+    st.metric("Last FFT peak",    f"{current_fft} Hz")
+    st.metric("Path",             "FAST (CLIP)" if st.session_state.world_model.scene.last_used_fast_path else "SLOW (VLM)")
+
+if should_observe:
+    spinner_msg = "Querying VLM and updating world model…" if force_vlm else "Updating world model…"
+    with st.spinner(spinner_msg):
+        frame = st.session_state.get('latest_raw_frame')
+        scene = st.session_state.world_model.observe(
+            frame=frame,
+            accel_g=current_accel,
+            fft_hz=current_fft,
+            force_vlm=force_vlm,
+        )
+        st.session_state.agent_thought = scene.last_summary or "(VLM returned empty)"
+
+with col_map:
+    fig = render_scene(st.session_state.world_model.scene)
+    st.plotly_chart(fig, use_container_width=True)
+
+# ── Row 3: Raw agent interpretation ───────────────────────────────────────────
+st.subheader("Agent's Raw Perceptual Output")
+st.code(st.session_state.agent_thought, language="text")
+
+# ── Row 4: Memory inspector ───────────────────────────────────────────────────
+st.markdown("---")
+st.header("🧠 Persistent Memory (ObjectMemory)")
+st.caption(
+    "Everything the agent has ever seen, touched, or heard. Tactile and "
+    "audio columns fill in as the agent encounters and grounds each object."
+)
+
+cards = st.session_state.world_model.memory.all()
+if cards:
+    import pandas as pd
+    rows = []
+    for c in cards:
+        rows.append({
+            "label": c.label,
+            "n_visual": c.n_visual,
+            "n_tactile": c.n_tactile,
+            "n_audio": c.n_audio,
+            "accel_mean (g)": round(c.tactile_accel_mean, 3),
+            "fft_mean (Hz)":  int(c.tactile_fft_mean),
+            "audio (Hz)":     c.audio_freq_hz,
+            "tactile_trained": c.tactile_trained,
+        })
+    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+else:
+    st.info("Memory is empty. Click '⚡ Observe scene' to start populating it.")
+
+# ── Row 5: Chat panel ─────────────────────────────────────────────────────────
+st.markdown("---")
+st.header("💬 Talk to the agent")
+st.caption(
+    "Replies are grounded in the current Scene and the persistent memory DB. "
+    "Uses an Ollama chat model — change it in the sidebar."
+)
+
+
+# Build the system prompt for the chat LLM from current Scene + memory.
+# This is the RAG context that grounds the agent's free-form responses
+# in what it has actually perceived rather than letting it hallucinate.
+def build_chat_context(world_model, accel: float, fft: int) -> str:
+    scene = world_model.scene
+    visible = list(scene.objects.keys()) or ["(nothing identified yet)"]
+    sounds = [(s.label, s.freq_hz) for s in scene.audio_sources.values()] or [("(none)", 0)]
+    mem_lines = []
+    for c in world_model.memory.all()[:25]:
+        mem_lines.append(
+            f"  • {c.label}: seen×{c.n_visual}, touched×{c.n_tactile} "
+            f"(accel≈{c.tactile_accel_mean:.2f}g, fft≈{int(c.tactile_fft_mean)}Hz), "
+            f"audio≈{c.audio_freq_hz}Hz"
+        )
+    mem_block = "\n".join(mem_lines) if mem_lines else "  (empty)"
+    return (
+        "You are an embodied perceptual agent. You have a camera, a glove-mounted "
+        "IMU, and a microphone (FFT peak). Ground every answer in the data below; "
+        "do not invent objects or sensor readings.\n\n"
+        f"Currently visible objects: {visible}\n"
+        f"Audio sources (label, freq Hz): {sounds}\n"
+        f"Latest tactile sample: accel={accel:.3f}g, fft_peak={fft}Hz\n"
+        f"Most recent tactile classification: {scene.last_tactile_label or '(none)'}\n\n"
+        "Long-term memory (every object the agent has grounded):\n"
+        f"{mem_block}\n"
     )
-    
-    # Grab the current transient scalar frames from your streaming deques
-    current_accel = accel_buf[-1] if accel_buf else 0.0
-    current_fft = fft_buf[-1] if fft_buf else 0
-    
-    # 'agent' module handles the current string classification token
-    from agent_simulator import current_state 
-    
-    if st.button("⚡ Trigger Sensory Alignment", type="primary"):
-        with st.spinner("Fusing edge-tokens with VLM visual fields..."):
-            if 'latest_raw_frame' in st.session_state:
-                # Dispatches localized image token + DSP metrics directly to Ollama
-                summary = st.session_state.vlm_agent.generate_grounded_summary(
-                    frame=st.session_state.latest_raw_frame,
-                    accel_g=current_accel,
-                    fft_hz=current_fft,
-                    heuristic_state=current_state
+
+
+# Render history first so the input box stays at the bottom.
+for msg in st.session_state.chat_history:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+prompt = st.chat_input("Ask about the scene, request a summary, or query the memory…")
+if prompt:
+    st.session_state.chat_history.append({"role": "user", "content": prompt})
+    st.chat_message("user").write(prompt)
+
+    ctx = build_chat_context(st.session_state.world_model, current_accel, current_fft)
+    with st.chat_message("assistant"):
+        try:
+            with st.spinner("Thinking…"):
+                resp = ollama.chat(
+                    model=chat_model,
+                    messages=[
+                        {"role": "system", "content": ctx},
+                        *st.session_state.chat_history,
+                    ],
                 )
-                st.session_state.agent_thought = summary
-            else:
-                st.session_state.agent_thought = "Error: Vision matrix buffer empty."
+                reply = resp["message"]["content"]
+        except Exception as e:
+            reply = f"(chat model error: {e} — is `ollama pull {chat_model}` done?)"
+        st.write(reply)
+    st.session_state.chat_history.append({"role": "assistant", "content": reply})
 
-with col_thought:
-    st.subheader("Agent's Perceptual Interpretation")
-    st.info(st.session_state.agent_thought)
+# ── Metrics row ───────────────────────────────────────────────────────────────
+m1, m2, m3, m4 = st.columns(4)
+m1.metric("Last Accel",       f"{accel_buf[-1]:.3f} g" if accel_buf else "—")
+m2.metric("Last FFT Peak",    f"{fft_buf[-1]} Hz"      if fft_buf   else "—")
+m3.metric("Tokens received",  len(ts_buf))
+m4.metric("Memory size",      len(st.session_state.world_model.memory.all()))
 
-
-# ── Auto-refresh every 100 ms ─────────────────────────────────────────────────
-time.sleep(0.1)
+# ── Auto-refresh ──────────────────────────────────────────────────────────────
+time.sleep(0.2)
 st.rerun()

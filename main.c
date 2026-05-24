@@ -20,6 +20,8 @@ static uint16_t frame_id   = 0;
 static uint32_t last_imu_us = 0;
 
 // ── I2C helper ────────────────────────────────────────────────────────────────
+// Read one signed 16-bit Z-axis acceleration sample from the QMI8658 IMU
+// over I²C. Returns 0 on a short read (treated as zero acceleration).
 static int16_t qmi8658_read_az(void) {
     Wire.beginTransmission(QMI8658_ADDR);
     Wire.write(REG_AZ_L);
@@ -32,10 +34,15 @@ static int16_t qmi8658_read_az(void) {
 }
 
 // ── ADC audio sample (analog pin — swap for PDM if board supports it) ─────────
+// Read one 12-bit ADC sample from pin A0 and re-center it around 0
+// (range becomes roughly [-1.0, +1.0]). Single sample per call; called
+// once per loop() iteration to build up the 512-sample FFT buffer.
 static float read_audio_sample(void) {
     return (float)(analogRead(A0) - 2048) / 2048.0f;  // 12-bit centre at 2048
 }
 
+// Arduino entry point. One-time hardware init: UART for host link,
+// I²C for the IMU, 12-bit ADC for the mic, and the on-board DSP/FFT.
 void setup(void) {
     Serial.begin(BAUD_RATE);
     Wire.begin();
@@ -43,6 +50,9 @@ void setup(void) {
     dsp_filter_init(AUDIO_SAMPLE_RATE, AUDIO_BUF_SIZE);
 }
 
+// Main hot loop. Samples one ADC value each iteration; on every 512th
+// iteration runs the FFT, reads the IMU, and prints one CSV telemetry
+// line. No delay() — audio sample rate is set implicitly by loop speed.
 void loop(void) {
     // ── Audio: fill buffer at ~16 kHz via busy sample (no DMA on Arduino core)
     audio_buf[audio_idx++] = read_audio_sample();
