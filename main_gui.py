@@ -43,7 +43,7 @@ baud_rate = st.sidebar.number_input("Baud rate", value=460800, step=1)
 window_size = st.sidebar.slider("Plot window (samples)", 50, 500, 200)
 auto_observe = st.sidebar.checkbox("Auto-observe every N sec", value=False)
 auto_period = st.sidebar.slider("Auto period (s)", 2, 30, 6)
-vlm_model = st.sidebar.text_input("VLM model (Ollama)", value="moondream")
+vlm_model = st.sidebar.text_input("VLM model (Ollama)", value="llava")
 chat_model = st.sidebar.text_input("Chat model (Ollama)", value="qwen2.5:3b")
 memory_path = st.sidebar.text_input("Memory DB path", value="object_memory.db")
 

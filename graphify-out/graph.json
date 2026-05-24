@@ -4,47 +4,46 @@
   "graph": {
     "hyperedges": [
       {
-        "id": "hyper_telemetry_pipeline",
-        "label": "End-to-end CSV telemetry pipeline (firmware \u2192 host queue \u2192 consumers)",
+        "id": "perception_pipeline",
+        "label": "Perception Pipeline",
         "nodes": [
-          "files_main_loop",
-          "files_data_harvester_reader_loop",
-          "files_data_harvester_token_queue",
-          "files_agent_simulator_run",
-          "files_main_gui_module"
-        ],
-        "relation": "participate_in",
-        "confidence": "INFERRED",
-        "confidence_score": 0.95,
-        "source_file": "CLAUDE.md"
-      },
-      {
-        "id": "hyper_observe_cycle",
-        "label": "WorldModel observe cycle: query \u2192 parse \u2192 bind audio \u2192 decay",
-        "nodes": [
-          "files_world_model_observe",
+          "files_world_model_try_fast_path",
           "files_world_model_query_vlm",
-          "files_world_model_parse_vlm_output",
-          "files_world_model_bind_audio",
-          "files_world_model_decay"
+          "files_world_model_observe",
+          "files_clip_encoder_encode_image"
         ],
         "relation": "form",
-        "confidence": "EXTRACTED",
-        "confidence_score": 1.0,
+        "confidence": "INFERRED",
+        "confidence_score": 0.9,
         "source_file": "world_model.py"
       },
       {
-        "id": "hyper_scene_to_ui",
-        "label": "Scene rendering chain: WorldModel.scene \u2192 render_scene \u2192 Streamlit map",
+        "id": "object_memory_lifecycle",
+        "label": "Object Memory Learning Cycle",
         "nodes": [
-          "files_world_model_scene",
-          "files_world_map_render_scene",
-          "files_main_gui_module"
+          "files_object_memory_update_tactile",
+          "files_object_memory_update_audio",
+          "files_object_memory_upsert_visual",
+          "files_object_memory_nearest_visual"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "object_memory.py"
+      },
+      {
+        "id": "tactile_contact_flow",
+        "label": "Tactile Contact Detection & Bootstrap",
+        "nodes": [
+          "files_agent_simulator_run",
+          "files_contact_detector_step",
+          "files_world_model_handle_contact",
+          "files_object_memory_update_tactile"
         ],
         "relation": "participate_in",
         "confidence": "EXTRACTED",
         "confidence_score": 1.0,
-        "source_file": "main_gui.py"
+        "source_file": "agent_simulator.py"
       }
     ]
   },
@@ -54,7 +53,7 @@
       "file_type": "code",
       "source_file": "dsp_filter.h",
       "source_location": "L1",
-      "community": 4,
+      "community": 6,
       "norm_label": "dsp_filter.h",
       "id": "dsp_filter_h"
     },
@@ -63,7 +62,7 @@
       "file_type": "code",
       "source_file": "agent_simulator.py",
       "source_location": "L1",
-      "community": 3,
+      "community": 1,
       "norm_label": "agent_simulator.py",
       "id": "agent_simulator_py"
     },
@@ -72,7 +71,7 @@
       "file_type": "code",
       "source_file": "agent_simulator.py",
       "source_location": "L18",
-      "community": 3,
+      "community": 1,
       "norm_label": "policy",
       "id": "files_agent_simulator_policy"
     },
@@ -81,7 +80,7 @@
       "file_type": "rationale",
       "source_file": "agent_simulator.py",
       "source_location": "L1",
-      "community": 3,
+      "community": 1,
       "norm_label": "agent_simulator.py heuristic physical agent: perceive \u2192 reason \u2192 act. classifies",
       "id": "files_agent_simulator_rationale_1"
     },
@@ -90,7 +89,7 @@
       "file_type": "rationale",
       "source_file": "agent_simulator.py",
       "source_location": "L58",
-      "community": 3,
+      "community": 7,
       "norm_label": "map sensor signatures to material state.      signatures (from claude.md):",
       "id": "files_agent_simulator_rationale_58"
     },
@@ -108,7 +107,7 @@
       "file_type": "code",
       "source_file": "main.c",
       "source_location": "L1",
-      "community": 4,
+      "community": 6,
       "norm_label": "main.c",
       "id": "main_c"
     },
@@ -117,7 +116,7 @@
       "file_type": "code",
       "source_file": "main.c",
       "source_location": "L23",
-      "community": 4,
+      "community": 6,
       "norm_label": "qmi8658_read_az()",
       "id": "files_main_qmi8658_read_az"
     },
@@ -126,7 +125,7 @@
       "file_type": "code",
       "source_file": "main.c",
       "source_location": "L35",
-      "community": 4,
+      "community": 6,
       "norm_label": "read_audio_sample()",
       "id": "files_main_read_audio_sample"
     },
@@ -135,7 +134,7 @@
       "file_type": "code",
       "source_file": "main.c",
       "source_location": "L39",
-      "community": 4,
+      "community": 6,
       "norm_label": "setup()",
       "id": "files_main_setup"
     },
@@ -144,7 +143,7 @@
       "file_type": "code",
       "source_file": "main.c",
       "source_location": "L46",
-      "community": 4,
+      "community": 6,
       "norm_label": "loop()",
       "id": "files_main_loop"
     },
@@ -153,7 +152,7 @@
       "file_type": "code",
       "source_file": "dsp_filter.c",
       "source_location": "L20",
-      "community": 4,
+      "community": 6,
       "norm_label": "compute_hann_window()",
       "id": "files_dsp_filter_compute_hann_window"
     },
@@ -162,7 +161,7 @@
       "file_type": "code",
       "source_file": "main_gui.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 5,
       "norm_label": "main_gui.py",
       "id": "main_gui_py"
     },
@@ -171,7 +170,7 @@
       "file_type": "rationale",
       "source_file": "main_gui.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 5,
       "norm_label": "main_gui.py streamlit dashboard: egocentric camera feed, live tactile line chart",
       "id": "files_main_gui_rationale_1"
     },
@@ -180,7 +179,7 @@
       "file_type": "code",
       "source_file": "data_harvester.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 5,
       "norm_label": "data_harvester.py",
       "id": "data_harvester_py"
     },
@@ -189,7 +188,7 @@
       "file_type": "code",
       "source_file": "data_harvester.py",
       "source_location": "L25",
-      "community": 2,
+      "community": 6,
       "norm_label": "_parse_line()",
       "id": "files_data_harvester_parse_line"
     },
@@ -198,7 +197,7 @@
       "file_type": "code",
       "source_file": "data_harvester.py",
       "source_location": "L36",
-      "community": 2,
+      "community": 5,
       "norm_label": "_push()",
       "id": "files_data_harvester_push"
     },
@@ -207,7 +206,7 @@
       "file_type": "code",
       "source_file": "data_harvester.py",
       "source_location": "L45",
-      "community": 2,
+      "community": 5,
       "norm_label": "_reader_loop()",
       "id": "files_data_harvester_reader_loop"
     },
@@ -216,7 +215,7 @@
       "file_type": "code",
       "source_file": "data_harvester.py",
       "source_location": "L61",
-      "community": 2,
+      "community": 5,
       "norm_label": "start()",
       "id": "files_data_harvester_start"
     },
@@ -225,7 +224,7 @@
       "file_type": "code",
       "source_file": "data_harvester.py",
       "source_location": "L75",
-      "community": 2,
+      "community": 5,
       "norm_label": "start_mock()",
       "id": "files_data_harvester_start_mock"
     },
@@ -234,7 +233,7 @@
       "file_type": "rationale",
       "source_file": "data_harvester.py",
       "source_location": "L1",
-      "community": 2,
+      "community": 5,
       "norm_label": "data_harvester.py non-blocking serial reader. runs in a daemon thread and pushes",
       "id": "files_data_harvester_rationale_1"
     },
@@ -243,7 +242,7 @@
       "file_type": "rationale",
       "source_file": "data_harvester.py",
       "source_location": "L26",
-      "community": 2,
+      "community": 6,
       "norm_label": "parse a csv serial line into a token. returns none on bad packet.",
       "id": "files_data_harvester_rationale_26"
     },
@@ -252,7 +251,7 @@
       "file_type": "rationale",
       "source_file": "data_harvester.py",
       "source_location": "L37",
-      "community": 2,
+      "community": 5,
       "norm_label": "push token to queue; drop oldest if full.",
       "id": "files_data_harvester_rationale_37"
     },
@@ -261,7 +260,7 @@
       "file_type": "rationale",
       "source_file": "data_harvester.py",
       "source_location": "L46",
-      "community": 2,
+      "community": 5,
       "norm_label": "background thread: read serial, parse, push to queue.",
       "id": "files_data_harvester_rationale_46"
     },
@@ -270,7 +269,7 @@
       "file_type": "rationale",
       "source_file": "data_harvester.py",
       "source_location": "L62",
-      "community": 2,
+      "community": 5,
       "norm_label": "start the serial reader as a daemon thread. returns the thread.",
       "id": "files_data_harvester_rationale_62"
     },
@@ -279,7 +278,7 @@
       "file_type": "rationale",
       "source_file": "data_harvester.py",
       "source_location": "L76",
-      "community": 2,
+      "community": 5,
       "norm_label": "inject synthetic tokens at a fixed rate for testing without hardware.",
       "id": "files_data_harvester_rationale_76"
     },
@@ -288,7 +287,7 @@
       "file_type": "rationale",
       "source_file": "agent_simulator.py",
       "source_location": "L52",
-      "community": 3,
+      "community": 7,
       "norm_label": "classifies organic materials based on vibrational friction (g-force)     and aco",
       "id": "files_agent_simulator_rationale_52"
     },
@@ -306,7 +305,7 @@
       "file_type": "code",
       "source_file": "multimodal_agent.py",
       "source_location": "L1",
-      "community": 6,
+      "community": 2,
       "norm_label": "multimodal_agent.py",
       "id": "multimodal_agent_py"
     },
@@ -315,7 +314,7 @@
       "file_type": "code",
       "source_file": "multimodal_agent.py",
       "source_location": "L12",
-      "community": 6,
+      "community": 2,
       "norm_label": ".__init__()",
       "id": "files_multimodal_agent_unifiedembodiedagent_init"
     },
@@ -324,7 +323,7 @@
       "file_type": "rationale",
       "source_file": "multimodal_agent.py",
       "source_location": "L1",
-      "community": 6,
+      "community": 2,
       "norm_label": "host_app/multimodal_agent.py unified perceptual agent: integrates cv matrices an",
       "id": "files_multimodal_agent_rationale_1"
     },
@@ -333,7 +332,7 @@
       "file_type": "rationale",
       "source_file": "multimodal_agent.py",
       "source_location": "L17",
-      "community": 6,
+      "community": 2,
       "norm_label": "checks if ollama is running and has the model pulled.",
       "id": "files_multimodal_agent_rationale_17"
     },
@@ -342,7 +341,7 @@
       "file_type": "rationale",
       "source_file": "multimodal_agent.py",
       "source_location": "L25",
-      "community": 6,
+      "community": 2,
       "norm_label": "ingests vision frame, audio bins, and tactile forces simultaneously          to",
       "id": "files_multimodal_agent_rationale_25"
     },
@@ -355,7 +354,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 1,
       "norm_label": "policy dataclass",
       "id": "agent_simulator_policy"
     },
@@ -368,7 +367,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 7,
       "norm_label": "policies dict",
       "id": "agent_simulator_policies"
     },
@@ -381,7 +380,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 7,
       "norm_label": "classify()",
       "id": "agent_simulator_classify"
     },
@@ -394,7 +393,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 1,
       "norm_label": "emit_directive()",
       "id": "agent_simulator_emit_directive"
     },
@@ -433,7 +432,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "current_state (shared global)",
       "id": "agent_simulator_current_state"
     },
@@ -446,7 +445,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "current_directive (shared global)",
       "id": "agent_simulator_current_directive"
     },
@@ -472,7 +471,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 1,
       "norm_label": "perceive-reason-act loop pattern",
       "id": "agent_simulator_perceive_reason_act"
     },
@@ -485,7 +484,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 7,
       "norm_label": "dry leaves policy",
       "id": "agent_simulator_dry_leaves_policy"
     },
@@ -498,7 +497,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 7,
       "norm_label": "dense sticks policy",
       "id": "agent_simulator_dense_sticks_policy"
     },
@@ -511,7 +510,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 2,
       "norm_label": "unifiedembodiedagent class",
       "id": "multimodal_agent_unifiedembodiedagent"
     },
@@ -524,7 +523,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 2,
       "norm_label": "_warmup()",
       "id": "multimodal_agent_warmup"
     },
@@ -537,7 +536,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 2,
       "norm_label": "generate_grounded_summary()",
       "id": "multimodal_agent_generate_grounded_summary"
     },
@@ -550,7 +549,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 2,
       "norm_label": "late-fusion multi-modal context pattern",
       "id": "multimodal_agent_late_fusion"
     },
@@ -563,7 +562,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 2,
       "norm_label": "moondream vlm (ollama)",
       "id": "multimodal_agent_moondream"
     },
@@ -576,7 +575,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "streamlit dashboard (main_gui.py)",
       "id": "main_gui_streamlit_dashboard"
     },
@@ -589,7 +588,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "token queue consumer (drain loop)",
       "id": "main_gui_token_queue_consumer"
     },
@@ -602,7 +601,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "state_colors map",
       "id": "main_gui_state_colors"
     },
@@ -615,7 +614,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "camera feed (opencv capture)",
       "id": "main_gui_camera_feed"
     },
@@ -628,7 +627,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "trigger sensory alignment button",
       "id": "main_gui_trigger_sensory_alignment"
     },
@@ -641,7 +640,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 2,
       "norm_label": "vlm_agent session state",
       "id": "main_gui_vlm_agent_session"
     },
@@ -654,7 +653,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "rolling deque buffers (accel/fft/ts)",
       "id": "main_gui_rolling_buffers"
     },
@@ -667,7 +666,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 8,
       "norm_label": "embodi-align project (claude.md)",
       "id": "claude_md_embodi_align"
     },
@@ -680,7 +679,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 7,
       "norm_label": "serial protocol (csv format)",
       "id": "claude_md_serial_protocol"
     },
@@ -693,7 +692,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "thread safety pattern (daemon threads + queue)",
       "id": "claude_md_thread_safety"
     },
@@ -706,7 +705,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 8,
       "norm_label": "arduino tuyaopen vs tuyaos sdk rationale",
       "id": "claude_md_arduino_tuya_rationale"
     },
@@ -719,7 +718,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 7,
+      "community": 8,
       "norm_label": "fft buffer = 512 constraint",
       "id": "claude_md_fft_512_constraint"
     },
@@ -732,7 +731,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 2,
       "norm_label": "token_queue (thread-safe queue)",
       "id": "claude_md_token_queue"
     },
@@ -741,180 +740,153 @@
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L1",
-      "id": "world_model_py",
       "community": 0,
-      "norm_label": "world_model.py"
-    },
-    {
-      "label": "SceneObject",
-      "file_type": "code",
-      "source_file": "world_model.py",
-      "source_location": "L46",
-      "id": "files_world_model_sceneobject",
-      "community": 0,
-      "norm_label": "sceneobject"
-    },
-    {
-      "label": "AudioSource",
-      "file_type": "code",
-      "source_file": "world_model.py",
-      "source_location": "L56",
-      "id": "files_world_model_audiosource",
-      "community": 0,
-      "norm_label": "audiosource"
-    },
-    {
-      "label": "Scene",
-      "file_type": "code",
-      "source_file": "world_model.py",
-      "source_location": "L64",
-      "id": "files_world_model_scene",
-      "community": 0,
-      "norm_label": "scene"
+      "norm_label": "world_model.py",
+      "id": "world_model_py"
     },
     {
       "label": ".decay()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L72",
-      "id": "files_world_model_scene_decay",
       "community": 0,
-      "norm_label": ".decay()"
+      "norm_label": ".decay()",
+      "id": "files_world_model_scene_decay"
     },
     {
       "label": "_parse_vlm_output()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L123",
-      "id": "files_world_model_parse_vlm_output",
       "community": 0,
-      "norm_label": "_parse_vlm_output()"
+      "norm_label": "_parse_vlm_output()",
+      "id": "files_world_model_parse_vlm_output"
     },
     {
       "label": "_freq_band()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L146",
-      "id": "files_world_model_freq_band",
-      "community": 5,
-      "norm_label": "_freq_band()"
+      "community": 0,
+      "norm_label": "_freq_band()",
+      "id": "files_world_model_freq_band"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L166",
-      "id": "files_world_model_worldmodel_init",
       "community": 0,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "files_world_model_worldmodel_init"
     },
     {
       "label": "._warmup()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L174",
-      "id": "files_world_model_worldmodel_warmup",
       "community": 0,
-      "norm_label": "._warmup()"
+      "norm_label": "._warmup()",
+      "id": "files_world_model_worldmodel_warmup"
     },
     {
       "label": "._query_vlm()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L183",
-      "id": "files_world_model_worldmodel_query_vlm",
       "community": 0,
-      "norm_label": "._query_vlm()"
+      "norm_label": "._query_vlm()",
+      "id": "files_world_model_worldmodel_query_vlm"
     },
     {
       "label": "._bind_audio()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L203",
-      "id": "files_world_model_worldmodel_bind_audio",
       "community": 0,
-      "norm_label": "._bind_audio()"
+      "norm_label": "._bind_audio()",
+      "id": "files_world_model_worldmodel_bind_audio"
     },
     {
       "label": ".observe()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L237",
-      "id": "files_world_model_worldmodel_observe",
       "community": 0,
-      "norm_label": ".observe()"
+      "norm_label": ".observe()",
+      "id": "files_world_model_worldmodel_observe"
     },
     {
       "label": ".reset()",
       "file_type": "code",
       "source_file": "world_model.py",
       "source_location": "L266",
-      "id": "files_world_model_worldmodel_reset",
       "community": 0,
-      "norm_label": ".reset()"
+      "norm_label": ".reset()",
+      "id": "files_world_model_worldmodel_reset"
     },
     {
       "label": "world_model.py LeCun-style grounded world model: builds and maintains a persiste",
       "file_type": "rationale",
       "source_file": "world_model.py",
       "source_location": "L1",
-      "id": "files_world_model_rationale_1",
       "community": 0,
-      "norm_label": "world_model.py lecun-style grounded world model: builds and maintains a persiste"
+      "norm_label": "world_model.py lecun-style grounded world model: builds and maintains a persiste",
+      "id": "files_world_model_rationale_1"
     },
     {
       "label": "Confidence falls off over time; drop stale entries.",
       "file_type": "rationale",
       "source_file": "world_model.py",
       "source_location": "L73",
-      "id": "files_world_model_rationale_73",
       "community": 0,
-      "norm_label": "confidence falls off over time; drop stale entries."
+      "norm_label": "confidence falls off over time; drop stale entries.",
+      "id": "files_world_model_rationale_73"
     },
     {
       "label": "Persistent grounded scene representation.      Each `observe(frame, accel_g, fft",
       "file_type": "rationale",
       "source_file": "world_model.py",
       "source_location": "L155",
-      "id": "files_world_model_rationale_155",
       "community": 0,
-      "norm_label": "persistent grounded scene representation.      each `observe(frame, accel_g, fft"
+      "norm_label": "persistent grounded scene representation.      each `observe(frame, accel_g, fft",
+      "id": "files_world_model_rationale_155"
     },
     {
       "label": "Attach the current FFT peak to the best-matching observed sound source.",
       "file_type": "rationale",
       "source_file": "world_model.py",
       "source_location": "L204",
-      "id": "files_world_model_rationale_204",
       "community": 0,
-      "norm_label": "attach the current fft peak to the best-matching observed sound source."
+      "norm_label": "attach the current fft peak to the best-matching observed sound source.",
+      "id": "files_world_model_rationale_204"
     },
     {
       "label": "world_map.py",
       "file_type": "code",
       "source_file": "world_map.py",
       "source_location": "L1",
-      "id": "world_map_py",
       "community": 0,
-      "norm_label": "world_map.py"
+      "norm_label": "world_map.py",
+      "id": "world_map_py"
     },
     {
       "label": "render_scene()",
       "file_type": "code",
       "source_file": "world_map.py",
       "source_location": "L28",
-      "id": "files_world_map_render_scene",
       "community": 0,
-      "norm_label": "render_scene()"
+      "norm_label": "render_scene()",
+      "id": "files_world_map_render_scene"
     },
     {
       "label": "world_map.py Render a 2D top-down iconographic map of the agent's current Scene.",
       "file_type": "rationale",
       "source_file": "world_map.py",
       "source_location": "L1",
-      "id": "files_world_map_rationale_1",
       "community": 0,
-      "norm_label": "world_map.py render a 2d top-down iconographic map of the agent's current scene."
+      "norm_label": "world_map.py render a 2d top-down iconographic map of the agent's current scene.",
+      "id": "files_world_map_rationale_1"
     },
     {
       "label": "POLICIES",
@@ -925,9 +897,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_agent_simulator_policies",
       "community": 1,
-      "norm_label": "policies"
+      "norm_label": "policies",
+      "id": "files_agent_simulator_policies"
     },
     {
       "label": "current_state",
@@ -938,9 +910,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_agent_simulator_current_state",
       "community": 1,
-      "norm_label": "current_state"
+      "norm_label": "current_state",
+      "id": "files_agent_simulator_current_state"
     },
     {
       "label": "current_directive",
@@ -951,9 +923,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_agent_simulator_current_directive",
       "community": 1,
-      "norm_label": "current_directive"
+      "norm_label": "current_directive",
+      "id": "files_agent_simulator_current_directive"
     },
     {
       "label": "UnifiedEmbodiedAgent.generate_grounded_summary",
@@ -964,9 +936,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_multimodal_agent_generate_grounded_summary",
-      "community": 5,
-      "norm_label": "unifiedembodiedagent.generate_grounded_summary"
+      "community": 4,
+      "norm_label": "unifiedembodiedagent.generate_grounded_summary",
+      "id": "files_multimodal_agent_generate_grounded_summary"
     },
     {
       "label": "UnifiedEmbodiedAgent._warmup",
@@ -977,9 +949,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_multimodal_agent_warmup",
-      "community": 6,
-      "norm_label": "unifiedembodiedagent._warmup"
+      "community": 2,
+      "norm_label": "unifiedembodiedagent._warmup",
+      "id": "files_multimodal_agent_warmup"
     },
     {
       "label": "dsp_filter_init",
@@ -990,9 +962,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_dsp_filter_init",
-      "community": 4,
-      "norm_label": "dsp_filter_init"
+      "community": 6,
+      "norm_label": "dsp_filter_init",
+      "id": "files_dsp_filter_init"
     },
     {
       "label": "dsp_get_peak_hz",
@@ -1003,9 +975,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_dsp_filter_get_peak_hz",
-      "community": 4,
-      "norm_label": "dsp_get_peak_hz"
+      "community": 6,
+      "norm_label": "dsp_get_peak_hz",
+      "id": "files_dsp_filter_get_peak_hz"
     },
     {
       "label": "main_gui (Streamlit app)",
@@ -1016,9 +988,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_main_gui_module",
       "community": 1,
-      "norm_label": "main_gui (streamlit app)"
+      "norm_label": "main_gui (streamlit app)",
+      "id": "files_main_gui_module"
     },
     {
       "label": "WorldModel.observe",
@@ -1029,9 +1001,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_observe",
-      "community": 5,
-      "norm_label": "worldmodel.observe"
+      "community": 4,
+      "norm_label": "worldmodel.observe",
+      "id": "files_world_model_observe"
     },
     {
       "label": "WorldModel._query_vlm",
@@ -1042,9 +1014,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_query_vlm",
-      "community": 5,
-      "norm_label": "worldmodel._query_vlm"
+      "community": 4,
+      "norm_label": "worldmodel._query_vlm",
+      "id": "files_world_model_query_vlm"
     },
     {
       "label": "WorldModel._bind_audio",
@@ -1055,9 +1027,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_bind_audio",
-      "community": 5,
-      "norm_label": "worldmodel._bind_audio"
+      "community": 7,
+      "norm_label": "worldmodel._bind_audio",
+      "id": "files_world_model_bind_audio"
     },
     {
       "label": "WorldModel._warmup",
@@ -1068,9 +1040,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_warmup",
       "community": 0,
-      "norm_label": "worldmodel._warmup"
+      "norm_label": "worldmodel._warmup",
+      "id": "files_world_model_warmup"
     },
     {
       "label": "WorldModel.reset",
@@ -1081,9 +1053,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_reset",
       "community": 1,
-      "norm_label": "worldmodel.reset"
+      "norm_label": "worldmodel.reset",
+      "id": "files_world_model_reset"
     },
     {
       "label": "Scene.decay",
@@ -1094,9 +1066,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_decay",
-      "community": 5,
-      "norm_label": "scene.decay"
+      "community": 4,
+      "norm_label": "scene.decay",
+      "id": "files_world_model_decay"
     },
     {
       "label": "FREQ_BANDS",
@@ -1107,9 +1079,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_freq_bands",
-      "community": 5,
-      "norm_label": "freq_bands"
+      "community": 0,
+      "norm_label": "freq_bands",
+      "id": "files_world_model_freq_bands"
     },
     {
       "label": "POS_X",
@@ -1120,9 +1092,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_pos_x",
       "community": 0,
-      "norm_label": "pos_x"
+      "norm_label": "pos_x",
+      "id": "files_world_model_pos_x"
     },
     {
       "label": "POS_Y",
@@ -1133,9 +1105,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_pos_y",
       "community": 0,
-      "norm_label": "pos_y"
+      "norm_label": "pos_y",
+      "id": "files_world_model_pos_y"
     },
     {
       "label": "_PROMPT_TEMPLATE",
@@ -1146,9 +1118,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_prompt_template",
-      "community": 5,
-      "norm_label": "_prompt_template"
+      "community": 4,
+      "norm_label": "_prompt_template",
+      "id": "files_world_model_prompt_template"
     },
     {
       "label": "_OBJECT_RE",
@@ -1159,9 +1131,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_object_re",
       "community": 0,
-      "norm_label": "_object_re"
+      "norm_label": "_object_re",
+      "id": "files_world_model_object_re"
     },
     {
       "label": "_SOUND_RE",
@@ -1172,9 +1144,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_world_model_sound_re",
       "community": 0,
-      "norm_label": "_sound_re"
+      "norm_label": "_sound_re",
+      "id": "files_world_model_sound_re"
     },
     {
       "label": "token_queue",
@@ -1185,9 +1157,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_data_harvester_token_queue",
       "community": 1,
-      "norm_label": "token_queue"
+      "norm_label": "token_queue",
+      "id": "files_data_harvester_token_queue"
     },
     {
       "label": "FILES.md",
@@ -1198,9 +1170,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_files_md",
-      "community": 5,
-      "norm_label": "files.md"
+      "community": 4,
+      "norm_label": "files.md",
+      "id": "files_files_md"
     },
     {
       "label": "CLAUDE.md (project rules)",
@@ -1211,9 +1183,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_claude_md",
-      "community": 4,
-      "norm_label": "claude.md (project rules)"
+      "community": 6,
+      "norm_label": "claude.md (project rules)",
+      "id": "files_claude_md"
     },
     {
       "label": "requirements.txt",
@@ -1224,9 +1196,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_requirements_txt",
-      "community": 8,
-      "norm_label": "requirements.txt"
+      "community": 9,
+      "norm_label": "requirements.txt",
+      "id": "files_requirements_txt"
     },
     {
       "label": "LeCun-style persistent world model",
@@ -1237,9 +1209,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_lecun_world_model",
-      "community": 4,
-      "norm_label": "lecun-style persistent world model"
+      "community": 6,
+      "norm_label": "lecun-style persistent world model",
+      "id": "files_concept_lecun_world_model"
     },
     {
       "label": "CSV Serial Telemetry Protocol (460800 baud)",
@@ -1250,9 +1222,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_serial_protocol",
-      "community": 2,
-      "norm_label": "csv serial telemetry protocol (460800 baud)"
+      "community": 6,
+      "norm_label": "csv serial telemetry protocol (460800 baud)",
+      "id": "files_concept_serial_protocol"
     },
     {
       "label": "Cross-modal grounded perception (vision+audio+tactile)",
@@ -1263,9 +1235,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_grounded_perception",
-      "community": 9,
-      "norm_label": "cross-modal grounded perception (vision+audio+tactile)"
+      "community": 10,
+      "norm_label": "cross-modal grounded perception (vision+audio+tactile)",
+      "id": "files_concept_grounded_perception"
     },
     {
       "label": "Producer/consumer Queue thread-safety pattern",
@@ -1276,9 +1248,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_thread_safety_queue",
       "community": 1,
-      "norm_label": "producer/consumer queue thread-safety pattern"
+      "norm_label": "producer/consumer queue thread-safety pattern",
+      "id": "files_concept_thread_safety_queue"
     },
     {
       "label": "FFT size = 512 invariant",
@@ -1289,9 +1261,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_fft512_invariant",
-      "community": 4,
-      "norm_label": "fft size = 512 invariant"
+      "community": 6,
+      "norm_label": "fft size = 512 invariant",
+      "id": "files_concept_fft512_invariant"
     },
     {
       "label": "Strict line-format VLM prompt template",
@@ -1302,9 +1274,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_strict_vlm_template",
-      "community": 5,
-      "norm_label": "strict line-format vlm prompt template"
+      "community": 4,
+      "norm_label": "strict line-format vlm prompt template",
+      "id": "files_concept_strict_vlm_template"
     },
     {
       "label": "Audio frequency \u2192 visible emitter binding",
@@ -1315,9 +1287,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_audio_freq_binding",
-      "community": 5,
-      "norm_label": "audio frequency \u2192 visible emitter binding"
+      "community": 7,
+      "norm_label": "audio frequency \u2192 visible emitter binding",
+      "id": "files_concept_audio_freq_binding"
     },
     {
       "label": "arduino-TuyaOpen framework choice",
@@ -1328,9 +1300,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_arduino_tuyaopen",
-      "community": 4,
-      "norm_label": "arduino-tuyaopen framework choice"
+      "community": 6,
+      "norm_label": "arduino-tuyaopen framework choice",
+      "id": "files_concept_arduino_tuyaopen"
     },
     {
       "label": "Scene confidence decay (half-life)",
@@ -1341,9 +1313,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_confidence_decay",
-      "community": 5,
-      "norm_label": "scene confidence decay (half-life)"
+      "community": 4,
+      "norm_label": "scene confidence decay (half-life)",
+      "id": "files_concept_confidence_decay"
     },
     {
       "label": "Legacy one-shot VLM summary path (multimodal_agent)",
@@ -1354,9 +1326,674 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "files_concept_legacy_vlm_path",
+      "community": 4,
+      "norm_label": "legacy one-shot vlm summary path (multimodal_agent)",
+      "id": "files_concept_legacy_vlm_path"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L57",
+      "id": "files_agent_simulator_contactdetector_init",
+      "community": 1,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".step()",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": "L69",
+      "id": "files_agent_simulator_contactdetector_step",
+      "community": 1,
+      "norm_label": ".step()"
+    },
+    {
+      "label": "object_memory.py",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L1",
+      "id": "object_memory_py",
+      "community": 3,
+      "norm_label": "object_memory.py"
+    },
+    {
+      "label": "tactile_trained()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L52",
+      "id": "files_object_memory_tactile_trained",
+      "community": 3,
+      "norm_label": "tactile_trained()"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L64",
+      "id": "files_object_memory_objectmemory_init",
+      "community": 3,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._create_schema()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L73",
+      "id": "files_object_memory_objectmemory_create_schema",
+      "community": 3,
+      "norm_label": "._create_schema()"
+    },
+    {
+      "label": "._row_to_card()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L94",
+      "id": "files_object_memory_objectmemory_row_to_card",
+      "community": 3,
+      "norm_label": "._row_to_card()"
+    },
+    {
+      "label": ".get()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L111",
+      "id": "files_object_memory_objectmemory_get",
+      "community": 3,
+      "norm_label": ".get()"
+    },
+    {
+      "label": ".all()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L120",
+      "id": "files_object_memory_objectmemory_all",
+      "community": 3,
+      "norm_label": ".all()"
+    },
+    {
+      "label": "._insert()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L128",
+      "id": "files_object_memory_objectmemory_insert",
+      "community": 3,
+      "norm_label": "._insert()"
+    },
+    {
+      "label": ".upsert_visual()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L148",
+      "id": "files_object_memory_objectmemory_upsert_visual",
+      "community": 3,
+      "norm_label": ".upsert_visual()"
+    },
+    {
+      "label": ".update_tactile()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L186",
+      "id": "files_object_memory_objectmemory_update_tactile",
+      "community": 3,
+      "norm_label": ".update_tactile()"
+    },
+    {
+      "label": ".update_audio()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L220",
+      "id": "files_object_memory_objectmemory_update_audio",
+      "community": 3,
+      "norm_label": ".update_audio()"
+    },
+    {
+      "label": ".nearest_visual()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L240",
+      "id": "files_object_memory_objectmemory_nearest_visual",
+      "community": 3,
+      "norm_label": ".nearest_visual()"
+    },
+    {
+      "label": ".nearest_tactile()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L262",
+      "id": "files_object_memory_objectmemory_nearest_tactile",
+      "community": 3,
+      "norm_label": ".nearest_tactile()"
+    },
+    {
+      "label": ".forget()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L277",
+      "id": "files_object_memory_objectmemory_forget",
+      "community": 3,
+      "norm_label": ".forget()"
+    },
+    {
+      "label": ".close()",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": "L285",
+      "id": "files_object_memory_objectmemory_close",
+      "community": 3,
+      "norm_label": ".close()"
+    },
+    {
+      "label": "object_memory.py Persistent SQLite-backed multi-modal grounding store.  Each row",
+      "file_type": "rationale",
+      "source_file": "object_memory.py",
+      "source_location": "L1",
+      "id": "files_object_memory_rationale_1",
+      "community": 3,
+      "norm_label": "object_memory.py persistent sqlite-backed multi-modal grounding store.  each row"
+    },
+    {
+      "label": "clip_encoder.py",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": "L1",
+      "id": "clip_encoder_py",
+      "community": 0,
+      "norm_label": "clip_encoder.py"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": "L31",
+      "id": "files_clip_encoder_clipencoder_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._load()",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": "L46",
+      "id": "files_clip_encoder_clipencoder_load",
+      "community": 0,
+      "norm_label": "._load()"
+    },
+    {
+      "label": ".encode_image()",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": "L71",
+      "id": "files_clip_encoder_clipencoder_encode_image",
+      "community": 0,
+      "norm_label": ".encode_image()"
+    },
+    {
+      "label": ".encode_text()",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": "L91",
+      "id": "files_clip_encoder_clipencoder_encode_text",
+      "community": 0,
+      "norm_label": ".encode_text()"
+    },
+    {
+      "label": "clip_encoder.py Thin wrapper around open_clip that gives the agent a way to fing",
+      "file_type": "rationale",
+      "source_file": "clip_encoder.py",
+      "source_location": "L1",
+      "id": "files_clip_encoder_rationale_1",
+      "community": 0,
+      "norm_label": "clip_encoder.py thin wrapper around open_clip that gives the agent a way to fing"
+    },
+    {
+      "label": "label_color()",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "L54",
+      "id": "files_main_gui_label_color",
       "community": 5,
-      "norm_label": "legacy one-shot vlm summary path (multimodal_agent)"
+      "norm_label": "label_color()"
+    },
+    {
+      "label": "build_chat_context()",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": "L249",
+      "id": "files_main_gui_build_chat_context",
+      "community": 5,
+      "norm_label": "build_chat_context()"
+    },
+    {
+      "label": "_xy_dist()",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": "L190",
+      "id": "files_world_model_xy_dist",
+      "community": 0,
+      "norm_label": "_xy_dist()"
+    },
+    {
+      "label": "._vlm_bind_audio()",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": "L258",
+      "id": "files_world_model_worldmodel_vlm_bind_audio",
+      "community": 0,
+      "norm_label": "._vlm_bind_audio()"
+    },
+    {
+      "label": ".handle_contact()",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": "L280",
+      "id": "files_world_model_worldmodel_handle_contact",
+      "community": 0,
+      "norm_label": ".handle_contact()"
+    },
+    {
+      "label": "._scene_from_cards()",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": "L328",
+      "id": "files_world_model_worldmodel_scene_from_cards",
+      "community": 0,
+      "norm_label": "._scene_from_cards()"
+    },
+    {
+      "label": "._try_fast_path()",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": "L347",
+      "id": "files_world_model_worldmodel_try_fast_path",
+      "community": 0,
+      "norm_label": "._try_fast_path()"
+    },
+    {
+      "label": "Persistent grounded scene representation backed by ObjectMemory + CLIP.      Eac",
+      "file_type": "rationale",
+      "source_file": "world_model.py",
+      "source_location": "L196",
+      "id": "files_world_model_rationale_196",
+      "community": 0,
+      "norm_label": "persistent grounded scene representation backed by objectmemory + clip.      eac"
+    },
+    {
+      "label": "Main GUI",
+      "file_type": "code",
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_main_gui",
+      "community": 5,
+      "norm_label": "main gui"
+    },
+    {
+      "label": "World Map Renderer",
+      "file_type": "code",
+      "source_file": "world_map.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_world_map",
+      "community": 5,
+      "norm_label": "world map renderer"
+    },
+    {
+      "label": "ObjectCard",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_object_card",
+      "community": 3,
+      "norm_label": "objectcard"
+    },
+    {
+      "label": "SceneObject",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_scene_object",
+      "community": 0,
+      "norm_label": "sceneobject"
+    },
+    {
+      "label": "AudioSource",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_audio_source",
+      "community": 0,
+      "norm_label": "audiosource"
+    },
+    {
+      "label": "HandPose",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_hand_pose",
+      "community": 0,
+      "norm_label": "handpose"
+    },
+    {
+      "label": "Scene",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_scene",
+      "community": 0,
+      "norm_label": "scene"
+    },
+    {
+      "label": "ContactDetector",
+      "file_type": "code",
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_contact_detector",
+      "community": 1,
+      "norm_label": "contactdetector"
+    },
+    {
+      "label": "CLIPEncoder.encode_image",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_clip_encoder_encode_image",
+      "community": 4,
+      "norm_label": "clipencoder.encode_image"
+    },
+    {
+      "label": "CLIPEncoder.encode_text",
+      "file_type": "code",
+      "source_file": "clip_encoder.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_clip_encoder_encode_text",
+      "community": 11,
+      "norm_label": "clipencoder.encode_text"
+    },
+    {
+      "label": "ObjectMemory.nearest_visual",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_object_memory_nearest_visual",
+      "community": 4,
+      "norm_label": "objectmemory.nearest_visual"
+    },
+    {
+      "label": "ObjectMemory.nearest_tactile",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_object_memory_nearest_tactile",
+      "community": 7,
+      "norm_label": "objectmemory.nearest_tactile"
+    },
+    {
+      "label": "ObjectMemory.update_tactile",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_object_memory_update_tactile",
+      "community": 4,
+      "norm_label": "objectmemory.update_tactile"
+    },
+    {
+      "label": "ObjectMemory.update_audio",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_object_memory_update_audio",
+      "community": 7,
+      "norm_label": "objectmemory.update_audio"
+    },
+    {
+      "label": "ObjectMemory.upsert_visual",
+      "file_type": "code",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_object_memory_upsert_visual",
+      "community": 4,
+      "norm_label": "objectmemory.upsert_visual"
+    },
+    {
+      "label": "WorldModel.handle_contact",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_world_model_handle_contact",
+      "community": 1,
+      "norm_label": "worldmodel.handle_contact"
+    },
+    {
+      "label": "WorldModel._try_fast_path",
+      "file_type": "code",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "files_world_model_try_fast_path",
+      "community": 4,
+      "norm_label": "worldmodel._try_fast_path"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "readme_md_document",
+      "community": 12,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "claude_md_document",
+      "community": 13,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "Persistent Grounded World Model",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_persistent_world_model",
+      "community": 0,
+      "norm_label": "persistent grounded world model"
+    },
+    {
+      "label": "Dual-Path Perception (Fast + Slow)",
+      "file_type": "concept",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_dual_path_perception",
+      "community": 4,
+      "norm_label": "dual-path perception (fast + slow)"
+    },
+    {
+      "label": "Tactile Learning via Contact Events",
+      "file_type": "concept",
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_tactile_learning",
+      "community": 1,
+      "norm_label": "tactile learning via contact events"
+    },
+    {
+      "label": "Cross-Modal Audio Binding",
+      "file_type": "concept",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_audio_binding",
+      "community": 7,
+      "norm_label": "cross-modal audio binding"
+    },
+    {
+      "label": "Visual Embedding (CLIP)",
+      "file_type": "concept",
+      "source_file": "clip_encoder.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_visual_embedding",
+      "community": 4,
+      "norm_label": "visual embedding (clip)"
+    },
+    {
+      "label": "Open-Vocabulary Perception",
+      "file_type": "concept",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "concept_open_vocab_perception",
+      "community": 3,
+      "norm_label": "open-vocabulary perception"
+    },
+    {
+      "label": "LeCun's World Representation Argument",
+      "file_type": "rationale",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "rationale_leCun_world_representation",
+      "community": 0,
+      "norm_label": "lecun's world representation argument"
+    },
+    {
+      "label": "Data-Driven Over Hard-Coded States",
+      "file_type": "rationale",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "rationale_no_hard_coded_states",
+      "community": 3,
+      "norm_label": "data-driven over hard-coded states"
+    },
+    {
+      "label": "Exponential Moving Average for Signature Learning",
+      "file_type": "rationale",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "rationale_ema_updates",
+      "community": 4,
+      "norm_label": "exponential moving average for signature learning"
+    },
+    {
+      "label": "CLIP Fast Path to Avoid VLM Latency",
+      "file_type": "rationale",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "rationale_clip_fast_path",
+      "community": 4,
+      "norm_label": "clip fast path to avoid vlm latency"
     }
   ],
   "links": [
@@ -1415,7 +2052,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L54",
+      "source_location": "L37",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_py",
@@ -1425,7 +2062,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L74",
+      "source_location": "L43",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_py",
@@ -1435,7 +2072,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L99",
+      "source_location": "L87",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_py",
@@ -1445,7 +2082,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L131",
+      "source_location": "L126",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_py",
@@ -1462,14 +2099,54 @@
       "target": "agent_simulator_py"
     },
     {
-      "relation": "imports",
+      "relation": "references",
+      "confidence": "INFERRED",
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "confidence_score": 0.85,
+      "source": "agent_simulator_py",
+      "target": "data_harvester_py"
+    },
+    {
+      "relation": "shares_data_with",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "L47",
+      "source_location": null,
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_py",
-      "target": "data_harvester_py"
+      "target": "files_contact_detector"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_main_gui",
+      "target": "agent_simulator_py"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "object_memory_py"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agent_simulator_py",
+      "target": "world_model_py"
     },
     {
       "relation": "rationale_for",
@@ -1629,6 +2306,26 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "main_gui.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "main_gui_py",
+      "target": "files_main_gui_label_color",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "main_gui.py",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "main_gui_py",
+      "target": "files_main_gui_build_chat_context",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "data_harvester.py",
       "source_location": "L28",
       "weight": 1.0,
@@ -1684,6 +2381,16 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "files_data_harvester_rationale_1",
+      "target": "data_harvester_py"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_main_gui",
       "target": "data_harvester_py"
     },
     {
@@ -1955,7 +2662,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "agent_simulator.py:111",
+      "source_location": null,
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_run",
@@ -2003,10 +2710,20 @@
     },
     {
       "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agent_simulator_classify",
+      "target": "files_object_memory_nearest_tactile"
+    },
+    {
+      "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "agent_simulator.py",
-      "source_location": "agent_simulator.py:118",
+      "source_location": "L106",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "agent_simulator_run",
@@ -2111,6 +2828,48 @@
       "weight": 1.0,
       "source": "agent_simulator_run",
       "target": "files_data_harvester_token_queue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "agent_simulator_run",
+      "target": "files_contact_detector"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "agent_simulator_run",
+      "target": "files_agent_simulator_contactdetector_step",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agent_simulator_run",
+      "target": "files_world_model_handle_contact"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "agent_simulator.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_tactile_learning",
+      "target": "agent_simulator_run"
     },
     {
       "relation": "calls",
@@ -2343,44 +3102,44 @@
       "target": "claude_md_token_queue"
     },
     {
-      "relation": "contains",
+      "relation": "shares_data_with",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L46",
+      "source_location": null,
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_sceneobject",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "world_model.py",
-      "source_location": "L56",
-      "weight": 1.0,
-      "source": "world_model_py",
-      "target": "files_world_model_audiosource",
-      "confidence_score": 1.0
+      "target": "files_scene_object"
     },
     {
       "relation": "shares_data_with",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "world_model.py:168",
+      "source_location": null,
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_scene"
+      "target": "files_audio_source"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "world_model_py",
+      "target": "files_scene"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L123",
+      "source_location": "L161",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_parse_vlm_output",
-      "confidence_score": 1.0
+      "target": "files_world_model_parse_vlm_output"
     },
     {
       "relation": "contains",
@@ -2388,49 +3147,29 @@
       "source_file": "world_model.py",
       "source_location": "L146",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_freq_band",
-      "confidence_score": 1.0
+      "target": "files_world_model_freq_band"
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L166",
+      "source_location": "L214",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_worldmodel_init",
-      "confidence_score": 1.0
+      "target": "files_world_model_worldmodel_init"
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L174",
+      "source_location": "L228",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_worldmodel_warmup",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "world_model.py",
-      "source_location": "L183",
-      "weight": 1.0,
-      "source": "world_model_py",
-      "target": "files_world_model_worldmodel_query_vlm",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "world_model.py",
-      "source_location": "L203",
-      "weight": 1.0,
-      "source": "world_model_py",
-      "target": "files_world_model_worldmodel_bind_audio",
-      "confidence_score": 1.0
+      "target": "files_world_model_worldmodel_warmup"
     },
     {
       "relation": "method",
@@ -2438,19 +3177,39 @@
       "source_file": "world_model.py",
       "source_location": "L237",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_worldmodel_observe",
-      "confidence_score": 1.0
+      "target": "files_world_model_worldmodel_query_vlm"
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L266",
+      "source_location": "L300",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_model_py",
-      "target": "files_world_model_worldmodel_reset",
-      "confidence_score": 1.0
+      "target": "files_world_model_worldmodel_bind_audio"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L372",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "world_model_py",
+      "target": "files_world_model_worldmodel_observe"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L424",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "world_model_py",
+      "target": "files_world_model_worldmodel_reset"
     },
     {
       "relation": "rationale_for",
@@ -2458,9 +3217,9 @@
       "source_file": "world_model.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_rationale_1",
-      "target": "world_model_py",
-      "confidence_score": 1.0
+      "target": "world_model_py"
     },
     {
       "relation": "rationale_for",
@@ -2468,9 +3227,9 @@
       "source_file": "world_model.py",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_rationale_155",
-      "target": "world_model_py",
-      "confidence_score": 1.0
+      "target": "world_model_py"
     },
     {
       "relation": "references",
@@ -2503,119 +3262,145 @@
       "target": "files_concept_lecun_world_model"
     },
     {
-      "relation": "references",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "world_model.py",
-      "source_location": "world_model.py:130",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "files_world_model_parse_vlm_output",
-      "target": "files_world_model_sceneobject"
-    },
-    {
       "relation": "shares_data_with",
       "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "world_model.py",
-      "source_location": "world_model.py:65",
+      "source_location": null,
       "weight": 1.0,
-      "source": "files_world_model_scene",
-      "target": "files_world_model_sceneobject"
+      "confidence_score": 1.0,
+      "source": "world_model_py",
+      "target": "files_hand_pose"
     },
     {
-      "relation": "shares_data_with",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "world_map.py",
-      "source_location": "world_map.py:33-37",
-      "weight": 1.0,
-      "source": "files_world_map_render_scene",
-      "target": "files_world_model_sceneobject"
-    },
-    {
-      "relation": "references",
-      "context": "call",
+      "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "world_model.py:139",
+      "source_location": "L190",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "files_world_model_parse_vlm_output",
-      "target": "files_world_model_audiosource"
-    },
-    {
-      "relation": "shares_data_with",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "world_model.py",
-      "source_location": "world_model.py:66",
-      "weight": 1.0,
-      "source": "files_world_model_scene",
-      "target": "files_world_model_audiosource"
-    },
-    {
-      "relation": "shares_data_with",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "world_map.py",
-      "source_location": "world_map.py:80-94",
-      "weight": 1.0,
-      "source": "files_world_map_render_scene",
-      "target": "files_world_model_audiosource"
+      "source": "world_model_py",
+      "target": "files_world_model_xy_dist",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L72",
+      "source_location": "L258",
       "weight": 1.0,
-      "source": "files_world_model_scene",
-      "target": "files_world_model_scene_decay",
+      "source": "world_model_py",
+      "target": "files_world_model_worldmodel_vlm_bind_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L280",
+      "weight": 1.0,
+      "source": "world_model_py",
+      "target": "files_world_model_worldmodel_handle_contact",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L328",
+      "weight": 1.0,
+      "source": "world_model_py",
+      "target": "files_world_model_worldmodel_scene_from_cards",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L347",
+      "weight": 1.0,
+      "source": "world_model_py",
+      "target": "files_world_model_worldmodel_try_fast_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L196",
+      "weight": 1.0,
+      "source": "files_world_model_rationale_196",
+      "target": "world_model_py",
       "confidence_score": 1.0
     },
     {
       "relation": "calls",
-      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L168",
+      "source_location": null,
       "weight": 1.0,
-      "source": "files_world_model_worldmodel_init",
-      "target": "files_world_model_scene",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "world_model_py",
+      "target": "object_memory_py"
     },
     {
       "relation": "calls",
-      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L267",
+      "source_location": null,
       "weight": 1.0,
-      "source": "files_world_model_worldmodel_reset",
-      "target": "files_world_model_scene",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "world_model_py",
+      "target": "clip_encoder_py"
     },
     {
-      "relation": "references",
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "world_map.py",
-      "source_location": "world_map.py:28",
+      "source_file": "main_gui.py",
+      "source_location": null,
       "weight": 1.0,
-      "source": "files_world_map_render_scene",
-      "target": "files_world_model_scene"
+      "source": "files_main_gui",
+      "target": "world_model_py"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_persistent_world_model",
+      "target": "world_model_py"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_open_vocab_perception",
+      "target": "world_model_py"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "files_scene",
+      "target": "files_world_model_scene_decay"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L261",
+      "source_location": "L418",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_worldmodel_observe",
-      "target": "files_world_model_scene_decay",
-      "confidence_score": 1.0
+      "target": "files_world_model_scene_decay"
     },
     {
       "relation": "rationale_for",
@@ -2623,7 +3408,18 @@
       "source_file": "world_model.py",
       "source_location": "L73",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_rationale_73",
+      "target": "files_world_model_scene_decay"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L366",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_try_fast_path",
       "target": "files_world_model_scene_decay",
       "confidence_score": 1.0
     },
@@ -2632,18 +3428,40 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L245",
+      "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "files_world_model_parse_vlm_output",
+      "target": "files_scene_object"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "files_world_model_parse_vlm_output",
+      "target": "files_audio_source"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L387",
+      "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_worldmodel_observe",
-      "target": "files_world_model_parse_vlm_output",
-      "confidence_score": 1.0
+      "target": "files_world_model_parse_vlm_output"
     },
     {
       "relation": "calls",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "world_model.py",
-      "source_location": "world_model.py:245",
+      "source_location": null,
       "weight": 1.0,
       "source": "files_world_model_observe",
       "target": "files_world_model_parse_vlm_output"
@@ -2693,11 +3511,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "files_world_model_parse_vlm_output",
+      "target": "files_hand_pose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
       "source_location": "L207",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_worldmodel_bind_audio",
-      "target": "files_world_model_freq_band",
-      "confidence_score": 1.0
+      "target": "files_world_model_freq_band"
     },
     {
       "relation": "calls",
@@ -2724,33 +3553,66 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L169",
+      "source_location": "L219",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "files_world_model_worldmodel_init",
+      "target": "files_scene"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "files_world_model_worldmodel_init",
+      "target": "files_world_model_worldmodel_warmup"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "world_model.py",
+      "source_location": "L220",
       "weight": 1.0,
       "source": "files_world_model_worldmodel_init",
-      "target": "files_world_model_worldmodel_warmup",
-      "confidence_score": 1.0
+      "target": "object_memory_py"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "world_model.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_init",
+      "target": "clip_encoder_py"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L242",
+      "source_location": "L384",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_worldmodel_observe",
-      "target": "files_world_model_worldmodel_query_vlm",
-      "confidence_score": 1.0
+      "target": "files_world_model_worldmodel_query_vlm"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "world_model.py",
-      "source_location": "L260",
+      "source_location": "L417",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_worldmodel_observe",
-      "target": "files_world_model_worldmodel_bind_audio",
-      "confidence_score": 1.0
+      "target": "files_world_model_worldmodel_bind_audio"
     },
     {
       "relation": "rationale_for",
@@ -2758,9 +3620,42 @@
       "source_file": "world_model.py",
       "source_location": "L204",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_model_rationale_204",
-      "target": "files_world_model_worldmodel_bind_audio",
+      "target": "files_world_model_worldmodel_bind_audio"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_bind_audio",
+      "target": "files_world_model_worldmodel_vlm_bind_audio",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L379",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_observe",
+      "target": "files_world_model_worldmodel_try_fast_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L425",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "files_world_model_worldmodel_reset",
+      "target": "files_scene"
     },
     {
       "relation": "contains",
@@ -2768,9 +3663,9 @@
       "source_file": "world_map.py",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "world_map_py",
-      "target": "files_world_map_render_scene",
-      "confidence_score": 1.0
+      "target": "files_world_map_render_scene"
     },
     {
       "relation": "rationale_for",
@@ -2778,9 +3673,39 @@
       "source_file": "world_map.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "files_world_map_rationale_1",
-      "target": "world_map_py",
-      "confidence_score": 1.0
+      "target": "world_map_py"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "world_map.py",
+      "source_location": "world_map.py:33-37",
+      "weight": 1.0,
+      "source": "files_world_map_render_scene",
+      "target": "files_scene_object"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "world_map.py",
+      "source_location": "world_map.py:80-94",
+      "weight": 1.0,
+      "source": "files_world_map_render_scene",
+      "target": "files_audio_source"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_map.py",
+      "source_location": "world_map.py:28",
+      "weight": 1.0,
+      "source": "files_world_map_render_scene",
+      "target": "files_scene"
     },
     {
       "relation": "calls",
@@ -2877,7 +3802,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "world_model.py",
-      "source_location": "world_model.py:242",
+      "source_location": null,
       "weight": 1.0,
       "source": "files_world_model_observe",
       "target": "files_world_model_query_vlm"
@@ -2887,7 +3812,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "world_model.py",
-      "source_location": "world_model.py:260",
+      "source_location": null,
       "weight": 1.0,
       "source": "files_world_model_observe",
       "target": "files_world_model_bind_audio"
@@ -2903,6 +3828,36 @@
       "target": "files_world_model_decay"
     },
     {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_observe",
+      "target": "files_world_model_try_fast_path"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_observe",
+      "target": "files_clip_encoder_encode_image"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_observe",
+      "target": "files_object_memory_upsert_visual"
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -2913,6 +3868,16 @@
       "target": "files_world_model_prompt_template"
     },
     {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_dual_path_perception",
+      "target": "files_world_model_query_vlm"
+    },
+    {
       "relation": "implements",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
@@ -2921,6 +3886,26 @@
       "weight": 1.0,
       "source": "files_world_model_bind_audio",
       "target": "files_concept_audio_freq_binding"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_bind_audio",
+      "target": "files_object_memory_update_audio"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_audio_binding",
+      "target": "files_world_model_bind_audio"
     },
     {
       "relation": "implements",
@@ -3021,52 +4006,778 @@
       "weight": 1.0,
       "source": "files_claude_md",
       "target": "files_concept_arduino_tuyaopen"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "files_contact_detector",
+      "target": "files_agent_simulator_contactdetector_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "files_contact_detector",
+      "target": "files_agent_simulator_contactdetector_step",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_card"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_tactile_trained",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_create_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_row_to_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_insert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_upsert_visual",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L186",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_update_tactile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_update_audio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L240",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_nearest_visual",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L262",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_nearest_tactile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L277",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_forget",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "source": "object_memory_py",
+      "target": "files_object_memory_objectmemory_close",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "files_object_memory_rationale_1",
+      "target": "object_memory_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "agent_simulator.py",
+      "source_location": "L145",
+      "weight": 0.8,
+      "source": "files_contact_detector",
+      "target": "object_memory_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L43",
+      "weight": 0.8,
+      "source": "files_scene_object",
+      "target": "object_memory_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L43",
+      "weight": 0.8,
+      "source": "files_audio_source",
+      "target": "object_memory_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L43",
+      "weight": 0.8,
+      "source": "files_hand_pose",
+      "target": "object_memory_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L43",
+      "weight": 0.8,
+      "source": "files_scene",
+      "target": "object_memory_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_main_gui_build_chat_context",
+      "target": "object_memory_py"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_persistent_world_model",
+      "target": "object_memory_py"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_open_vocab_perception",
+      "target": "object_memory_py"
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_main_gui",
+      "target": "object_memory_py"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_init",
+      "target": "files_object_memory_objectmemory_create_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_row_to_card",
+      "target": "files_object_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_get",
+      "target": "files_object_memory_objectmemory_row_to_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_all",
+      "target": "files_object_memory_objectmemory_row_to_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_upsert_visual",
+      "target": "files_object_memory_objectmemory_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_update_tactile",
+      "target": "files_object_memory_objectmemory_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_update_audio",
+      "target": "files_object_memory_objectmemory_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_nearest_visual",
+      "target": "files_object_memory_objectmemory_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_nearest_tactile",
+      "target": "files_object_memory_objectmemory_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_insert",
+      "target": "files_object_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_upsert_visual",
+      "target": "files_object_memory_objectmemory_insert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_update_tactile",
+      "target": "files_object_memory_objectmemory_insert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "object_memory.py",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "files_object_memory_objectmemory_update_audio",
+      "target": "files_object_memory_objectmemory_insert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "clip_encoder.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "clip_encoder_py",
+      "target": "files_clip_encoder_clipencoder_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "clip_encoder.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "clip_encoder_py",
+      "target": "files_clip_encoder_clipencoder_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "clip_encoder.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "clip_encoder_py",
+      "target": "files_clip_encoder_clipencoder_encode_image",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "clip_encoder.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "clip_encoder_py",
+      "target": "files_clip_encoder_clipencoder_encode_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "clip_encoder.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "files_clip_encoder_rationale_1",
+      "target": "clip_encoder_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L44",
+      "weight": 0.8,
+      "source": "files_scene_object",
+      "target": "clip_encoder_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L44",
+      "weight": 0.8,
+      "source": "files_audio_source",
+      "target": "clip_encoder_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L44",
+      "weight": 0.8,
+      "source": "files_hand_pose",
+      "target": "clip_encoder_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "world_model.py",
+      "source_location": "L44",
+      "weight": 0.8,
+      "source": "files_scene",
+      "target": "clip_encoder_py",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_object_memory_nearest_visual",
+      "target": "clip_encoder_py"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "clip_encoder.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_visual_embedding",
+      "target": "clip_encoder_py"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "clip_encoder.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "files_clip_encoder_clipencoder_init",
+      "target": "files_clip_encoder_clipencoder_load",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_main_gui_build_chat_context",
+      "target": "files_scene"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L288",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_handle_contact",
+      "target": "files_world_model_xy_dist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L337",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_scene_from_cards",
+      "target": "files_scene_object",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "world_model.py",
+      "source_location": "L360",
+      "weight": 1.0,
+      "source": "files_world_model_worldmodel_try_fast_path",
+      "target": "files_world_model_worldmodel_scene_from_cards",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "main_gui.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_main_gui",
+      "target": "files_world_map"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_visual_embedding",
+      "target": "files_object_card"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": "world_model.py:65",
+      "weight": 1.0,
+      "source": "files_scene",
+      "target": "files_scene_object"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": "world_model.py:66",
+      "weight": 1.0,
+      "source": "files_scene",
+      "target": "files_audio_source"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_try_fast_path",
+      "target": "files_clip_encoder_encode_image"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_try_fast_path",
+      "target": "files_object_memory_nearest_visual"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "files_world_model_handle_contact",
+      "target": "files_object_memory_update_tactile"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "rationale_ema_updates",
+      "target": "files_object_memory_update_tactile"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "object_memory.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "rationale_ema_updates",
+      "target": "files_object_memory_upsert_visual"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_tactile_learning",
+      "target": "files_world_model_handle_contact"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_dual_path_perception",
+      "target": "files_world_model_try_fast_path"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "rationale_clip_fast_path",
+      "target": "files_world_model_try_fast_path"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "rationale_leCun_world_representation",
+      "target": "concept_persistent_world_model"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "concept_dual_path_perception",
+      "target": "concept_visual_embedding"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "world_model.py",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "rationale_no_hard_coded_states",
+      "target": "concept_open_vocab_perception"
     }
   ],
   "hyperedges": [
     {
-      "id": "hyper_telemetry_pipeline",
-      "label": "End-to-end CSV telemetry pipeline (firmware \u2192 host queue \u2192 consumers)",
+      "id": "perception_pipeline",
+      "label": "Perception Pipeline",
       "nodes": [
-        "files_main_loop",
-        "files_data_harvester_reader_loop",
-        "files_data_harvester_token_queue",
-        "files_agent_simulator_run",
-        "files_main_gui_module"
-      ],
-      "relation": "participate_in",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "CLAUDE.md"
-    },
-    {
-      "id": "hyper_observe_cycle",
-      "label": "WorldModel observe cycle: query \u2192 parse \u2192 bind audio \u2192 decay",
-      "nodes": [
-        "files_world_model_observe",
+        "files_world_model_try_fast_path",
         "files_world_model_query_vlm",
-        "files_world_model_parse_vlm_output",
-        "files_world_model_bind_audio",
-        "files_world_model_decay"
+        "files_world_model_observe",
+        "files_clip_encoder_encode_image"
       ],
       "relation": "form",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
       "source_file": "world_model.py"
     },
     {
-      "id": "hyper_scene_to_ui",
-      "label": "Scene rendering chain: WorldModel.scene \u2192 render_scene \u2192 Streamlit map",
+      "id": "object_memory_lifecycle",
+      "label": "Object Memory Learning Cycle",
       "nodes": [
-        "files_world_model_scene",
-        "files_world_map_render_scene",
-        "files_main_gui_module"
+        "files_object_memory_update_tactile",
+        "files_object_memory_update_audio",
+        "files_object_memory_upsert_visual",
+        "files_object_memory_nearest_visual"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "object_memory.py"
+    },
+    {
+      "id": "tactile_contact_flow",
+      "label": "Tactile Contact Detection & Bootstrap",
+      "nodes": [
+        "files_agent_simulator_run",
+        "files_contact_detector_step",
+        "files_world_model_handle_contact",
+        "files_object_memory_update_tactile"
       ],
       "relation": "participate_in",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "main_gui.py"
+      "source_file": "agent_simulator.py"
     }
   ],
-  "built_at_commit": "39675a011e317d461aeee8c5da14b3c60c5a9cb1"
+  "built_at_commit": "0f789bc1cf29396672d84334b78b3556404116cc"
 }

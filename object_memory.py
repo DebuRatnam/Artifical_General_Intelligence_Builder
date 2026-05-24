@@ -16,6 +16,7 @@ question into a numpy dot product instead of a 1-3s VLM call.
 from __future__ import annotations
 
 import sqlite3
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Optional
@@ -63,7 +64,8 @@ class ObjectMemory:
     def __init__(self, db_path: str = "object_memory.db", alpha: float = 0.2):
         self.db_path = db_path
         self.alpha = alpha
-        self._conn = sqlite3.connect(db_path, check_same_thread=False)
+        self._lock = threading.Lock()
+        self._conn = sqlite3.connect(db_path, check_same_thread=False, timeout=5.0)
         self._conn.execute("PRAGMA journal_mode=WAL")
         self._create_schema()
 
@@ -108,15 +110,18 @@ class ObjectMemory:
     # Fetch one card by exact label match, or None if absent.
     def get(self, label: str) -> Optional[ObjectCard]:
         key = label.strip().lower()
-        cur = self._conn.execute("SELECT * FROM objects WHERE label=?", (key,))
-        row = cur.fetchone()
+        with self._lock:
+            cur = self._conn.execute("SELECT * FROM objects WHERE label=?", (key,))
+            row = cur.fetchone()
         return self._row_to_card(row) if row else None
 
     # Return every card in the DB. Used for brute-force visual search and
     # for serialising scene context into the chat LLM prompt.
     def all(self) -> list[ObjectCard]:
-        cur = self._conn.execute("SELECT * FROM objects")
-        return [self._row_to_card(r) for r in cur.fetchall()]
+        with self._lock:
+            cur = self._conn.execute("SELECT * FROM objects")
+            rows = cur.fetchall()
+        return [self._row_to_card(r) for r in rows]
 
     # Insert a new row with a fresh label. Sets first_seen=last_seen=now.
     # description is optional; embedding is optional (text-only seed OK).
@@ -124,12 +129,13 @@ class ObjectMemory:
                 description: str) -> ObjectCard:
         now = time.time()
         emb_blob = embedding.astype(np.float32).tobytes() if embedding is not None else None
-        self._conn.execute("""
-            INSERT INTO objects (label, visual_embedding, description,
-                                 n_visual, first_seen, last_seen)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (label, emb_blob, description, 1 if embedding is not None else 0, now, now))
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute("""
+                INSERT INTO objects (label, visual_embedding, description,
+                                     n_visual, first_seen, last_seen)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (label, emb_blob, description, 1 if embedding is not None else 0, now, now))
+            self._conn.commit()
         return ObjectCard(
             label=label, visual_embedding=embedding, description=description,
             n_visual=1 if embedding is not None else 0,
@@ -162,15 +168,16 @@ class ObjectMemory:
             card.description = description
 
         card.last_seen = time.time()
-        self._conn.execute("""
-            UPDATE objects SET
-                visual_embedding=?, description=?, n_visual=?, last_seen=?
-            WHERE label=?
-        """, (
-            card.visual_embedding.tobytes() if card.visual_embedding is not None else None,
-            card.description, card.n_visual, card.last_seen, key,
-        ))
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute("""
+                UPDATE objects SET
+                    visual_embedding=?, description=?, n_visual=?, last_seen=?
+                WHERE label=?
+            """, (
+                card.visual_embedding.tobytes() if card.visual_embedding is not None else None,
+                card.description, card.n_visual, card.last_seen, key,
+            ))
+            self._conn.commit()
         return card
 
     # Push one (accel, fft) sample into the tactile signature for label.
@@ -192,18 +199,19 @@ class ObjectMemory:
         card.n_tactile += 1
         card.last_seen = time.time()
 
-        self._conn.execute("""
-            UPDATE objects SET
-                tactile_accel_mean=?, tactile_accel_std=?,
-                tactile_fft_mean=?,   tactile_fft_std=?,
-                n_tactile=?, last_seen=?
-            WHERE label=?
-        """, (
-            card.tactile_accel_mean, card.tactile_accel_std,
-            card.tactile_fft_mean,   card.tactile_fft_std,
-            card.n_tactile, card.last_seen, key,
-        ))
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute("""
+                UPDATE objects SET
+                    tactile_accel_mean=?, tactile_accel_std=?,
+                    tactile_fft_mean=?,   tactile_fft_std=?,
+                    n_tactile=?, last_seen=?
+                WHERE label=?
+            """, (
+                card.tactile_accel_mean, card.tactile_accel_std,
+                card.tactile_fft_mean,   card.tactile_fft_std,
+                card.n_tactile, card.last_seen, key,
+            ))
+            self._conn.commit()
         return card
 
     # Record an audio FFT peak Hz for label. Uses a simple EMA over the
@@ -219,10 +227,11 @@ class ObjectMemory:
             card.audio_freq_hz = int((1 - a) * card.audio_freq_hz + a * freq_hz)
         card.n_audio += 1
         card.last_seen = time.time()
-        self._conn.execute("""
-            UPDATE objects SET audio_freq_hz=?, n_audio=?, last_seen=? WHERE label=?
-        """, (card.audio_freq_hz, card.n_audio, card.last_seen, key))
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute("""
+                UPDATE objects SET audio_freq_hz=?, n_audio=?, last_seen=? WHERE label=?
+            """, (card.audio_freq_hz, card.n_audio, card.last_seen, key))
+            self._conn.commit()
         return card
 
     # Visual nearest-neighbour search. Returns the top_k closest cards
@@ -267,8 +276,9 @@ class ObjectMemory:
     # for cleaning up bad VLM hallucinations from polluting the cache.
     def forget(self, label: str) -> None:
         key = label.strip().lower()
-        self._conn.execute("DELETE FROM objects WHERE label=?", (key,))
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute("DELETE FROM objects WHERE label=?", (key,))
+            self._conn.commit()
 
     # Close the SQLite handle. Safe to call repeatedly. Streamlit doesn't
     # call this explicitly but the WAL journal mode keeps things sane.

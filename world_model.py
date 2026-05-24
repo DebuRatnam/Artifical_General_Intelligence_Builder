@@ -104,31 +104,32 @@ class Scene:
 
 
 # ── VLM prompt template ──────────────────────────────────────────────────────
-_PROMPT_TEMPLATE = """You are a grounded perceptual agent building a 2D map of the room you see.
-Look at the image and list every clearly visible object on its own line in this EXACT format:
+_PROMPT_TEMPLATE = """You are a grounded perceptual agent mapping a room.
+CRITICAL: Output ONLY object lines. NO explanation, NO other text.
 
-- LABEL | POSITION | EMOJI
+EXACT FORMAT - One line per object:
+- OBJECT_NAME | POSITION EMOJI
 
-Where POSITION is exactly one of:
+POSITION must be one of:
 top-left, top-center, top-right, middle-left, middle-center, middle-right, bottom-left, bottom-center, bottom-right
 
-EMOJI must be a single unicode emoji that matches the object.
+EXAMPLES:
+- COUCH | bottom-right 🛋️
+- LAMP | top-left 💡
+- PERSON | middle-center 👤
 
-After the objects, list any sound-emitting objects in this EXACT format:
+For sounds (OPTIONAL):
+SOUND: OBJECT_NAME | EMOJI
 
-SOUND: LABEL | EMOJI
+Rules:
+- Write object name (what it IS, not description)
+- Max 4 objects
+- Each line starts with "-" (dash and space)
+- No extra text
 
-If a human hand is visible, also output:
+Current audio: {fft_hz} Hz, vibration: {accel_g:.2f} g
 
-HAND: POSITION
-
-Only list things you actually see. Be concise — max 8 objects, max 3 sounds.
-
-Real-time tactile/audio telemetry (for context):
-- Audio peak frequency: {fft_hz} Hz
-- Vibration: {accel_g:.2f} g
-
-Begin output now:
+BEGIN OUTPUT (ONLY valid lines):
 """
 
 # Asked separately after object extraction so the VLM can think about
@@ -141,11 +142,11 @@ Reply with ONLY the exact label from the list above. No other text.
 
 # ── Parsing ───────────────────────────────────────────────────────────────────
 _OBJECT_RE = re.compile(
-    r"^\s*[-*]\s*([^|]+?)\s*\|\s*(top|middle|bottom)[\s-]+(left|center|right)\s*\|\s*(\S+)",
+    r"^\s*[-*]\s*([^|]+?)\s*\|\s*(top|middle|bottom)[\s-]+(left|center|right)\s+(.+?)$",
     re.IGNORECASE,
 )
 _SOUND_RE = re.compile(
-    r"^\s*SOUND\s*:\s*([^|]+?)\s*\|\s*(\S+)",
+    r"^\s*SOUND\s*:\s*([^|]+?)\s*\|\s*(.+?)$",
     re.IGNORECASE,
 )
 _HAND_RE = re.compile(
@@ -164,7 +165,7 @@ def _parse_vlm_output(text: str) -> tuple[list[SceneObject], list[AudioSource], 
     for line in text.splitlines():
         m = _OBJECT_RE.match(line)
         if m:
-            label, v_kw, h_kw, icon = m.group(1).strip(), m.group(2).lower(), m.group(3).lower(), m.group(4)
+            label, v_kw, h_kw, icon = m.group(1).strip(), m.group(2).lower(), m.group(3).lower(), m.group(4).strip()
             objs.append(SceneObject(
                 label=label,
                 x=POS_X.get(h_kw, 0.5),
@@ -174,7 +175,7 @@ def _parse_vlm_output(text: str) -> tuple[list[SceneObject], list[AudioSource], 
             continue
         m = _SOUND_RE.match(line)
         if m:
-            sounds.append(AudioSource(label=m.group(1).strip(), icon=m.group(2)))
+            sounds.append(AudioSource(label=m.group(1).strip(), icon=m.group(2).strip()))
             continue
         m = _HAND_RE.match(line)
         if m:
@@ -210,7 +211,7 @@ class WorldModel:
     # Wire up the VLM model name, the memory DB path, and a CLIP encoder.
     # vlm_force_every controls how often the slow VLM path runs even when
     # the fast CLIP path matches a remembered scene — set >0 to refresh.
-    def __init__(self, model_name: str = "moondream",
+    def __init__(self, model_name: str = "llava",
                  memory_path: str = "object_memory.db",
                  clip_device: str = "cpu",
                  vlm_force_every: float = 15.0):

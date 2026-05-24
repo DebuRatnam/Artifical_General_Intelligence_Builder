@@ -12,7 +12,7 @@ class UnifiedEmbodiedAgent:
     # Bind the agent to a specific Ollama-hosted VLM and pre-check
     # that it's available locally so the first observe() call doesn't
     # surprise the user with a multi-GB pull.
-    def __init__(self, model_name: str = "moondream"):
+    def __init__(self, model_name: str = "llava"):
         self.model_name = model_name
         self._warmup()
 

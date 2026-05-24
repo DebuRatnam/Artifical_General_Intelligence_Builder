@@ -7,7 +7,7 @@
 ## What It Does
 
 The agent:
-1. **Observes scenes** via camera (CLIP fast-path + moondream VLM)
+1. **Observes scenes** via camera (CLIP fast-path + llava VLM)
 2. **Binds audio frequencies** to visible sound sources (fan ≈ 120 Hz, water ≈ 200 Hz, etc.)
 3. **Learns tactile signatures** from experience (accel + FFT mean/std per object)
 4. **Maintains persistent memory** across sessions (SQLite ObjectMemory)
@@ -46,7 +46,7 @@ python3 --version     # should be 3.8+
 
 ```bash
 # One-time download
-ollama pull moondream      # vision model (required)
+ollama pull llava          # vision model (required)
 ollama pull qwen2.5:3b     # chat model (optional, defaults used in GUI)
 ```
 
@@ -87,8 +87,8 @@ Open that URL in a browser. You'll see:
 
 **Without hardware (mock mode, default):**
 - Camera feed should show live camera
-- Click **⚡ Observe scene (force VLM)** → moondream analyzes frame
-- Check the **Agent's Raw Perceptual Output** section to see what moondream detected
+- Click **⚡ Observe scene (force VLM)** → llava analyzes frame
+- Check the **Agent's Raw Perceptual Output** section to see what llava detected
 - Detected objects appear on the 2D map with emoji icons
 
 **To disable mock mode and connect Tuya board:**
@@ -174,7 +174,7 @@ The agent will now consume tactile + audio telemetry from the board.
 ### VLM not detecting objects
 - **Check raw output:** Click "⚡ Observe scene" → look at **Agent's Raw Perceptual Output**
 - Moondream has limits; try: better lighting, different angle, or larger objects
-- To swap VLM: edit `main_gui.py` line 46, change `moondream` to another Ollama model
+- To swap VLM: edit `main_gui.py` line 46, change `llava` to another Ollama model
   ```python
   vlm_model = st.sidebar.text_input("VLM model (Ollama)", value="llava-phi")  # or "minicpm-v"
   ```
@@ -228,7 +228,7 @@ If no output → board firmware issue. Reflash `main.c`.
 - **Baud rate** — board TX rate (fixed: `460800`)
 - **Plot window** — tactile sample history (50–500)
 - **Auto-observe** — trigger VLM every N seconds
-- **VLM model** — Ollama model name (default `moondream`)
+- **VLM model** — Ollama model name (default `llava`)
 - **Chat model** — Ollama chat model (default `qwen2.5:3b`)
 - **Memory DB path** — ObjectMemory SQLite file
 
@@ -269,7 +269,7 @@ graphify hook install
 ### Quick demo (no objects):
 1. Start Streamlit in mock mode
 2. Click **⚡ Observe scene (force VLM)**
-3. Watch moondream output in **Agent's Raw Perceptual Output**
+3. Watch llava output in **Agent's Raw Perceptual Output**
 4. 2D map updates with detected objects
 
 ### With hardware (Tuya board):
@@ -284,7 +284,7 @@ graphify hook install
 
 ## Known Limitations
 
-- **Moondream vision:** Limited object detection vs. larger models (GPT-4V, Gemini). Consider alternatives if accuracy is critical.
+- **Llava vision:** Limited object detection vs. larger models (GPT-4V, Gemini). Consider alternatives if accuracy is critical.
 - **FFT size = 512 exactly:** Hard constraint on M33 microcontroller. Don't change.
 - **Session state resets:** World model scene clears on page reload (use 🧹 button). ObjectMemory persists.
 - **No network:** All compute is local (camera, VLM via Ollama, chat via Ollama).

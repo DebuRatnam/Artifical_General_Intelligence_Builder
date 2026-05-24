@@ -8,7 +8,7 @@
 >
 > Hardware target: **Tuya T5AI-Board** strapped to a glove. Onboard
 > mic + IMU stream tactile/audio telemetry over USB-serial; host laptop
-> runs the camera, the VLM (moondream via Ollama), and the world model.
+> runs the camera, the VLM (llava via Ollama), and the world model.
 >
 > Demo flow: agent looks around a room → identifies objects + their
 > rough 2D positions → binds dominant audio frequencies to the visible
@@ -51,7 +51,7 @@ embodi-align/
   classified frame-by-frame.
 
 Each `observe(frame, accel_g, fft_hz)` call:
-1. Sends the frame to moondream (Ollama) with a strict line-format prompt.
+1. Sends the frame to llava (Ollama) with a strict line-format prompt.
 2. Regex-parses each line → `SceneObject` / `AudioSource`.
 3. Merges new observations into the persistent `Scene` (EMA on positions).
 4. Binds the current FFT peak to whichever sound-emitter best matches
@@ -129,7 +129,7 @@ python -m serial.tools.miniterm /dev/ttyUSB0 460800
 pip install -r requirements.txt
 
 # Pull the VLM (once)
-ollama pull moondream
+ollama pull llava
 
 # Launch
 streamlit run main_gui.py
@@ -140,7 +140,7 @@ python data_harvester.py --mock --dump   # no hardware
 ```
 
 The Streamlit sidebar exposes mock mode (synthetic tokens), serial port,
-auto-observe toggle, and VLM model name (default `moondream`).
+auto-observe toggle, and VLM model name (default `llava`).
 
 ---
 
