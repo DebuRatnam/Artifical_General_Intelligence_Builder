@@ -1,4 +1,4 @@
-# CLAUDE.md — embodi-align
+# CLAUDE.md — PIA (Physics-Informed Agents)
 
 > **Cross-Embodiment Grounded Perceptual Agent.**
 > Audio + vision world model that builds a 2D top-down map of the room
@@ -20,19 +20,53 @@
 ## Repo Layout
 
 ```text
-embodi-align/
-├── main.c                  # T5 firmware: IMU + audio sampling, 460800 baud TX
-├── dsp_filter.c / .h       # Hann window + CMSIS-DSP rFFT (N=512)
-├── data_harvester.py       # Non-blocking serial reader → thread-safe Queue
-├── agent_simulator.py      # Heuristic tactile classifier (low-level state)
-├── multimodal_agent.py     # (legacy) one-shot VLM summary path
-├── world_model.py          # LeCun-style persistent scene representation
-├── world_map.py            # Plotly emoji 2D map renderer
-├── main_gui.py             # Streamlit dashboard (camera + plots + map)
-├── graphify-out/graph.json # Zero-token structural index for Claude Code
+pia/
+├── firmware/                  # T5 embedded C
+│   ├── main.c                 # IMU + audio sampling, 460800 baud TX
+│   └── dsp_filter.c / .h      # Hann window + CMSIS-DSP rFFT (N=512)
+│
+├── sensors/                   # Host-side sensor ingestion
+│   └── data_harvester.py      # Non-blocking serial reader → thread-safe Queue
+│
+├── perception/                # World model, multi-modal memory, vision
+│   ├── world_model.py         # LeCun-style persistent Scene + VLM observe path
+│   ├── world_map.py           # Plotly emoji 2D map renderer
+│   ├── object_memory.py       # SQLite ObjectCard store (visual/tactile/audio)
+│   └── clip_encoder.py        # CLIP frame fingerprinting (fast path)
+│
+├── agents/                    # Behavior layer
+│   ├── agent_simulator.py     # Tactile classifier + contact-event detector
+│   └── multimodal_agent.py    # (legacy) one-shot VLM summary path
+│
+├── backend/                   # Application servers (entry points)
+│   ├── server.py              # FastAPI (REST + /ws/telemetry) for frontend/
+│   └── main_gui.py            # Legacy Streamlit single-process dashboard
+│
+├── frontend/                  # Vite + React + Tailwind dashboard
+│   ├── src/App.jsx
+│   ├── src/components/        # StatusBar, CameraFeed, ChatPanel, WorldMap,
+│   │                          # WaveformCanvas, TelemetryStream
+│   ├── src/hooks/             # useHardwareTelemetry, useAnimatedScene
+│   └── src/lib/api.js
+│
+├── scripts/
+│   └── run_dev.sh             # Boots server.py + Vite together; traps Ctrl-C
+│
+├── docs/
+│   └── FILES.md               # Per-file API reference
+│
+├── graphify-out/graph.json    # Zero-token structural index for Claude Code
 ├── requirements.txt
+├── README.md
 └── CLAUDE.md
 ```
+
+> **Import convention:** all Python entry points (`backend/server.py`,
+> `backend/main_gui.py`, plus the `__main__` block of `agents/agent_simulator.py`)
+> add the repo root to `sys.path` so absolute imports like
+> `from perception.world_model import WorldModel`,
+> `from sensors.data_harvester import token_queue`, and
+> `from agents import agent_simulator` resolve regardless of cwd.
 
 ---
 
@@ -125,22 +159,49 @@ python -m serial.tools.miniterm /dev/ttyUSB0 460800
 ## Host Setup & Launch
 
 ```bash
-# Deps
+# Deps (Python + Node)
 pip install -r requirements.txt
+(cd frontend && npm install)
 
 # Pull the VLM (once)
 ollama pull llava
+ollama pull qwen2.5:3b    # chat model used by /api/chat
 
-# Launch
-streamlit run main_gui.py
+# ── Option A — FastAPI backend + Vite frontend (recommended) ────────────────
+# One command runs both. Ctrl-C cleanly stops both.
+./scripts/run_dev.sh
+#   API : http://localhost:8000   (docs at /docs, ws at /ws/telemetry)
+#   WEB : http://localhost:5173
 
-# Standalone serial diagnostics
-python data_harvester.py --port /dev/ttyUSB0 --baud 460800 --dump
-python data_harvester.py --mock --dump   # no hardware
+# Manual two-terminal equivalent (run from repo root):
+uvicorn backend.server:app --host 0.0.0.0 --port 8000 --reload   # terminal 1
+(cd frontend && npm run dev)                                      # terminal 2
+
+# ── Option B — Legacy Streamlit single-process UI ───────────────────────────
+streamlit run backend/main_gui.py
+
+# Standalone serial diagnostics (run from repo root)
+python -m sensors.data_harvester --port /dev/ttyUSB0 --baud 460800 --dump
+python -m sensors.data_harvester --mock --dump   # no hardware
 ```
 
-The Streamlit sidebar exposes mock mode (synthetic tokens), serial port,
-auto-observe toggle, and VLM model name (default `llava`).
+Backend env knobs (consumed by `server.py`):
+
+| Var               | Default            |
+|-------------------|--------------------|
+| `PIA_USE_MOCK`    | `1` (mock tokens)  |
+| `PIA_SERIAL_PORT` | `/dev/ttyUSB0`     |
+| `PIA_BAUD_RATE`   | `460800`           |
+| `PIA_VLM_MODEL`   | `llava`            |
+| `PIA_CHAT_MODEL`  | `qwen2.5:3b`       |
+| `PIA_MEMORY_PATH` | `object_memory.db` |
+| `PIA_CAMERA_INDEX`| `0`                |
+| `PIA_WS_HZ`       | `40`               |
+
+`run_dev.sh` extra knobs: `PORT_API` (default 8000), `PORT_WEB` (default 5173).
+
+The Streamlit sidebar (Option B) still exposes mock mode (synthetic tokens),
+serial port, auto-observe toggle, and VLM model name (default `llava`).
 
 ---
 

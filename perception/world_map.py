@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import plotly.graph_objects as go
 
-from world_model import Scene
+from perception.world_model import Scene
 
 
 # Reserve top strip of the canvas for audio source annotations.

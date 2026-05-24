@@ -142,14 +142,19 @@ if __name__ == '__main__':
     parser.add_argument('--db', default='object_memory.db', help='ObjectMemory SQLite path')
     args = parser.parse_args()
 
-    from object_memory import ObjectMemory
+    import os, sys
+    _REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if _REPO_ROOT not in sys.path:
+        sys.path.insert(0, _REPO_ROOT)
+
+    from perception.object_memory import ObjectMemory
     mem = ObjectMemory(db_path=args.db)
 
     if args.mock:
-        from data_harvester import token_queue, start_mock
+        from sensors.data_harvester import token_queue, start_mock
         start_mock()
     else:
-        from data_harvester import token_queue, start as start_serial
+        from sensors.data_harvester import token_queue, start as start_serial
         start_serial()
 
     start(token_queue, mem)

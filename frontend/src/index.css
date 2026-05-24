@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html, body, #root { height: 100%; }
+  body {
+    background-color: #09090b;
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(124, 58, 237, 0.08), transparent 50%),
+      radial-gradient(circle at 80% 100%, rgba(56, 189, 248, 0.05), transparent 50%);
+    background-attachment: fixed;
+  }
+  ::selection { background: #7c3aed; color: white; }
+}
+
+@layer components {
+  .panel {
+    @apply bg-zinc-900/60 border border-zinc-800 rounded-xl backdrop-blur-sm;
+  }
+  .panel-header {
+    @apply px-4 py-3 border-b border-zinc-800 flex items-center justify-between;
+  }
+  .panel-title {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px]
+           font-mono font-medium bg-zinc-800/80 text-zinc-300 border border-zinc-700/60;
+  }
+  .chip-live  { @apply text-emerald-400 border-emerald-500/30 bg-emerald-500/10; }
+  .chip-mute  { @apply text-zinc-500; }
+
+  .btn {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium
+           border border-zinc-700 bg-zinc-800/70 text-zinc-200
+           hover:bg-zinc-700/70 hover:border-zinc-600
+           transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply bg-violet-500/15 border-violet-500/40 text-violet-200
+           hover:bg-violet-500/25 hover:border-violet-400;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scrollbar-dark::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+  .scrollbar-dark::-webkit-scrollbar-track { background: transparent; }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(63, 63, 70, 0.4) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(63, 63, 70, 0.4) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Markdown chat styling */
+  .md-chat p           { @apply my-1.5 leading-relaxed; }
+  .md-chat code        { @apply px-1 py-0.5 rounded bg-zinc-800 text-violet-300 font-mono text-[12px]; }
+  .md-chat pre         { @apply my-2 p-3 rounded-lg bg-zinc-950 border border-zinc-800 overflow-x-auto; }
+  .md-chat pre code    { @apply bg-transparent p-0 text-zinc-200; }
+  .md-chat ul          { @apply list-disc ml-5 my-1.5 space-y-0.5; }
+  .md-chat ol          { @apply list-decimal ml-5 my-1.5 space-y-0.5; }
+  .md-chat a           { @apply text-violet-300 underline underline-offset-2 hover:text-violet-200; }
+  .md-chat strong      { @apply text-zinc-100 font-semibold; }
+  .md-chat blockquote  { @apply border-l-2 border-zinc-700 pl-3 my-2 text-zinc-400 italic; }
+}

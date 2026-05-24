@@ -6,6 +6,10 @@ opencv-python>=4.9
 ollama>=0.2.0
 plotly>=5.20
 pandas>=2.0
+# Headless backend (server.py) for the Vite frontend.
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.5
 # Fast vision path (open-vocab object re-identification via CLIP).
 # Optional: world_model degrades to VLM-only if these aren't installed.
 open-clip-torch>=2.24

@@ -1,4 +1,4 @@
-# Embodi-Align: Grounded Perceptual Agent
+# PIA (Physics-Informed Agents): Grounded Perceptual Agent
 
 **Cross-embodiment grounded world model.** Audio + vision + tactile perception system that builds a persistent 2D map of the environment. Inspired by Yann LeCun's argument that real intelligence requires persistent world representation, not just next-token prediction.
 
@@ -64,8 +64,71 @@ Download from https://ollama.ai
 
 ### 3. Launch the Dashboard
 
+Two supported UIs:
+
+**A) Streamlit (legacy single-process)**
+
 ```bash
-streamlit run main_gui.py
+streamlit run backend/main_gui.py
+```
+
+**B) FastAPI backend + Vite React frontend (recommended)**
+
+One command boots both:
+
+```bash
+./scripts/run_dev.sh
+```
+
+Output:
+
+```
+[run_dev] starting FastAPI server on :8000 …
+[run_dev] starting Vite dev server on :5173 …
+  API : http://localhost:8000   (docs: /docs, ws: /ws/telemetry)
+  WEB : http://localhost:5173
+```
+
+Open `http://localhost:5173`. Ctrl-C stops both processes.
+
+The script:
+- activates `./venv` if present
+- runs `npm install` in `frontend/` the first time
+- streams both logs with `[api]` / `[web]` prefixes
+- traps SIGINT/SIGTERM so neither process is orphaned
+
+Manual two-terminal equivalent (run from repo root):
+
+```bash
+# terminal 1 — backend
+source venv/bin/activate
+uvicorn backend.server:app --host 0.0.0.0 --port 8000 --reload
+
+# terminal 2 — frontend
+cd frontend
+npm install         # first time only
+npm run dev         # http://localhost:5173, proxies /api + /ws/telemetry to :8000
+```
+
+Environment overrides (either path):
+
+| Var                 | Default            | Notes                                    |
+|---------------------|--------------------|------------------------------------------|
+| `PIA_USE_MOCK`      | `1`                | `0` = real serial hardware               |
+| `PIA_SERIAL_PORT`   | `/dev/ttyUSB0`     | Board serial device                      |
+| `PIA_BAUD_RATE`     | `460800`           | Match `firmware/main.c` TX rate          |
+| `PIA_VLM_MODEL`     | `llava`            | Ollama vision model                      |
+| `PIA_CHAT_MODEL`    | `qwen2.5:3b`       | Ollama chat model                        |
+| `PIA_MEMORY_PATH`   | `object_memory.db` | SQLite path                              |
+| `PIA_CAMERA_INDEX`  | `0`                | `cv2.VideoCapture(index)`                |
+| `PIA_WS_HZ`         | `40`               | `/ws/telemetry` push rate (30–60 sane)   |
+| `PORT_API`          | `8000`             | `run_dev.sh` only                        |
+| `PORT_WEB`          | `5173`             | `run_dev.sh` only                        |
+
+**Legacy Streamlit (option A) — same flow as before:**
+
+```bash
+streamlit run backend/main_gui.py
 ```
 
 **Output:**
@@ -102,17 +165,21 @@ Open that URL in a browser. You'll see:
 
 | File | Purpose |
 |------|---------|
-| `main_gui.py` | Streamlit dashboard — camera, plots, map, memory, chat |
-| `world_model.py` | Persistent scene representation + VLM integration |
-| `world_map.py` | Plotly 2D map renderer |
-| `agent_simulator.py` | Fast tactile classifier + contact-event detector |
-| `object_memory.py` | SQLite-backed persistent object store (visual embeddings, tactile signatures, audio frequencies) |
-| `clip_encoder.py` | CLIP frame fingerprinting (optional fast-path) |
-| `data_harvester.py` | Non-blocking serial reader (Tuya board data) |
-| `main.c` | Firmware for Tuya T5 board (IMU + audio sampling) |
-| `dsp_filter.c` | On-board FFT + Hann window |
+| `backend/main_gui.py` | Streamlit dashboard — camera, plots, map, memory, chat (legacy) |
+| `backend/server.py` | Headless FastAPI backend — REST + WebSocket telemetry |
+| `frontend/` | Vite + React + Tailwind dashboard (talks to `backend/server.py`) |
+| `scripts/run_dev.sh` | One-shot launcher for `server.py` + Vite dev server |
+| `perception/world_model.py` | Persistent scene representation + VLM integration |
+| `perception/world_map.py` | Plotly 2D map renderer |
+| `perception/object_memory.py` | SQLite-backed persistent object store (visual embeddings, tactile signatures, audio frequencies) |
+| `perception/clip_encoder.py` | CLIP frame fingerprinting (optional fast-path) |
+| `agents/agent_simulator.py` | Fast tactile classifier + contact-event detector |
+| `agents/multimodal_agent.py` | Legacy one-shot VLM summary path |
+| `sensors/data_harvester.py` | Non-blocking serial reader (Tuya board data) |
+| `firmware/main.c` | Firmware for Tuya T5 board (IMU + audio sampling) |
+| `firmware/dsp_filter.c` | On-board FFT + Hann window |
 
-See [FILES.md](FILES.md) for detailed API reference.
+See [docs/FILES.md](docs/FILES.md) for detailed API reference.
 
 ---
 
@@ -174,7 +241,7 @@ The agent will now consume tactile + audio telemetry from the board.
 ### VLM not detecting objects
 - **Check raw output:** Click "⚡ Observe scene" → look at **Agent's Raw Perceptual Output**
 - Moondream has limits; try: better lighting, different angle, or larger objects
-- To swap VLM: edit `main_gui.py` line 46, change `llava` to another Ollama model
+- To swap VLM: edit `backend/main_gui.py` (look for `vlm_model = st.sidebar.text_input(...)`) and change `llava` to another Ollama model
   ```python
   vlm_model = st.sidebar.text_input("VLM model (Ollama)", value="llava-phi")  # or "minicpm-v"
   ```
@@ -195,7 +262,7 @@ python -m serial.tools.miniterm /dev/ttyUSB0 460800
 # 104722,0.81,3415,0018
 ```
 
-If no output → board firmware issue. Reflash `main.c`.
+If no output → board firmware issue. Reflash `firmware/main.c`.
 
 ---
 
@@ -248,11 +315,11 @@ Replies are constrained by `build_chat_context()` to ground answers in observed 
 ### Run Tests (Standalone)
 
 ```bash
-# Tactile classifier
-python agent_simulator.py --mock --db object_memory.db
+# Tactile classifier  (run from repo root)
+python -m agents.agent_simulator --mock --db object_memory.db
 
 # Serial diagnostics
-python data_harvester.py --mock --dump
+python -m sensors.data_harvester --mock --dump
 ```
 
 ### Rebuild Graph Index (for Claude Code)
@@ -295,7 +362,7 @@ graphify hook install
 
 - **CLAUDE.md** — project architecture & invariants
 - **FILES.md** — detailed API reference per file
-- **World Model Details** — see `world_model.py` docstring
+- **World Model Details** — see `perception/world_model.py` docstring
 - **Ollama Models** — https://ollama.ai/library
 
 ---
@@ -304,7 +371,9 @@ graphify hook install
 
 ```bash
 source venv/bin/activate
-streamlit run main_gui.py
+./scripts/run_dev.sh             # FastAPI :8000 + Vite :5173  (recommended)
+# or
+streamlit run backend/main_gui.py   # legacy single-process UI on :8501
 ```
 
-Then open `http://localhost:8501` in your browser. 🚀
+Open `http://localhost:5173` (Vite) or `http://localhost:8501` (Streamlit). 🚀

@@ -1,6 +1,6 @@
 """
 main_gui.py
-Streamlit dashboard for the embodi-align grounded perceptual agent.
+Streamlit dashboard for the PIA (Physics-Informed Agents) grounded perceptual agent.
 
 Panels:
   1. Egocentric camera feed + tactile / audio line charts.
@@ -15,27 +15,35 @@ Launch:
 """
 
 import hashlib
+import os
+import sys
 import time
 from collections import deque
+
+# Repo-root path bootstrap so `from sensors...` etc. resolve when this
+# script is launched as `streamlit run backend/main_gui.py` from root.
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
 
 import cv2
 import numpy as np
 import ollama
 import streamlit as st
 
-from world_model import WorldModel
-from world_map import render_scene
+from perception.world_model import WorldModel
+from perception.world_map import render_scene
 
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Embodi-Align — Grounded World Model",
+    page_title="PIA — Grounded World Model",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # ── Sidebar controls ──────────────────────────────────────────────────────────
-st.sidebar.title("Embodi-Align")
+st.sidebar.title("PIA")
 st.sidebar.markdown("**Grounded Perceptual Agent** — audio + vision + tactile memory")
 use_mock = st.sidebar.checkbox("Mock mode (no hardware)", value=True)
 serial_port = st.sidebar.text_input("Serial port", value="/dev/ttyUSB0")
@@ -60,8 +68,8 @@ def label_color(label: str) -> str:
 
 # ── One-time session bootstrap ────────────────────────────────────────────────
 if 'started' not in st.session_state:
-    from data_harvester import token_queue, start, start_mock
-    import agent_simulator as agent
+    from sensors.data_harvester import token_queue, start, start_mock
+    from agents import agent_simulator as agent
 
     st.session_state.world_model = WorldModel(
         model_name=vlm_model,
@@ -82,8 +90,8 @@ if 'started' not in st.session_state:
                 world_model=st.session_state.world_model)
     st.session_state.started = True
 
-import agent_simulator as agent
-from data_harvester import token_queue
+from agents import agent_simulator as agent
+from sensors.data_harvester import token_queue
 
 # ── Rolling buffers ───────────────────────────────────────────────────────────
 if 'accel_buf' not in st.session_state:

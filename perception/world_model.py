@@ -40,8 +40,8 @@ from typing import Optional
 import cv2
 import ollama
 
-from object_memory import ObjectMemory
-from clip_encoder import CLIPEncoder
+from perception.object_memory import ObjectMemory
+from perception.clip_encoder import CLIPEncoder
 
 
 # ── Spatial coordinate convention ─────────────────────────────────────────────
