@@ -20,11 +20,46 @@ No hard-coded material states. No fixed frequency tables. Everything learned fro
 
 ## Quick Start (No Hardware Required)
 
+### System Dependencies (Install First)
+
+Before running any commands, install these system-level tools:
+
+**1. Git**
+- macOS: `brew install git`
+- Windows: https://git-scm.com/download/win
+- Linux: `sudo apt install git`
+- Verify: `git --version`
+
+**2. Python 3.8+**
+- Download: https://www.python.org/downloads/
+- Choose 3.10+ recommended (tested with 3.14)
+- macOS: `brew install python3`
+- Windows: Run installer, **check "Add Python to PATH"**
+- Verify: `python3 --version`
+
+**3. Node.js + npm** (required for React frontend)
+- Download: https://nodejs.org (LTS version recommended)
+- Includes npm automatically
+- Verify: `node --version` and `npm --version`
+
+**4. Ollama** (VLM inference engine)
+- Download: https://ollama.ai
+- macOS: `brew install ollama`
+- Linux: `curl https://ollama.ai/install.sh | sh`
+- Windows: Download from https://ollama.ai
+- Verify: `ollama --version`
+
+**5. Camera** (built-in or USB webcam)
+- Ensure camera is plugged in and working
+- Test in system settings (Camera app on macOS)
+
 ### Prerequisites
 
-- **Python 3.8+** (tested with 3.14)
-- **Ollama** (https://ollama.ai) — for local VLM inference
-- **Camera** (built-in or USB webcam)
+Once system dependencies are installed, you'll need:
+
+- **Python 3.8+** (from above)
+- **Ollama** (from above)
+- **Camera** (from above)
 
 ### 1. Clone & Install
 

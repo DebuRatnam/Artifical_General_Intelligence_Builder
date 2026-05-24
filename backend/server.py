@@ -36,14 +36,15 @@ if _REPO_ROOT not in sys.path:
     sys.path.insert(0, _REPO_ROOT)
 
 import cv2
+import numpy as np
 import ollama
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, Response, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agents import agent_simulator as agent
 from sensors.data_harvester import start as start_serial
-from sensors.data_harvester import start_mock, token_queue
+from sensors.data_harvester import frame_queue, start_mock, token_queue
 from perception.world_model import WorldModel
 
 
@@ -67,6 +68,9 @@ camera: Optional[cv2.VideoCapture] = None
 _latest_accel: float = 0.0
 _latest_fft: int = 0
 _latest_ts: int = 0
+_latest_jpeg: Optional[bytes] = None
+_latest_jpeg_id: int = -1
+_latest_jpeg_ts: float = 0.0
 _state_lock = threading.Lock()
 
 
@@ -84,13 +88,11 @@ async def lifespan(app: FastAPI):
         start_serial(port=SERIAL_PORT, baud=BAUD_RATE)
         print(f"[server] harvester: serial {SERIAL_PORT} @ {BAUD_RATE}")
 
-    # Tactile classifier + contact-event detector. Shares the world
-    # model so contact spikes bootstrap object signatures into memory.
     agent.start(token_queue, memory=world_model.memory, world_model=world_model)
 
     camera = cv2.VideoCapture(CAMERA_INDEX)
     if not camera.isOpened():
-        print(f"[server] camera index {CAMERA_INDEX} unavailable — /api/observe will 503")
+        print(f"[server] laptop camera index {CAMERA_INDEX} unavailable — /api/observe will 503")
 
     yield
 
@@ -144,6 +146,36 @@ def _drain_queue_to_latest() -> None:
     if last is not None:
         with _state_lock:
             _latest_ts, _latest_accel, _latest_fft, _ = last
+
+
+def _drain_frame_queue() -> None:
+    """Drain pending JPEG frames; keep newest under lock."""
+    global _latest_jpeg, _latest_jpeg_id, _latest_jpeg_ts
+    drained = 0
+    last = None
+    while drained < 8:
+        try:
+            last = frame_queue.get_nowait()
+            drained += 1
+        except queue.Empty:
+            break
+    if last is not None:
+        with _state_lock:
+            _latest_jpeg    = last['jpeg']
+            _latest_jpeg_id = last['id']
+            _latest_jpeg_ts = last['ts']
+
+
+def _decode_latest_frame_bgr() -> Optional[np.ndarray]:
+    """Decode latest board JPEG to BGR numpy array. None if no frame or decode fails."""
+    _drain_frame_queue()
+    with _state_lock:
+        jpeg = _latest_jpeg
+    if jpeg is None:
+        return None
+    arr = np.frombuffer(jpeg, dtype=np.uint8)
+    frame = cv2.imdecode(arr, cv2.IMREAD_COLOR)
+    return frame
 
 
 def _build_chat_context(wm: WorldModel, accel: float, fft: int) -> str:
@@ -202,6 +234,7 @@ def _scene_payload(wm: WorldModel) -> dict:
 # ── REST endpoints ──────────────────────────────────────────────────────────
 @app.get("/api/health")
 def health():
+    _drain_frame_queue()
     return {
         "ok": True,
         "mock": USE_MOCK,
@@ -209,7 +242,9 @@ def health():
         "chat_model": CHAT_MODEL,
         "objects": len(world_model.scene.objects) if world_model else 0,
         "memory_size": len(world_model.memory.all()) if world_model else 0,
-        "camera_ok": bool(camera and camera.isOpened()),
+        "camera_ok": _latest_jpeg is not None,
+        "latest_jpeg_id": _latest_jpeg_id,
+        "latest_jpeg_age_s": (time.time() - _latest_jpeg_ts) if _latest_jpeg_ts else None,
     }
 
 
@@ -218,7 +253,7 @@ def observe(req: ObserveRequest):
     if world_model is None:
         raise HTTPException(503, "world model not initialized")
     if camera is None or not camera.isOpened():
-        raise HTTPException(503, "camera unavailable")
+        raise HTTPException(503, "laptop camera unavailable")
 
     ok, frame = camera.read()
     if not ok or frame is None:
@@ -236,6 +271,18 @@ def observe(req: ObserveRequest):
         "telemetry": {"accel_g": accel, "fft_hz": fft},
         "summary": scene.last_summary,
     }
+
+
+@app.get("/api/board_camera/snapshot")
+def board_camera_snapshot():
+    """Return latest JPEG from the T5 board camera."""
+    _drain_frame_queue()
+    with _state_lock:
+        jpeg = _latest_jpeg
+    if jpeg is None:
+        raise HTTPException(503, "no board camera frame available yet")
+    return Response(content=jpeg, media_type="image/jpeg",
+                    headers={"Cache-Control": "no-store"})
 
 
 @app.get("/api/memory")

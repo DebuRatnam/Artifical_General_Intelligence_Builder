@@ -13,9 +13,7 @@ export default function CameraFeed({ summary, observing, lastObservedAt }) {
           videoRef.current.srcObject = s
         }
       })
-      .catch(() => {
-        // camera permission denied or unavailable — placeholder stays
-      })
+      .catch(() => {})
     return () => {
       if (stream) stream.getTracks().forEach((t) => t.stop())
     }
@@ -26,7 +24,7 @@ export default function CameraFeed({ summary, observing, lastObservedAt }) {
       <div className="panel-header">
         <div className="flex items-center gap-2">
           <Camera size={14} className="text-violet-300" />
-          <span className="panel-title">Egocentric camera</span>
+          <span className="panel-title">Laptop camera (VLM source)</span>
         </div>
         <span className="text-[10px] font-mono text-zinc-500">
           {lastObservedAt ? new Date(lastObservedAt).toLocaleTimeString() : '— : — : —'}
@@ -41,13 +39,6 @@ export default function CameraFeed({ summary, observing, lastObservedAt }) {
           muted
           className="absolute inset-0 w-full h-full object-cover"
         />
-
-        {/* fallback placeholder shown when video stream not yet active */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-zinc-600 pointer-events-none"
-             style={{ opacity: 0 }}>
-          <Camera size={32} strokeWidth={1.2} />
-          <span className="text-xs mt-2 font-mono">no preview — host-side capture</span>
-        </div>
 
         {observing && (
           <div className="absolute inset-0 pointer-events-none">

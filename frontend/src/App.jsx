@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import StatusBar       from './components/StatusBar.jsx'
 import CameraFeed      from './components/CameraFeed.jsx'
+import BoardCameraFeed from './components/BoardCameraFeed.jsx'
 import ChatPanel       from './components/ChatPanel.jsx'
 import WorldMap        from './components/WorldMap.jsx'
 import TelemetryStream from './components/TelemetryStream.jsx'
@@ -65,6 +66,7 @@ export default function App() {
             observing={observing}
             lastObservedAt={lastObservedAt}
           />
+          <BoardCameraFeed />
           <ChatPanel />
         </section>
 
