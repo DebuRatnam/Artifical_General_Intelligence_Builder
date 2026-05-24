@@ -52,8 +52,24 @@ export default function CameraFeed({ summary, observing, lastObservedAt }) {
         )}
       </div>
 
-      <div className="px-4 py-2.5 border-t border-zinc-800 text-[11px] font-mono text-zinc-400 min-h-[44px]">
-        {summary?.trim() ? summary : 'No VLM summary yet — click Observe scene.'}
+      <div className="border-t border-zinc-800">
+        <div className="px-4 py-1.5 flex items-center justify-between border-b border-zinc-800/60">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
+            llava raw output
+          </span>
+          {summary?.trim() && (
+            <span className="text-[10px] font-mono text-zinc-600">
+              {summary.split('\n').filter(l => l.trim()).length} lines
+            </span>
+          )}
+        </div>
+        <div className="px-4 py-3 text-[12px] font-mono text-zinc-300 leading-relaxed
+                        min-h-[160px] max-h-[280px] overflow-y-auto whitespace-pre-wrap break-words
+                        bg-black/30">
+          {summary?.trim() ? summary : (
+            <span className="text-zinc-600">No VLM summary yet — click Observe scene.</span>
+          )}
+        </div>
       </div>
     </div>
   )

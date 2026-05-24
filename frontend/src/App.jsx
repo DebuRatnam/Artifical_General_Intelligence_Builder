@@ -67,11 +67,15 @@ export default function App() {
             lastObservedAt={lastObservedAt}
           />
           <BoardCameraFeed />
-          <ChatPanel />
         </section>
 
-        <section className="col-span-6 flex flex-col min-h-0">
-          <WorldMap scene={scene} />
+        <section className="col-span-6 flex flex-col min-h-0 gap-3">
+          <div className="flex-[2] min-h-0 flex">
+            <WorldMap scene={scene} />
+          </div>
+          <div className="flex-[1] min-h-[260px] flex">
+            <ChatPanel />
+          </div>
         </section>
 
         <section className="col-span-3 flex flex-col min-h-0">
