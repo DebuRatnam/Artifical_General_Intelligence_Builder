@@ -3,13 +3,13 @@
 #include "dvpCamera.h"
 #include "dsp_filter.h"
 
-#define BAUD_RATE          460800
+#define BAUD_RATE          2000000
 #define QMI8658_ADDR       0x6A
 #define REG_AZ_L           0x37
 #define IMU_SCALE_G        (1.0f / 4096.0f)
 #define AUDIO_SAMPLE_RATE  16000
 #define AUDIO_BUF_SIZE     512
-#define CAMERA_PERIOD_MS   500   // ~2 fps to fit 460800 baud
+#define CAMERA_PERIOD_MS   150   // ~6 fps target at 2 Mbaud + 480x480
 
 static float    audio_buf[AUDIO_BUF_SIZE];
 static uint16_t audio_idx     = 0;
@@ -58,7 +58,7 @@ void setup(void) {
     dsp_filter_init(AUDIO_SAMPLE_RATE, AUDIO_BUF_SIZE);
 
     if (OPRT_OK == board_register_hardware()) {
-        if (OPRT_OK == camera.begin(CameraResolution::RES_240X240, 10, CameraFormat::JPEG)) {
+        if (OPRT_OK == camera.begin(CameraResolution::RES_480X480, 15, CameraFormat::JPEG, EncodingQuality::MEDIUM)) {
             camera_ok = true;
         }
     }
@@ -82,7 +82,7 @@ void loop(void) {
         Serial.println(frame_id);
 
         frame_id = (frame_id + 1) % 65535;
-
-        tx_camera_frame();
     }
+
+    tx_camera_frame();
 }

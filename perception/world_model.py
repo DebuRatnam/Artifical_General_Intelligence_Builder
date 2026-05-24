@@ -38,10 +38,16 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 import cv2
-import ollama
+import numpy as np
+from ollama import Client as OllamaClient
 
 from perception.object_memory import ObjectMemory
 from perception.clip_encoder import CLIPEncoder
+
+# Hard wall-clock cap on any one Ollama call. Without this, a stuck
+# llava runner can hang /api/observe indefinitely and the UI freezes.
+# Override with PIA_VLM_TIMEOUT (seconds).
+VLM_TIMEOUT_S = float(os.getenv("PIA_VLM_TIMEOUT", "25.0"))
 
 
 # ── Spatial coordinate convention ─────────────────────────────────────────────
@@ -57,7 +63,8 @@ class SceneObject:
     x: float
     y: float
     icon: str = "❓"
-    confidence: float = 1.0
+    confidence: float = 1.0        # displayed value = base_confidence × decay
+    base_confidence: float = 1.0   # P(label is correct) at observation time
     last_seen: float = field(default_factory=time.time)
 
 
@@ -98,42 +105,101 @@ class Scene:
                 del d[k]
         for o in self.objects.values():
             age = now - o.last_seen
-            o.confidence = max(0.05, 0.5 ** (age / half_life_s))
+            decay_factor = 0.5 ** (age / half_life_s)
+            o.confidence = max(0.05, o.base_confidence * decay_factor)
         if self.hand and (now - self.hand.last_seen) > half_life_s * 2:
             self.hand = None
 
 
 # ── VLM prompt template ──────────────────────────────────────────────────────
+# Format adds a CONFIDENCE column. Confidence is your honest P(label correct),
+# NOT P(object exists). A truthful spread of values is required — see calibration
+# rubric below. The host then re-weights this with an independent CLIP image-text
+# similarity score so a lazy "0.99 for everything" output still gets corrected.
 _PROMPT_TEMPLATE = """You are a grounded perceptual agent mapping a room.
-CRITICAL: Output ONLY object lines. NO explanation, NO other text.
-CRITICAL: ONLY list objects you can CLEARLY and CONFIDENTLY see in this image.
-CRITICAL: If you are uncertain about an object, do NOT include it.
-CRITICAL: If the image is dark, blurry, or shows nothing clearly, output NOTHING.
+TASK: Identify items visible in the image. Output ONLY object lines, nothing else.
 
-EXACT FORMAT - One line per object:
-- OBJECT_NAME | POSITION EMOJI
+EXACT FORMAT — one line per object:
+- LABEL | POSITION | CONFIDENCE | EMOJI
 
-POSITION must be one of:
-top-left, top-center, top-right, middle-left, middle-center, middle-right, bottom-left, bottom-center, bottom-right
+LABEL       lowercase common noun (couch, lamp, laptop, ...). What the item IS.
+POSITION    one of: top-left, top-center, top-right,
+                    middle-left, middle-center, middle-right,
+                    bottom-left, bottom-center, bottom-right
+CONFIDENCE  float 0.00–1.00 — your honest probability that LABEL is correct
+            for that item, NOT the probability an object exists there.
+EMOJI       single emoji icon for the item.
 
-EXAMPLES:
-- COUCH | bottom-right 🛋️
-- LAMP | top-left 💡
-- PERSON | middle-center 👤
+CONFIDENCE CALIBRATION (HARD RULE — most outputs MUST NOT be 0.99):
+  0.95–1.00 → unmistakable: full clear view, distinctive shape, no ambiguity
+  0.75–0.94 → clear but partial occlusion / sub-optimal angle / muted lighting
+  0.50–0.74 → recognisable shape, ambiguous between 2+ similar items
+  0.30–0.49 → only a hint; suspect but not sure
+  < 0.30    → DO NOT include this object at all
 
-For sounds (OPTIONAL, only if object is VISIBLY a sound source):
-SOUND: OBJECT_NAME | EMOJI
+GOOD EXAMPLES (note varied confidences — same object, different views):
+- couch         | bottom-right  | 0.91 | 🛋️
+- lamp          | top-left      | 0.78 | 💡
+- person        | middle-center | 0.96 | 👤
+- laptop        | middle-center | 0.88 | 💻
+- monitor       | top-center    | 0.93 | 🖥️
+- keyboard      | bottom-center | 0.82 | ⌨️
+- mouse         | bottom-right  | 0.71 | 🖱️
+- phone         | middle-right  | 0.85 | 📱
+- mug           | middle-left   | 0.66 | ☕
+- water bottle  | bottom-left   | 0.74 | 🍶
+- plate         | middle-center | 0.62 | 🍽️
+- book          | bottom-left   | 0.80 | 📕
+- chair         | bottom-center | 0.89 | 🪑
+- desk          | middle-center | 0.87 | 🗄️
+- plant         | top-right     | 0.81 | 🪴
+- window        | top-left      | 0.94 | 🪟
+- door          | middle-left   | 0.86 | 🚪
+- fan           | top-center    | 0.83 | 💨
+- speaker       | middle-right  | 0.69 | 🔈
+- tv            | top-center    | 0.93 | 📺
+- remote        | middle-center | 0.58 | 🎮
+- backpack      | bottom-left   | 0.77 | 🎒
+- shoe          | bottom-right  | 0.72 | 👟
+- pen           | middle-center | 0.55 | 🖊️
+- notebook      | middle-left   | 0.79 | 📓
+- clock         | top-right     | 0.84 | 🕐
+- mirror        | middle-right  | 0.75 | 🪞
+- fridge        | bottom-left   | 0.91 | 🧊
+- towel         | middle-right  | 0.61 | 🧻
+- guitar        | bottom-right  | 0.86 | 🎸
+- headphones    | middle-center | 0.81 | 🎧
+- cable         | middle-center | 0.45 | 🔌
+- bottle cap    | middle-left   | 0.42 | 🧢
 
-Rules:
-- Write object name (what it IS, not a description)
-- Max 4 objects
-- Only objects ACTUALLY VISIBLE in the image — no guesses
-- Each line starts with "-" (dash and space)
-- No extra text, no commentary
+BAD EXAMPLES (DO NOT emit these):
+- Object        | center        | 0.99 | ❓     ← lazy default; everything ≠ 0.99
+- weird thing   | top-left      | 1.00 | 📦     ← invented; no visual evidence
+- "I see a small dark blob that could be ..."  ← prose, not allowed
+- something     | middle-center | 0.70 | ❓     ← unsure → omit, never emit ❓
+- couch         | bottom-right  | 0.91 | 🛋️
+  couch         | bottom-center | 0.91 | 🛋️    ← duplicate label, not allowed
 
-Current audio: {fft_hz} Hz, vibration: {accel_g:.2f} g
+HALLUCINATION GUARDS — read before answering:
+- Dark / blurry / empty image → output NOTHING. Silent is correct.
+- Unsure between two labels → pick the MORE GENERAL one (bottle, not "Aquafina bottle")
+  AND lower the confidence.
+- Reflections, posters, screen images, paintings, and photographs of items
+  are NOT the items themselves — do not list them.
+- Hard cap: 5 objects. Quality over quantity. If you only see 2 clearly, output 2.
+- Confidences MUST vary across your output. If every line ends in the same
+  confidence you are not calibrating — re-score.
+- No duplicate labels. One line per distinct visible item.
+- Use only labels for items you can name. If you cannot name it confidently,
+  do not include it.
 
-BEGIN OUTPUT (ONLY valid lines for objects you can clearly see):
+For SOUND-EMITTING visible objects (OPTIONAL — only AFTER the object lines):
+SOUND: LABEL | EMOJI
+
+Telemetry hint (use ONLY to corroborate what you actually see, never to invent):
+  Current audio peak: {fft_hz} Hz, vibration: {accel_g:.2f} g
+
+BEGIN OUTPUT (object lines only, no header, no commentary):
 """
 
 # Asked separately after object extraction so the VLM can think about
@@ -145,7 +211,16 @@ Reply with ONLY the exact label from the list above. No other text.
 
 
 # ── Parsing ───────────────────────────────────────────────────────────────────
+# Strict: `- LABEL | POSITION | CONFIDENCE | EMOJI`
+# Lenient fallback (legacy 4-field format without confidence) keeps older VLM
+# outputs parseable; missing confidence defaults to 0.5 so CLIP calibration
+# does the heavy lifting.
 _OBJECT_RE = re.compile(
+    r"^\s*[-*]\s*([^|]+?)\s*\|\s*(top|middle|bottom)[\s-]+(left|center|right)\s*\|\s*"
+    r"([01](?:\.\d+)?|0?\.\d+)\s*\|\s*(.+?)$",
+    re.IGNORECASE,
+)
+_OBJECT_RE_LEGACY = re.compile(
     r"^\s*[-*]\s*([^|]+?)\s*\|\s*(top|middle|bottom)[\s-]+(left|center|right)\s+(.+?)$",
     re.IGNORECASE,
 )
@@ -164,17 +239,47 @@ _HAND_RE = re.compile(
 # are silently ignored (VLM commentary, blank lines, etc.).
 def _parse_vlm_output(text: str) -> tuple[list[SceneObject], list[AudioSource], Optional[HandPose]]:
     objs: list[SceneObject] = []
+    seen_labels: set[str] = set()
     sounds: list[AudioSource] = []
     hand: Optional[HandPose] = None
     for line in text.splitlines():
         m = _OBJECT_RE.match(line)
         if m:
-            label, v_kw, h_kw, icon = m.group(1).strip(), m.group(2).lower(), m.group(3).lower(), m.group(4).strip()
+            label = m.group(1).strip()
+            v_kw  = m.group(2).lower()
+            h_kw  = m.group(3).lower()
+            try:
+                conf = max(0.0, min(1.0, float(m.group(4))))
+            except ValueError:
+                conf = 0.5
+            icon = m.group(5).strip()
+            key = label.lower()
+            if key in seen_labels:
+                continue
+            seen_labels.add(key)
             objs.append(SceneObject(
                 label=label,
                 x=POS_X.get(h_kw, 0.5),
                 y=POS_Y.get(v_kw, 0.5),
                 icon=icon,
+                confidence=conf,
+                base_confidence=conf,
+            ))
+            continue
+        m = _OBJECT_RE_LEGACY.match(line)
+        if m:
+            label, v_kw, h_kw, icon = m.group(1).strip(), m.group(2).lower(), m.group(3).lower(), m.group(4).strip()
+            key = label.lower()
+            if key in seen_labels:
+                continue
+            seen_labels.add(key)
+            objs.append(SceneObject(
+                label=label,
+                x=POS_X.get(h_kw, 0.5),
+                y=POS_Y.get(v_kw, 0.5),
+                icon=icon,
+                confidence=0.5,
+                base_confidence=0.5,
             ))
             continue
         m = _SOUND_RE.match(line)
@@ -225,13 +330,16 @@ class WorldModel:
         self.clip = CLIPEncoder(device=clip_device)
         self.vlm_force_every = vlm_force_every
         self._last_vlm_call = 0.0
+        # Dedicated client with a hard timeout so VLM calls cannot hang
+        # the request thread when llava stalls or its runner crashes.
+        self._ollama = OllamaClient(timeout=VLM_TIMEOUT_S)
         self._warmup()
 
     # Best-effort check that the configured Ollama model is available.
     # Never raises — the first generate() call will surface a real error.
     def _warmup(self) -> None:
         try:
-            ollama.show(self.model_name)
+            self._ollama.show(self.model_name)
         except Exception:
             print(f"[WorldModel] '{self.model_name}' not pulled — run: ollama pull {self.model_name}")
 
@@ -242,15 +350,20 @@ class WorldModel:
         tmp = "temp_worldmodel_view.jpg"
         cv2.imwrite(tmp, frame)
         try:
-            resp = ollama.generate(
+            resp = self._ollama.generate(
                 model=self.model_name,
                 prompt=_PROMPT_TEMPLATE.format(fft_hz=fft_hz, accel_g=accel_g),
                 images=[tmp],
+                keep_alive="30m",
+                options={
+                    "num_predict": 256,   # cap output so model can't ramble
+                    "temperature": 0.2,   # tighter, less hallucination
+                },
             )
             self._last_vlm_call = time.time()
             return resp["response"]
         except Exception as e:
-            return f"VLM_ERROR: {e}"
+            return f"VLM_TIMEOUT_OR_ERROR ({VLM_TIMEOUT_S:.0f}s cap): {e}"
         finally:
             if os.path.exists(tmp):
                 os.remove(tmp)
@@ -263,9 +376,11 @@ class WorldModel:
         if not candidates or fft_hz <= 0:
             return None
         try:
-            resp = ollama.generate(
+            resp = self._ollama.generate(
                 model=self.model_name,
                 prompt=_AUDIO_BIND_PROMPT.format(names=candidates, fft_hz=fft_hz),
+                keep_alive="30m",
+                options={"num_predict": 64, "temperature": 0.0},
             )
             chosen = resp["response"].strip().lower()
             for c in candidates:
@@ -274,6 +389,35 @@ class WorldModel:
         except Exception as e:
             print(f"[WorldModel] audio bind VLM failed: {e}")
         return None
+
+    # Combine VLM self-confidence with an INDEPENDENT CLIP image-text
+    # similarity score so we don't trust the VLM alone (it tends to anchor
+    # at 0.99). Returns calibrated P(label is correct in this frame).
+    #
+    # Method:
+    #   clip_sim   = cos(frame_emb, text_emb("a photo of a {label}"))
+    #                ∈ ~[0.10, 0.40] for true matches with ViT-B/32.
+    #   clip_score = clip_sim / 0.32, clamped to [0, 1]
+    #                (0.32 ≈ strong match on ViT-B/32 OpenAI weights)
+    #   final      = 0.5 * vlm_conf + 0.5 * clip_score
+    #
+    # If CLIP is disabled (no torch / open_clip), we down-weight the raw
+    # VLM number by 0.85 so a sea of 0.99s still shrinks toward ~0.84 and
+    # the displayed confidence reflects uncalibrated input.
+    def _calibrate_confidence(self, frame_emb,
+                              label: str, vlm_conf: float) -> float:
+        if frame_emb is None or not self.clip.enabled:
+            return round(min(1.0, vlm_conf * 0.85), 3)
+        text_emb = self.clip.encode_text(f"a photo of a {label}")
+        if text_emb is None:
+            return round(min(1.0, vlm_conf * 0.85), 3)
+        try:
+            sim = float(np.dot(frame_emb, text_emb))
+        except Exception:
+            return round(min(1.0, vlm_conf * 0.85), 3)
+        clip_score = max(0.0, min(1.0, sim / 0.32))
+        blended = 0.5 * vlm_conf + 0.5 * clip_score
+        return round(max(0.05, min(1.0, blended)), 3)
 
     # Bind a tactile spike to whichever visible object the hand is
     # nearest. Called by main_gui (or by an upstream contact-event
@@ -335,12 +479,13 @@ class WorldModel:
             key = card.label
             if key in self.scene.objects:
                 obj = self.scene.objects[key]
-                obj.confidence = 1.0
+                obj.base_confidence = max(obj.base_confidence, 0.7)
+                obj.confidence = obj.base_confidence
                 obj.last_seen = now
             else:
                 self.scene.objects[key] = SceneObject(
                     label=card.label, x=0.5, y=0.5, icon="❓",
-                    confidence=0.6, last_seen=now,
+                    confidence=0.6, base_confidence=0.6, last_seen=now,
                 )
 
     # Fast-path attempt. CLIP-encode the frame, query memory for the
@@ -399,14 +544,18 @@ class WorldModel:
 
         for o in new_objs:
             key = o.label.lower()
+            cal_conf = self._calibrate_confidence(frame_emb, o.label, o.base_confidence)
             existing = self.scene.objects.get(key)
             if existing:
                 existing.x = 0.6 * existing.x + 0.4 * o.x
                 existing.y = 0.6 * existing.y + 0.4 * o.y
                 existing.icon = o.icon or existing.icon
-                existing.confidence = 1.0
+                existing.base_confidence = cal_conf
+                existing.confidence = cal_conf
                 existing.last_seen = now
             else:
+                o.base_confidence = cal_conf
+                o.confidence = cal_conf
                 self.scene.objects[key] = o
             # Persist visual + description fragment to long-term memory.
             self.memory.upsert_visual(
